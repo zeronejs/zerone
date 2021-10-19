@@ -35,5 +35,6 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 node_modules
+dist
 # tmp
 public/*

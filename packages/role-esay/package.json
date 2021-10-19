@@ -10,6 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "@nestjs/common": "^8.1.1",
-    "@nestjs/core": "^8.1.1"
+    "@nestjs/core": "^8.1.1",
+    "chokidar": "^3.5.2",
+    "fs-extra": "^10.0.0",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/gulp": "^4.0.9"
   }
 }
