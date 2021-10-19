@@ -1,0 +1,8 @@
+{
+    "singleQuote": true,
+    "semi": true,
+    "tabWidth":4,
+    "useTabs":true,
+    "TrailingCooma": "none",
+    "printWidth": 110
+  }

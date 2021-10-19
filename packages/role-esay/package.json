@@ -1,0 +1,15 @@
+{
+  "name": "@zerone/role-esay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/common": "^8.1.1",
+    "@nestjs/core": "^8.1.1"
+  }
+}
