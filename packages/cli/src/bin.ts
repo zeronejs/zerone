@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { CommandLoader } from './commands';
 // import { loadLocalBinCommandLoader, localBinExists } from '../lib/utils/local-binaries';
