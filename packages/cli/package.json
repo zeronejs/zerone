@@ -1,0 +1,33 @@
+{
+  "name": "@zeronejs/cli",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "zerone": "src/bin.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "chokidar": "^3.5.2",
+    "commander": "^8.2.0",
+    "fs-extra": "^10.0.0",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "node-emoji": "^1.11.0",
+    "os-name": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/gulp": "^4.0.9",
+    "@types/os-name": "3.1.0",
+    "@types/node-emoji": "^1.8.1"
+  }
+}
