@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts, { Diagnostic } from 'typescript';
 import { join } from 'path';
 import consola from 'consola';
 const formatHost = {
@@ -28,9 +28,9 @@ function watchMain() {
 	host.createProgram = (rootNames: any, options: any, host: any, oldProgram: any) => {
 		consola.info("We're about to create the program!");
 		Reflect.deleteProperty(options, 'outDir');
-		Reflect.set(options, 'outDir', join(__dirname, 'dist'));
-		Reflect.set(options, 'baseUrl', join(__dirname));
-		Reflect.set(options, 'rootDir', join(__dirname));
+		Reflect.set(options, 'outDir', join(process.cwd(), 'dist'));
+		Reflect.set(options, 'baseUrl', join(process.cwd()));
+		Reflect.set(options, 'rootDir', join(process.cwd()));
 		consola.info({ rootNames, options, host, oldProgram });
 		return origCreateProgram(rootNames, options, host, oldProgram);
 	};
@@ -46,8 +46,14 @@ function watchMain() {
 	ts.createWatchProgram(host);
 }
 
-function reportDiagnostic(diagnostic: { code: any; messageText: any }) {
+function reportDiagnostic(diagnostic: Diagnostic) {
+	// console.log({diagnostic})
 	consola.error(
+		'Path',
+		':',
+		diagnostic?.file?.fileName,
+		`
+       `,
 		'Error',
 		diagnostic.code,
 		':',
@@ -55,11 +61,13 @@ function reportDiagnostic(diagnostic: { code: any; messageText: any }) {
 	);
 }
 
-function reportWatchStatusChanged(diagnostic: any) {
+function reportWatchStatusChanged(diagnostic: Diagnostic) {
 	let message = ts.formatDiagnostic(diagnostic, formatHost);
 	if (message.indexOf('TS6194') > 0) {
+        // console.log({message})
 		message = message.replace(/message\sTS[0-9]{4}:(.+)(\s+)$/, '$1');
-		consola.ready({ message, badge: true });
+		consola.ready({ message:message.replace('Watching for file changes',''), badge: true });
+		process.exit();
 	}
 }
 
