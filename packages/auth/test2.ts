@@ -1,3 +1,4 @@
+// ts api
 import ts, { Diagnostic } from 'typescript';
 import { join } from 'path';
 import consola from 'consola';
