@@ -213,6 +213,20 @@ export class BuildAction extends AbstractAction {
 				if (existsSync(join(options.src, 'lerna.json'))) {
 					inputs.push(join(options.src, 'lerna.json'));
 				}
+				const templatesDir = 'templates'
+				// cli的模板
+				if (existsSync(join(options.src, templatesDir))) {
+					const src = gulp
+						.src(
+							`${join(
+								options.src,
+								templatesDir,
+								'**/*'
+							)}`
+						)
+						.pipe(gulp.dest(join(options.output!, templatesDir)));
+					incs.push(fromEvent(src));
+				}
 				incs.push(
 					fromEvent(gulp.src(inputs).pipe(gulp.dest(options.output!))).catch((e) => done && done(e))
 				);

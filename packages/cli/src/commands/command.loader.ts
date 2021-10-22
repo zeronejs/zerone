@@ -5,7 +5,7 @@ import {
 	BuildAction,
 	// GenerateAction,
 	InfoAction,
-	// NewAction,
+	NewAction,
 	// StartAction,
 	// UpdateAction,
 } from '../actions';
@@ -14,12 +14,12 @@ import { ERROR_PREFIX } from '../ui';
 import { BuildCommand } from './build.command';
 // import { GenerateCommand } from './generate.command';
 import { InfoCommand } from './info.command';
-// import { NewCommand } from './new.command';
+import { NewCommand } from './new.command';
 // import { StartCommand } from './start.command';
 // import { UpdateCommand } from './update.command';
 export class CommandLoader {
 	public static load(program: Command): void {
-		// new NewCommand(new NewAction()).load(program);
+		new NewCommand(new NewAction()).load(program);
 		new BuildCommand(new BuildAction()).load(program);
 		// new StartCommand(new StartAction()).load(program);
 		new InfoCommand(new InfoAction()).load(program);
