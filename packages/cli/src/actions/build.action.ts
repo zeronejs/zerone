@@ -6,7 +6,7 @@ import consola from 'consola';
 import { AbstractAction } from './abstract.action';
 
 import * as gulp from 'gulp';
-import { createProject } from 'gulp-typescript';
+// import { createProject } from 'gulp-typescript';
 import { join } from 'path';
 import { watch } from 'chokidar';
 import { existsSync, writeFileSync, readFileSync } from 'fs';
@@ -55,33 +55,33 @@ export class BuildAction extends AbstractAction {
 				removeSync(join(options.output));
 			}
 			gulp.task(`dts`, (done: any) => {
-				delete pkg.main;
-				pkg.name = `${pkg.name}.types`;
-				pkg.main = pkg.types;
-				console.log(`i am compiling dts...`);
-				const pros = tsconfig.include.map((inc: string) => {
-					const tsProject = createProject(options.tsconfig, {
-						declaration: true,
-					});
-					const tsResult = gulp
-						.src([
-							join(options.src, inc, '*.ts'),
-							join(options.src, inc, '*.tsx'),
-							join(options.src, inc, '**/*.ts'),
-							join(options.src, inc, '**/*.tsx'),
-							`!${join(options.src, options.output || '')}`,
-							...exclude,
-						])
-						.pipe(tsProject());
-					const dts = fromEvent(tsResult.dts.pipe(gulp.dest(join(options.types!, inc))));
-					return dts;
-				});
-				Promise.all(pros).then((res) => {
-					console.log(`i am compiling dts finish`);
-					ensureDirSync(options.output!);
-					writeFileSync(join(options.types!, 'package.json'), JSON.stringify(pkg, null, 2));
-					done && done();
-				});
+				// delete pkg.main;
+				// pkg.name = `${pkg.name}.types`;
+				// pkg.main = pkg.types;
+				// console.log(`i am compiling dts...`);
+				// const pros = tsconfig.include.map((inc: string) => {
+				// 	const tsProject = createProject(options.tsconfig, {
+				// 		declaration: true,
+				// 	});
+				// 	const tsResult = gulp
+				// 		.src([
+				// 			join(options.src, inc, '*.ts'),
+				// 			join(options.src, inc, '*.tsx'),
+				// 			join(options.src, inc, '**/*.ts'),
+				// 			join(options.src, inc, '**/*.tsx'),
+				// 			`!${join(options.src, options.output || '')}`,
+				// 			...exclude,
+				// 		])
+				// 		.pipe(tsProject());
+				// 	const dts = fromEvent(tsResult.dts.pipe(gulp.dest(join(options.types!, inc))));
+				// 	return dts;
+				// });
+				// Promise.all(pros).then((res) => {
+				// 	console.log(`i am compiling dts finish`);
+				// 	ensureDirSync(options.output!);
+				// 	writeFileSync(join(options.types!, 'package.json'), JSON.stringify(pkg, null, 2));
+				// 	done && done();
+				// });
 			});
 			gulp.task('compiler', (done: any) => {
 				console.log(`i am compiling...`);
