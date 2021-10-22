@@ -33,7 +33,10 @@ export class NewAction extends AbstractAction {
 		try {
 			await ensureDir(join(root, appName));
 
-			await copy(join(__dirname, '../../templates/new'), join(root, appName), { overwrite: false });
+			await copy(join(__dirname, '../../templates/new'), join(root, appName), {
+				overwrite: false,
+				// dereference: true,
+			});
 			const packageJson = await readJson(join(root, appName, 'package.json'));
 			packageJson.name = appName;
 			await writeJson(join(root, appName, 'package.json'), packageJson, { spaces: 2 });
