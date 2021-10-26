@@ -5,8 +5,14 @@ export enum Gender {
     mam,
     woman,
 }
+/**
+ * 用户表
+ */
 @Entity()
 export class UserEntity {
+    /**
+     * id
+     */
     @PrimaryGeneratedColumn()
     id: number;
     /**
