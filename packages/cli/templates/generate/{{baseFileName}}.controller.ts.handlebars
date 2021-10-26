@@ -1,0 +1,57 @@
+import { Controller, Get, Post, Patch, Body, Param, Delete } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
+import { {{BaseName}}Service } from './{{baseName}}.service';
+
+@ApiTags('{{baseName}}')
+@ApiBearerAuth()
+@Controller()
+export class {{BaseName}}Controller {
+    constructor(private readonly {{baseName}}Service: {{BaseName}}Service) {}
+    /**
+     * 新增{{documentation}}
+     */
+    @Post('/{{baseName}}/create')
+    create(@Body() create{{BaseName}}Dto: {{BaseName}}CreateDto) {
+        return this.{{baseName}}Service.create(create{{BaseName}}Dto);
+    }
+    /**
+     * {{documentation}}列表
+     */
+    @Post('/{{baseName}}/list')
+    list(@Body() dto: {{BaseName}}ListDto) {
+        return this.{{baseName}}Service.list(dto);
+    }
+    // @Get('/{{baseName}}')
+    // findAll() {
+    //     return this.{{baseName}}Service.findAll();
+    // }
+    /**
+     * {{documentation}}详情
+     */
+    @Get('/{{baseName}}/details/:id')
+    @ApiOperation({ summary: '某个{{documentation}}信息' })
+    @ApiResponse({
+        status: 200,
+        // description: 'The found record',
+        // type: Get{{BaseName}}InfoResult,
+    })
+    details(@Param('id') id: number) {
+        return this.{{baseName}}Service.findById(id);
+    }
+    /**
+     * 修改{{documentation}}
+     */
+    @Patch('/{{baseName}}/update/:id')
+    @ApiOperation({ summary: '修改{{documentation}}信息' })
+    update(@Param('id') id: number, @Body() update{{BaseName}}Dto: {{BaseName}}UpdateDto) {
+        return this.{{baseName}}Service.update(id, update{{BaseName}}Dto);
+    }
+    /**
+     * 删除{{documentation}}
+     */
+    @Delete('/{{baseName}}/remove/:id')
+    remove(@Param('id') id: string) {
+        return this.{{baseName}}Service.delete(+id);
+    }
+}

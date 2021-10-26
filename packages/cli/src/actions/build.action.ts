@@ -1,4 +1,4 @@
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { Input } from '../commands';
 import { ERROR_PREFIX } from '../ui';
 import ts, { Diagnostic } from 'typescript';

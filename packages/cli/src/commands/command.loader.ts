@@ -3,7 +3,7 @@ import { Command } from 'commander';
 import {
 	// AddAction,
 	BuildAction,
-	// GenerateAction,
+	GenerateAction,
 	InfoAction,
 	NewAction,
 	// StartAction,
@@ -12,7 +12,7 @@ import {
 import { ERROR_PREFIX } from '../ui';
 // import { AddCommand } from './add.command';
 import { BuildCommand } from './build.command';
-// import { GenerateCommand } from './generate.command';
+import { GenerateCommand } from './generate.command';
 import { InfoCommand } from './info.command';
 import { NewCommand } from './new.command';
 // import { StartCommand } from './start.command';
@@ -25,7 +25,7 @@ export class CommandLoader {
 		new InfoCommand(new InfoAction()).load(program);
 		// new UpdateCommand(new UpdateAction()).load(program);
 		// new AddCommand(new AddAction()).load(program);
-		// new GenerateCommand(new GenerateAction()).load(program);
+		new GenerateCommand(new GenerateAction()).load(program);
 
 		this.handleInvalidCommand(program);
 	}

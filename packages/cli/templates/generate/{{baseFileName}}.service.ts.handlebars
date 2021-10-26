@@ -1,0 +1,39 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
+import { {{BaseName}}Entity } from './entities/{{baseName}}.entity';
+import { Repository } from 'typeorm';
+@Injectable()
+export class {{BaseName}}Service {
+    constructor(private {{baseName}}Repository: Repository<{{BaseName}}Entity>) {}
+
+    async create(entity: {{BaseName}}CreateDto) {
+        return await this.{{baseName}}Repository.save(entity);
+    }
+
+    findAll() {
+        return `This action returns all {{baseName}}`;
+    }
+    async list(dto: {{BaseName}}ListDto) {
+        const { page = 0, psize = 20 } = dto.limit || {};
+
+        return await this.{{baseName}}Repository.find({
+            where: dto.where,
+            order: { createdAt: 'DESC' },
+            skip: page * psize,
+            take: psize,
+        });
+    }
+    async findById(id: number) {
+        const entity = await this.{{baseName}}Repository.findOne(id);
+
+        if (!entity) throw new BadRequestException('数据不存在');
+        return entity;
+    }
+
+    async update(id: number, update: {{BaseName}}UpdateDto) {
+        return await this.{{baseName}}Repository.update(id, update);
+    }
+    async delete(id: number) {
+        return await this.{{baseName}}Repository.delete({ id });
+    }
+}

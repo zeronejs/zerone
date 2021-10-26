@@ -1,0 +1,27 @@
+import { Limit } from '@common/utils/constants';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+class {{BaseName}}ListWhereDto {
+	{{#each property}}
+    /**
+     * {{documentation.[0].text}}
+     */
+    @ApiProperty()
+    @IsOptional()
+    {{escapedName}}?: {{{type}}};
+	{{/each}}
+}
+
+export class {{BaseName}}ListDto {
+    @ApiProperty()
+    @ValidateNested()
+    @IsNotEmpty()
+    // 这里不加Type不会验证
+    @Type(() => {{BaseName}}ListWhereDto)
+    where: {{BaseName}}ListWhereDto;
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => Limit)
+    limit?: Limit;
+}

@@ -1,0 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
+
+export class {{BaseName}}UpdateDto {
+	{{#each property}}
+    /**
+     * {{documentation.[0].text}}
+     */
+    @ApiProperty()
+    @IsOptional()
+    {{escapedName}}?: {{{type}}};
+
+	{{/each}}
+}

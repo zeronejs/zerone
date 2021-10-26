@@ -1,0 +1,21 @@
+import { IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+export class {{BaseName}}CreateDto {
+	{{#each property}}
+    /**
+     * {{documentation.[0].text}}
+     */
+    @ApiProperty()
+    {{#if isOptional }}
+    @IsOptional()
+    {{escapedName}}?: {{{type}}};
+
+    {{else}}
+    @IsNotEmpty({
+        message: '{{documentation.[0].text}}不能为空',
+    })
+    {{escapedName}}: {{{type}}};
+
+    {{/if}}
+	{{/each}}
+}

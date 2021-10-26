@@ -7,7 +7,7 @@ export class NewCommand extends AbstractCommand {
     program
       .command('new [name]')
       .alias('n')
-      .description('Generate Nest application.')
+      .description('Generate New Nest application.')
       // .option('--directory [directory]', 'Specify the destination directory')
       // .option(
       //   '-d, --dry-run',
