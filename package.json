@@ -8,8 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@172.16.1.35:zzh/zerone.git"
+    "url": "git+https://github.com/zeronejs/zerone.git"
   },
+  "keywords": [
+    "zerone"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
