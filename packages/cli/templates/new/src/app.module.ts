@@ -9,13 +9,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // import { AuthModule } from '@zeronejs/auth';
 @Module({
     imports: [
+        // TypeOrmModule.forRoot({
+        //     type: 'postgres',
+        //     host: 'localhost',
+        //     port: 5432,
+        //     username: 'postgres',
+        //     password: '123456',
+        //     database: 'test',
+        //     autoLoadEntities: true,
+        //     // entities: [],
+        //     synchronize: true,
+        // }),
         TypeOrmModule.forRoot({
-            type: 'postgres',
-            host: 'localhost',
-            port: 5432,
-            username: 'postgres',
-            password: '123456',
-            database: 'test',
+            type: 'sqlite',
+            database: './mydb.sql',
             autoLoadEntities: true,
             // entities: [],
             synchronize: true,

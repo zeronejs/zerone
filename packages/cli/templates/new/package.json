@@ -37,11 +37,11 @@
     "dayjs": "^1.10.7",
     "fs-extra": "^10.0.0",
     "mongoose": "^6.0.8",
-    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.3.0",
     "swagger-ui-express": "^4.1.6",
+    "sqlite3": "^5.0.2",
     "typeorm": "^0.2.38"
   },
   "devDependencies": {
