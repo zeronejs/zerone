@@ -39,3 +39,4 @@ dist
 # tmp
 public/*
 test
+*.sql
