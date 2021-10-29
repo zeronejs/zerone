@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '../src/jwt-auth.guard';
 import { JwtStrategy } from '../src/jwt.strategy';
 import { LocalStrategy } from '../src/local.strategy';
 
-describe('UserService', () => {
+describe('@zeronejs/auth', () => {
 	let service: AuthService;
 	let localStrategy: LocalStrategy;
 	let jwtStrategy: JwtStrategy;
