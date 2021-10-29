@@ -32,7 +32,7 @@ export class AuthService {
 	 * @param user 完整用户
 	 * @returns
 	 */
-	async login(user: UserSpareEntity) {
+	async login(user: Pick<UserSpareEntity, 'id' | 'username'>) {
 		const payload: ReqUser = { username: user.username, id: user.id };
 		return {
 			accessToken: this.jwtService.sign(payload),
