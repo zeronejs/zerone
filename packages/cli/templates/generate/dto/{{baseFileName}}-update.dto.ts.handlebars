@@ -3,12 +3,13 @@ import { IsOptional } from 'class-validator';
 
 export class {{BaseName}}UpdateDto {
 	{{#each property}}
+    {{#unless isSpecialColumn }}
     /**
      * {{documentation.[0].text}}
      */
     @ApiProperty()
     @IsOptional()
     {{escapedName}}?: {{{type}}};
-
+    {{/unless}}
 	{{/each}}
 }

@@ -19,6 +19,7 @@ export interface DocEntryProperty {
 	type?: string;
 	isOptional?: boolean;
 	isUnionType?: boolean;
+	isSpecialColumn: boolean;
 }
 
 /** Generate documentation for all classes in a set of .ts files */
@@ -74,11 +75,30 @@ export function generateDocumentation(fileNames: string[], options: ts.CompilerO
 		const res = checker.getPropertiesOfType(type).map((it) => {
 			const item = it as any;
 			// console.log(item.valueDeclaration.type.kind);
+			// it.valueDeclaration && Reflect.deleteProperty(it.valueDeclaration, 'parent');
+			let isSpecialColumn = false;
+			it.valueDeclaration?.decorators?.forEach((element: any) => {
+				if (element.expression.expression) {
+					const text = element.expression.expression.escapedText;
+					switch (text) {
+						case 'PrimaryGeneratedColumn':
+							isSpecialColumn = true;
+							break;
+						case 'CreateDateColumn':
+							isSpecialColumn = true;
+							break;
+						case 'UpdateDateColumn':
+							isSpecialColumn = true;
+							break;
+					}
+				}
+			});
 			const property: DocEntryProperty = {
 				flags: it.flags,
 				escapedName: it.escapedName.toString(),
 				documentation: it.getDocumentationComment(checker),
 				isOptional: ts.SymbolFlags.Property + ts.SymbolFlags.Optional === it.flags,
+				isSpecialColumn,
 			};
 			if (item.valueDeclaration.type) {
 				property.type = getSimpleTypeStringBySyntaxKind(item.valueDeclaration.type);
@@ -124,6 +144,7 @@ export function generateDocumentation(fileNames: string[], options: ts.CompilerO
 				return 'unknown';
 			// 引用类型  目前直接用类型的字符串
 			case ts.SyntaxKind.TypeReference:
+				// console.log(type.typeName.parent)
 				return type.typeName.escapedText;
 			default:
 				return '';

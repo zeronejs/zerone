@@ -2,6 +2,7 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class {{BaseName}}CreateDto {
 	{{#each property}}
+    {{#unless isSpecialColumn }}
     /**
      * {{documentation.[0].text}}
      */
@@ -17,5 +18,6 @@ export class {{BaseName}}CreateDto {
     {{escapedName}}: {{{type}}};
 
     {{/if}}
+    {{/unless}}
 	{{/each}}
 }

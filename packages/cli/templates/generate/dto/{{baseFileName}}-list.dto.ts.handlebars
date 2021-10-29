@@ -4,12 +4,14 @@ import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 class {{BaseName}}ListWhereDto {
 	{{#each property}}
+    {{#unless isSpecialColumn }}
     /**
      * {{documentation.[0].text}}
      */
     @ApiProperty()
     @IsOptional()
     {{escapedName}}?: {{{type}}};
+    {{/unless}}
 	{{/each}}
 }
 

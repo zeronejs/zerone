@@ -214,6 +214,9 @@ export class BuildAction extends AbstractAction {
 				if (existsSync(join(options.src, 'lerna.json'))) {
 					inputs.push(join(options.src, 'lerna.json'));
 				}
+				if (existsSync(join(options.src, 'LICENSE'))) {
+					inputs.push(join(options.src, 'LICENSE'));
+				}
 				const templatesDir = 'templates';
 				// cli的模板
 				if (existsSync(join(options.src, templatesDir))) {

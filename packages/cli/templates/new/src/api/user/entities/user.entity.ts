@@ -27,26 +27,33 @@ export class UserEntity {
     @Column()
     password: string;
     /**
+     * 性别
+     */
+    @Column({
+        default: Gender.unknown,
+    })
+    gender: Gender;
+    /**
      * 手机号
      */
 
-    @Column({ default: '' })
-    phone: string;
+    @Column({ nullable: true })
+    phone?: string;
     /**
      * 头像
      */
-    @Column({ default: '' })
-    avatar: string;
+    @Column({nullable: true })
+    avatar?: string;
     /**
      * 昵称
      */
-    @Column({ default: '' })
-    nickname: string;
+    @Column({ nullable: true})
+    nickname?: string;
     /**
      * 签名
      */
-    @Column({ default: '' })
-    desc: string;
+    @Column({ nullable: true })
+    desc?: string;
     /**
      * 创建时间
      */
@@ -57,13 +64,7 @@ export class UserEntity {
      */
     @UpdateDateColumn()
     updatedAt: Date;
-    /**
-     * 性别
-     */
-    @Column({
-        default: Gender.unknown,
-    })
-    gender: Gender;
+
     // /**
     //  * 角色
     //  */
