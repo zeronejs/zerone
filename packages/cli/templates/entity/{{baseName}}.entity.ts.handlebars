@@ -1,0 +1,30 @@
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+
+/**
+ * {{BaseName}}表
+ */
+@Entity()
+export class {{BaseName}}Entity {
+    /**
+     * id
+     */
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    /**
+     * 描述
+     */
+    @Column({ nullable: true })
+    desc?: string;
+    /**
+     * 创建时间
+     */
+    @CreateDateColumn()
+    createdAt: Date;
+    /**
+     * 修改时间
+     */
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+}

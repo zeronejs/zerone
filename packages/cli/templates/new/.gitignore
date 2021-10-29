@@ -37,3 +37,4 @@ lerna-debug.log*
 
 # tmp
 public/*
+*.sql

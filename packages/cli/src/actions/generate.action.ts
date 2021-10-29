@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { Input } from '../commands';
 import { ensureDir, readdir, readFile, stat, writeFile, pathExists } from 'fs-extra';
+import * as inquirer from 'inquirer';
 import * as ts from 'typescript';
 import { join, basename } from 'path';
 import { compile } from 'handlebars';
@@ -17,7 +18,22 @@ export class GenerateAction extends AbstractAction {
 		const allfiles = await readdir(root);
 		const fileNames = allfiles.filter((it) => it.includes('.entity.ts'));
 		if (fileNames.length === 0) {
-			return console.log('未找到.entity.ts结尾的文件');
+			const message = '未找到.entity.ts结尾的文件，如需新建，请输入文件的基础名称！';
+			const answers = await inquirer.prompt([
+				{
+					type: 'input',
+					message: message,
+					name: 'name',
+					default: 'test', // 默认值
+				},
+			]);
+			const baseName = answers.name;
+			
+			await generateBaseEntityFile(baseName)
+			return	console.log('文件已生成，请自定义后再执行 generate')
+			// fileNames.push(answers.name.replace(/.entity.ts$/, '') + '.entity.ts');
+
+			// return console.log('未找到.entity.ts结尾的文件');
 		}
 		const docEntry = generateDocumentation(fileNames, {
 			target: ts.ScriptTarget.ES5,
@@ -35,6 +51,7 @@ export class GenerateAction extends AbstractAction {
 		});
 	}
 }
+
 const generate = async (docEntryItem: DocEntry) => {
 	const generateUri = join(__dirname, '../../templates/generate');
 	const files = await readdir(generateUri);
@@ -63,7 +80,17 @@ const generateWriteFile = async (
 		await _writeFile(writeFileUri, content);
 	});
 };
-
+const generateBaseEntityFile = async (baseName: string) => {
+	const root = process.cwd();
+	const handlebarsName = '{{baseName}}.entity.ts.handlebars';
+	const entityUri = join(__dirname, '../../templates/entity');
+	const handlebarsContent = await readFile(join(entityUri, handlebarsName));
+	const fileName = compile(handlebarsName)({ baseName }).replace('.handlebars', '');
+	const content = compile(handlebarsContent.toString())({
+		BaseName: baseName.charAt(0).toUpperCase() + baseName.slice(1),
+	});
+	await writeFile(join(root, fileName), content);
+};
 const _isDir = async (file: string): Promise<boolean> => {
 	const stats = await stat(file);
 	if (stats.isDirectory()) {
