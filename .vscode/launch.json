@@ -13,7 +13,9 @@
             ],
             "runtimeArgs": [
                 "-r",
-                "ts-node/register"
+                "tsconfig-paths/register",
+                "-r",
+                "ts-node/register",
             ],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
