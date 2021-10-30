@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "commit": "git-cz",
-    "test": "jest"
+    "test": "jest",
+    "test:cov": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@nestjs/common": "^8.1.2",
+    "@nestjs/core": "^8.1.2",
     "@nestjs/testing": "^8.1.2",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
@@ -25,6 +28,7 @@
     "eslint-plugin-import": "^2.25.2",
     "git-cz": "^4.8.0",
     "jest": "^27.3.1",
+    "rxjs": "^7.4.0",
     "sqlite3": "^5.0.2",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.3.0",
