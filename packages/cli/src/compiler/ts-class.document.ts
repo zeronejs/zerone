@@ -1,3 +1,4 @@
+import { basename } from 'path';
 import * as ts from 'typescript';
 // import * as fs from 'fs';
 
@@ -115,7 +116,7 @@ export function generateDocumentation(fileNames: string[], options: ts.CompilerO
 			return property;
 		});
 		return {
-			baseFileName: (symbol as any).parent.valueDeclaration.fileName.replace(/.entity.ts$/, ''),
+			baseFileName: basename((symbol as any).parent.valueDeclaration.fileName.replace(/.entity.ts$/, '')),
 			name: symbol.getName(),
 			documentation: ts.displayPartsToString(symbol.getDocumentationComment(checker)),
 			type: checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!)),
