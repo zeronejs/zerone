@@ -7,6 +7,7 @@
 | @zeronejs/cli       | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/cli)       | 命令行工具     |
 | @zeronejs/role-easy | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/role-easy) | 简单的角色授权 |
 | @zeronejs/auth      | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/auth)      | 身份验证       |
+| @zeronejs/redis     | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/redis)     | 高速缓存       |
 | @zeronejs/utils     | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/utils)     | 通用工具       |
 
 ## Documentation
