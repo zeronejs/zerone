@@ -8,7 +8,7 @@ module.exports = {
     types: {
         chore: {
             // "description": "Build process or auxiliary tool changes",
-            description: '构建过程或辅助工具变更',
+            description: '杂务：构建过程或辅助工具变更',
             emoji: '🤖',
             value: 'chore',
         },
