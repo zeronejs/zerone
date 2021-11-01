@@ -14,7 +14,7 @@ module.exports = {
         },
         ci: {
             // "description": "CI related changes",
-            description: '框架相关修改',
+            description: '持续集成 相关修改',
             emoji: '🎡',
             value: 'ci',
         },
