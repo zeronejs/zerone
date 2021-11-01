@@ -8,7 +8,10 @@ class {{BaseName}}ListWhereDto {
     /**
      * {{documentation.[0].text}}
      */
-    @ApiProperty()
+    @ApiProperty({
+        description: '{{documentation.[0].text}}',
+        required: false,
+    })
     @IsOptional()
     {{escapedName}}?: {{{type}}};
     {{/unless}}

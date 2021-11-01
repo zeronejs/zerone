@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.0.22",
+  "version": "1.0.25",
   "description": "",
   "main": "index.js",
   "publishConfig": {

@@ -6,7 +6,10 @@ export class {{BaseName}}CreateDto {
     /**
      * {{documentation.[0].text}}
      */
-    @ApiProperty()
+    @ApiProperty({
+        description: '{{documentation.[0].text}}',
+        required: {{#unless isOptional }}true{{else unless isRead}}false{{/unless}},
+    })
     {{#if isOptional }}
     @IsOptional()
     {{escapedName}}?: {{{type}}};
