@@ -1,7 +1,7 @@
 {
   "name": "@zeronejs/utils",
-  "version": "1.0.7",
-  "description": "",
+  "version": "1.0.8",
+  "description": "Zerone utils",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "publishConfig": {
@@ -14,6 +14,15 @@
     "publish:npm": "npm publish dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "zerone",
+    "zeronejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronejs/zerone.git"
+  },
+  "homepage": "https://zerone.top/",
   "author": "",
   "license": "MIT",
   "dependencies": {

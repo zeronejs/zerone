@@ -1,7 +1,7 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.0.26",
-  "description": "",
+  "version": "1.0.28",
+  "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
@@ -16,6 +16,19 @@
   "bin": {
     "zerone": "src/bin.js"
   },
+  "keywords": [
+    "zerone",
+    "cli",
+    "zeronejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronejs/zerone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeronejs/zerone/issues"
+  },
+  "homepage": "https://zerone.top/",
   "author": "",
   "license": "MIT",
   "dependencies": {
