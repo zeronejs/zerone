@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/utils",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -8,6 +8,10 @@
     "access": "public"
   },
   "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "zerone build",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

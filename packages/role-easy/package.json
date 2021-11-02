@@ -8,6 +8,10 @@
     "access": "public"
   },
   "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "zerone build",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
