@@ -3,10 +3,16 @@ import { IsNumber } from 'class-validator';
 import { join } from 'path';
 export const PublicUrl = join(__dirname, '..', '..', '../public');
 export class Limit {
-    @ApiProperty()
+    @ApiProperty({
+        description: '页码',
+        default: 0,
+    })
     @IsNumber()
     page: number;
-    @ApiProperty()
+    @ApiProperty({
+        description: 'psize',
+        default: 20,
+    })
     @IsNumber()
     psize: number;
 }

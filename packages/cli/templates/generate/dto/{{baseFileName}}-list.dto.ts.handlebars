@@ -21,10 +21,10 @@ class {{BaseName}}ListWhereDto {
 export class {{BaseName}}ListDto {
     @ApiProperty()
     @ValidateNested()
-    @IsNotEmpty()
+    @IsOptional()
     // 这里不加Type不会验证
     @Type(() => {{BaseName}}ListWhereDto)
-    where: {{BaseName}}ListWhereDto;
+    where?: {{BaseName}}ListWhereDto;
     @IsOptional()
     @ValidateNested()
     @Type(() => Limit)

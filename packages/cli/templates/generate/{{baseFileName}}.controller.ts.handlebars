@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Patch, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Delete, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Limit } from '@common/utils/constants';
 import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
 import { {{BaseName}}Service } from './{{baseName}}.service';
 
@@ -17,12 +18,20 @@ export class {{BaseName}}Controller {
         return this.{{baseName}}Service.create(create{{BaseName}}Dto);
     }
     /**
+     * {{documentation}}列表（query）
+     */
+    @ApiOperation({ summary: '{{documentation}}列表（query）' })
+    @Post('/{{baseName}}/list')
+    queryList(@Body() dto: {{BaseName}}ListDto) {
+        return this.{{baseName}}Service.list(dto);
+    }
+    /**
      * {{documentation}}列表
      */
     @ApiOperation({ summary: '{{documentation}}列表' })
-    @Post('/{{baseName}}/list')
-    list(@Body() dto: {{BaseName}}ListDto) {
-        return this.{{baseName}}Service.list(dto);
+    @Get('/user/list')
+    list(@Query() limit: Limit) {
+        return this.{{baseName}}Service.list({ limit });
     }
     // @Get('/{{baseName}}')
     // findAll() {
