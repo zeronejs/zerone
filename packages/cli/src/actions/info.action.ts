@@ -7,18 +7,18 @@ import { join } from 'path';
 import { BANNER, MESSAGES } from '../ui';
 import { AbstractAction } from './abstract.action';
 
-// interface LockfileDependency {
-// 	version: string;
-// }
+interface LockfileDependency {
+	version: string;
+}
 
-// interface PackageJsonDependencies {
-// 	[key: string]: LockfileDependency;
-// }
+interface PackageJsonDependencies {
+	[key: string]: LockfileDependency;
+}
 
-// interface NestDependency {
-// 	name: string;
-// 	value: string;
-// }
+interface NestDependency {
+	name: string;
+	value: string;
+}
 
 export class InfoAction extends AbstractAction {
 	// private manager!: AbstractPackageManager;
@@ -38,32 +38,48 @@ export class InfoAction extends AbstractAction {
 		console.info(chalk.green('[System Information]'));
 		console.info('OS Version     :', chalk.blue(osName(platform(), release())));
 		console.info('NodeJS Version :', chalk.blue(process.version));
-		// await this.displayPackageManagerVersion();
 	}
-
-	// async displayPackageManagerVersion() {
-	// 	try {
-	// 		const version: string = await this.manager.version();
-	// 		console.info(`${this.manager.name} Version    :`, chalk.blue(version), '\n');
-	// 	} catch {
-	// 		console.error(`${this.manager.name} Version    :`, chalk.red('Unknown'), '\n');
-	// 	}
-	// }
 
 	async displayNestInformation(): Promise<void> {
 		this.displayCliVersion();
-		// console.info(chalk.green('[Nest Platform Information]'));
-		// await this.displayNestInformationFromPackage();
+		await this.displayNestInformationFromPackage();
 	}
 
-	// async displayNestInformationFromPackage(): Promise<void> {
-	// 	try {
-	// 		const dependencies: PackageJsonDependencies = this.readProjectPackageDependencies();
-	// 		this.displayNestVersions(dependencies);
-	// 	} catch (err) {
-	// 		console.error(chalk.red(MESSAGES.NEST_INFORMATION_PACKAGE_MANAGER_FAILED));
-	// 	}
-	// }
+	async displayNestInformationFromPackage(): Promise<void> {
+		try {
+			const dependencies: PackageJsonDependencies = this.readProjectPackageDependencies();
+			const keys = Object.keys(dependencies);
+			const maxLength = Math.max(...keys.map((it) => it.length));
+
+			const zerones: string[] = [];
+			const nests: string[] = [];
+			const others: string[] = [];
+
+			keys.forEach((it) => {
+				if (it.startsWith('@zeronejs/')) {
+					zerones.push(it);
+				} else if (it.startsWith('@nestjs/')) {
+					nests.push(it);
+				} else {
+					others.push(it);
+				}
+			});
+			console.info(chalk.green('[Zerone Platform Information]'));
+			zerones.forEach((it) => {
+				console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
+			});
+			console.info(chalk.green('[Nest Platform Information]'));
+			nests.forEach((it) => {
+				console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
+			});
+			console.info(chalk.green('[Others Information]'));
+			others.forEach((it) => {
+				console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
+			});
+		} catch (err) {
+			console.error(chalk.red(MESSAGES.NEST_INFORMATION_PACKAGE_MANAGER_FAILED));
+		}
+	}
 
 	displayCliVersion(): void {
 		console.info(chalk.green('[Zerone CLI]'));
@@ -74,64 +90,15 @@ export class InfoAction extends AbstractAction {
 		);
 	}
 
-	// readProjectPackageDependencies(): PackageJsonDependencies {
-	// 	const buffer = readFileSync(join(process.cwd(), 'package.json'));
-	// 	const pack = JSON.parse(buffer.toString());
-	// 	const dependencies = { ...pack.dependencies, ...pack.devDependencies };
-	// 	Object.keys(dependencies).forEach((key) => {
-	// 		dependencies[key] = {
-	// 			version: dependencies[key],
-	// 		};
-	// 	});
-	// 	return dependencies;
-	// }
-
-	// displayNestVersions(dependencies: PackageJsonDependencies) {
-	// 	this.buildNestVersionsMessage(dependencies).forEach((dependency) =>
-	// 		console.info(dependency.name, chalk.blue(dependency.value))
-	// 	);
-	// }
-
-	// buildNestVersionsMessage(dependencies: PackageJsonDependencies): NestDependency[] {
-	// 	const nestDependencies = this.collectNestDependencies(dependencies);
-	// 	return this.format(nestDependencies);
-	// }
-
-	// collectNestDependencies(dependencies: PackageJsonDependencies): NestDependency[] {
-	// 	const nestDependencies: NestDependency[] = [];
-	// 	Object.keys(dependencies).forEach((key) => {
-	// 		if (key.indexOf('@nestjs') > -1) {
-	// 			const depPackagePath = require.resolve(key + '/package.json', { paths: [process.cwd()] });
-	// 			const depPackage = readFileSync(depPackagePath).toString();
-	// 			const value = JSON.parse(depPackage).version;
-	// 			nestDependencies.push({
-	// 				name: `${key.replace(/@nestjs\//, '').replace(/@.*/, '')} version`,
-	// 				value: value || dependencies[key].version,
-	// 			});
-	// 		}
-	// 	});
-	// 	return nestDependencies;
-	// }
-
-	// format(dependencies: NestDependency[]): NestDependency[] {
-	// 	const sorted = dependencies.sort(
-	// 		(dependencyA, dependencyB) => dependencyB.name.length - dependencyA.name.length
-	// 	);
-	// 	const length = sorted[0].name.length;
-	// 	sorted.forEach((dependency) => {
-	// 		if (dependency.name.length < length) {
-	// 			dependency.name = this.rightPad(dependency.name, length);
-	// 		}
-	// 		dependency.name = dependency.name.concat(' :');
-	// 		dependency.value = dependency.value.replace(/(\^|\~)/, '');
-	// 	});
-	// 	return sorted;
-	// }
-
-	// rightPad(name: string, length: number): string {
-	// 	while (name.length < length) {
-	// 		name = name.concat(' ');
-	// 	}
-	// 	return name;
-	// }
+	readProjectPackageDependencies(): PackageJsonDependencies {
+		const buffer = readFileSync(join(process.cwd(), 'package.json'));
+		const pack = JSON.parse(buffer.toString());
+		const dependencies = { ...pack.dependencies, ...pack.devDependencies };
+		Object.keys(dependencies).forEach((key) => {
+			dependencies[key] = {
+				version: dependencies[key],
+			};
+		});
+		return dependencies;
+	}
 }

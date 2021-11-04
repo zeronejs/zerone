@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "rimraf dist",
     "build": "ts-node ./src/bin.ts build",
+    "info": "ts-node ./src/bin.ts info",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish dist/"
   },
