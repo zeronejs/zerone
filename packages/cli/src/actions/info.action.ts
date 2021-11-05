@@ -42,10 +42,10 @@ export class InfoAction extends AbstractAction {
 
 	async displayNestInformation(): Promise<void> {
 		this.displayCliVersion();
-		await this.displayNestInformationFromPackage();
+		await this.displayInformationFromPackage();
 	}
 
-	async displayNestInformationFromPackage(): Promise<void> {
+	async displayInformationFromPackage(): Promise<void> {
 		try {
 			const dependencies: PackageJsonDependencies = this.readProjectPackageDependencies();
 			const keys = Object.keys(dependencies);
@@ -72,10 +72,10 @@ export class InfoAction extends AbstractAction {
 			nests.forEach((it) => {
 				console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
 			});
-			console.info(chalk.green('[Others Information]'));
-			others.forEach((it) => {
-				console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
-			});
+			// console.info(chalk.green('[Others Information]'));
+			// others.forEach((it) => {
+			// 	console.info(it.padEnd(maxLength), ':', chalk.blue(dependencies[it].version));
+			// });
 		} catch (err) {
 			console.error(chalk.red(MESSAGES.NEST_INFORMATION_PACKAGE_MANAGER_FAILED));
 		}
