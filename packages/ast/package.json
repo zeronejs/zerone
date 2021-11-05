@@ -1,0 +1,31 @@
+{
+  "name": "@zeronejs/ast",
+  "version": "1.0.0",
+  "description": "Zerone ast",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "zerone build",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zerone",
+    "zeronejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronejs/zerone.git"
+  },
+  "homepage": "https://zerone.top/",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^4.4.4"
+  }
+}
