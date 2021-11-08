@@ -18,6 +18,7 @@ export interface FileImports {
 export interface FileClasses {
 	name: string;
 	decorators: DecoratorDoc[];
+	documentation: string;
 }
 
 /** Generate documentation for all classes in a set of .ts files */
@@ -29,7 +30,13 @@ export function generateDocumentation(
 	}
 ) {
 	const output: DocEntry[] = [];
-	const sourceFiles = getSourceFiles(fileNames, options);
+	// Build a program using the set of root file names in fileNames
+	const program = ts.createProgram(fileNames, options);
+	// Get the checker, we will use it to find more about classes
+	const sources = program.getSourceFiles();
+	// 过滤ts自带声明(.d.ts)文件 和 无关文件
+	const sourceFiles = sources.filter((it) => !it.isDeclarationFile && fileNames.includes(it.fileName));
+	// const sourceFiles = getSourceFiles(fileNames, options);
 	for (const sourceFile of sourceFiles) {
 		output.push(visit(sourceFile));
 	}
@@ -39,7 +46,7 @@ export function generateDocumentation(
 		const { importDeclarations, variableStatements, enumDeclarations, classDeclarations } =
 			getDeclarations(sourceFile);
 		const inports = generateImportDeclarationsDoc(importDeclarations);
-		const classes = generateClassDeclarationsDoc(classDeclarations, sourceFile);
+		const classes = generateClassDeclarationsDoc(classDeclarations, sourceFile, program);
 		return {
 			// path: sourceFile.fileName,
 			fileName: basename(sourceFile.fileName),
@@ -92,28 +99,72 @@ export function generateImportDeclarationsDoc(importDeclarations: ts.ImportDecla
 	}
 	return inports;
 }
+export interface ClassPropertyDeclarationDoc {
+	name: string;
+	documentation: string;
+	isOptional?: boolean;
+	decorators: DecoratorDoc[];
+	type: {
+		// 预留  后期丰富
+		value: string;
+	};
+}
 export function generateClassDeclarationsDoc(
 	classDeclarations: ts.ClassDeclaration[],
-	sourceFile: ts.SourceFile
+	sourceFile: ts.SourceFile,
+	program: ts.Program
 ): FileClasses[] {
+	const checker = program.getTypeChecker();
 	const classes: FileClasses[] = [];
 	for (const classDeclaration of classDeclarations) {
 		const fileClasses: FileClasses = {
 			name: '',
-			decorators: [],
+			decorators: generateDecoratorDoc(sourceFile, classDeclaration.decorators),
+			documentation: '',
 		};
-		if (classDeclaration.name?.escapedText) {
+		if (classDeclaration.name) {
 			fileClasses.name = ts.unescapeLeadingUnderscores(classDeclaration.name.escapedText);
+			const symbol = checker.getSymbolAtLocation(classDeclaration.name);
+			if (symbol) {
+				fileClasses.documentation = ts.displayPartsToString(symbol.getDocumentationComment(checker));
+			}
 		}
-		fileClasses.decorators = generateDecoratorDoc(sourceFile, classDeclaration.decorators);
+		// const properties = classDeclaration.members.filter((it) => ts.isPropertyDeclaration(it));
+		const properties: ClassPropertyDeclarationDoc[] = [];
+
+		classDeclaration.members.map((member) => {
+			if (ts.isPropertyDeclaration(member)) {
+				const symbol = checker.getSymbolAtLocation(member.name);
+				const property: ClassPropertyDeclarationDoc = {
+					name: '',
+					documentation: '',
+					isOptional: ts.SymbolFlags.Property + ts.SymbolFlags.Optional === symbol?.flags,
+					decorators: generateDecoratorDoc(sourceFile, member.decorators),
+					type: {
+						value: member.type?.getText(sourceFile) ?? 'any',
+					},
+				};
+				if (ts.isIdentifier(member.name)) {
+					property.name = ts.unescapeLeadingUnderscores(member.name.escapedText);
+				} else {
+					property.name = member.name.getText(sourceFile);
+				}
+				if (symbol) {
+					property.documentation = ts.displayPartsToString(symbol.getDocumentationComment(checker));
+				}
+
+				properties.push(property);
+			}
+		});
 		debugger;
+
 		classes.push(fileClasses);
 	}
 	return classes;
 }
 export interface DecoratorDoc {
 	name: string;
-	expression: DecoratorExpressionDoc;
+	expression?: DecoratorExpressionDoc;
 }
 export interface DecoratorExpressionDoc {
 	args: any[];
@@ -128,14 +179,12 @@ export function generateDecoratorDoc(sourceFile: ts.SourceFile, decorators?: ts.
 	return decorators.map((ItemDecorator) => {
 		const decorator: DecoratorDoc = {
 			name: '',
-			expression: { args: [] },
 		};
-		// todo. This assumes that the decorator does not have multiple expressions nested
-		recursiveExpression(ItemDecorator.expression, decorator.expression);
+		recursiveExpression(ItemDecorator.expression, decorator);
 		return decorator;
 		function recursiveExpression(
 			expression: ts.LeftHandSideExpression,
-			putExpression: DecoratorExpressionDoc
+			putExpression: DecoratorDoc | DecoratorExpressionDoc
 		) {
 			if (ts.isIdentifier(expression)) {
 				decorator.name = ts.unescapeLeadingUnderscores(expression.escapedText);
@@ -144,27 +193,31 @@ export function generateDecoratorDoc(sourceFile: ts.SourceFile, decorators?: ts.
 					////////////// See you next week
 					if (ts.isObjectLiteralExpression(arg)) {
 						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
-						handleObject(arg, newObj, sourceFile);
+						generateObjectDoc(sourceFile, arg, newObj);
 						return newObj;
 					} else if (ts.isArrayLiteralExpression(arg)) {
-						return handleArray(arg, sourceFile);
-					} else if (ts.isStringLiteral(arg)) {
-						return arg.text;
-					} else {
+						return generateArrayDoc(sourceFile, arg);
+					}
+					// else if (ts.isStringLiteral(arg)) {
+					// 	return arg.text;
+					// }
+					// todo  处理变量标识符
+					else {
 						return arg.getText(sourceFile);
 					}
 				});
-				putExpression.args = args;
-				putExpression.expression = { args: [] };
+				putExpression.expression = {
+					args,
+				};
 				recursiveExpression(expression.expression, putExpression.expression);
 			}
 		}
 	});
 }
-function handleObject(
+function generateObjectDoc(
+	sourceFile: ts.SourceFile,
 	object: ts.ObjectLiteralExpression,
-	obj: ObjectLiteralExpressionDoc,
-	sourceFile: ts.SourceFile
+	obj: ObjectLiteralExpressionDoc
 ) {
 	object.properties.map((propertie) => {
 		if (ts.isPropertyAssignment(propertie)) {
@@ -172,28 +225,32 @@ function handleObject(
 				obj.name = ts.unescapeLeadingUnderscores(propertie.name.escapedText);
 			}
 			if (ts.isObjectLiteralExpression(propertie.initializer)) {
-				handleObject(propertie.initializer, obj.value, sourceFile);
+				generateObjectDoc(sourceFile, propertie.initializer, obj.value);
 			} else if (ts.isArrayLiteralExpression(propertie.initializer)) {
-				obj.value = handleArray(propertie.initializer, sourceFile);
-			} else if (ts.isStringLiteral(propertie.initializer)) {
-				return propertie.initializer.text;
-			} else {
+				obj.value = generateArrayDoc(sourceFile, propertie.initializer);
+			}
+			// else if (ts.isStringLiteral(propertie.initializer)) {
+			// 	return propertie.initializer.text;
+			// }
+			else {
 				obj.value = propertie.initializer.getText(sourceFile);
 			}
 		}
 	});
 }
-function handleArray(arr: ts.ArrayLiteralExpression, sourceFile: ts.SourceFile): any {
+function generateArrayDoc(sourceFile: ts.SourceFile, arr: ts.ArrayLiteralExpression): any {
 	return arr.elements.map((element) => {
 		if (ts.isObjectLiteralExpression(element)) {
 			const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
-			handleObject(element, newObj, sourceFile);
+			generateObjectDoc(sourceFile, element, newObj);
 			return newObj;
 		} else if (ts.isArrayLiteralExpression(element)) {
-			return handleArray(element, sourceFile);
-		} else if (ts.isStringLiteral(element)) {
-			return element.text;
-		} else {
+			return generateArrayDoc(sourceFile, element);
+		}
+		// else if (ts.isStringLiteral(element)) {
+		// 	return element.text;
+		// }
+		else {
 			return element.getText(sourceFile);
 		}
 	});
