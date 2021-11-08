@@ -17,6 +17,7 @@ export interface FileImports {
 }
 export interface FileClasses {
 	name: string;
+	decorators: DecoratorDoc[];
 }
 
 /** Generate documentation for all classes in a set of .ts files */
@@ -38,7 +39,7 @@ export function generateDocumentation(
 		const { importDeclarations, variableStatements, enumDeclarations, classDeclarations } =
 			getDeclarations(sourceFile);
 		const inports = generateImportDeclarationsDoc(importDeclarations);
-		const classes = generateClassDeclarationsDoc(classDeclarations);
+		const classes = generateClassDeclarationsDoc(classDeclarations, sourceFile);
 		return {
 			// path: sourceFile.fileName,
 			fileName: basename(sourceFile.fileName),
@@ -91,38 +92,47 @@ export function generateImportDeclarationsDoc(importDeclarations: ts.ImportDecla
 	}
 	return inports;
 }
-export function generateClassDeclarationsDoc(classDeclarations: ts.ClassDeclaration[]): FileClasses[] {
+export function generateClassDeclarationsDoc(
+	classDeclarations: ts.ClassDeclaration[],
+	sourceFile: ts.SourceFile
+): FileClasses[] {
 	const classes: FileClasses[] = [];
 	for (const classDeclaration of classDeclarations) {
 		const fileClasses: FileClasses = {
 			name: '',
+			decorators: [],
 		};
 		if (classDeclaration.name?.escapedText) {
 			fileClasses.name = ts.unescapeLeadingUnderscores(classDeclaration.name.escapedText);
 		}
-		const decorators = generateDecoratorDoc(classDeclaration.decorators);
+		fileClasses.decorators = generateDecoratorDoc(sourceFile, classDeclaration.decorators);
+		debugger;
 		classes.push(fileClasses);
 	}
 	return classes;
 }
 export interface DecoratorDoc {
 	name: string;
-	expression?: DecoratorExpressionDoc;
+	expression: DecoratorExpressionDoc;
 }
 export interface DecoratorExpressionDoc {
 	args: any[];
 	expression?: DecoratorExpressionDoc;
 }
-export function generateDecoratorDoc(decorators?: ts.NodeArray<ts.Decorator>) {
+export interface ObjectLiteralExpressionDoc {
+	name: string;
+	value: any;
+}
+export function generateDecoratorDoc(sourceFile: ts.SourceFile, decorators?: ts.NodeArray<ts.Decorator>) {
 	if (!decorators) return [];
 	return decorators.map((ItemDecorator) => {
-		const decorator = {
+		const decorator: DecoratorDoc = {
 			name: '',
 			expression: { args: [] },
 		};
 		// todo. This assumes that the decorator does not have multiple expressions nested
 		recursiveExpression(ItemDecorator.expression, decorator.expression);
-		debugger
+		return decorator;
 		function recursiveExpression(
 			expression: ts.LeftHandSideExpression,
 			putExpression: DecoratorExpressionDoc
@@ -132,11 +142,59 @@ export function generateDecoratorDoc(decorators?: ts.NodeArray<ts.Decorator>) {
 			} else if (ts.isCallExpression(expression)) {
 				const args = expression.arguments.map((arg) => {
 					////////////// See you next week
+					if (ts.isObjectLiteralExpression(arg)) {
+						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+						handleObject(arg, newObj, sourceFile);
+						return newObj;
+					} else if (ts.isArrayLiteralExpression(arg)) {
+						return handleArray(arg, sourceFile);
+					} else if (ts.isStringLiteral(arg)) {
+						return arg.text;
+					} else {
+						return arg.getText(sourceFile);
+					}
 				});
 				putExpression.args = args;
 				putExpression.expression = { args: [] };
 				recursiveExpression(expression.expression, putExpression.expression);
 			}
+		}
+	});
+}
+function handleObject(
+	object: ts.ObjectLiteralExpression,
+	obj: ObjectLiteralExpressionDoc,
+	sourceFile: ts.SourceFile
+) {
+	object.properties.map((propertie) => {
+		if (ts.isPropertyAssignment(propertie)) {
+			if (ts.isIdentifier(propertie.name)) {
+				obj.name = ts.unescapeLeadingUnderscores(propertie.name.escapedText);
+			}
+			if (ts.isObjectLiteralExpression(propertie.initializer)) {
+				handleObject(propertie.initializer, obj.value, sourceFile);
+			} else if (ts.isArrayLiteralExpression(propertie.initializer)) {
+				obj.value = handleArray(propertie.initializer, sourceFile);
+			} else if (ts.isStringLiteral(propertie.initializer)) {
+				return propertie.initializer.text;
+			} else {
+				obj.value = propertie.initializer.getText(sourceFile);
+			}
+		}
+	});
+}
+function handleArray(arr: ts.ArrayLiteralExpression, sourceFile: ts.SourceFile): any {
+	return arr.elements.map((element) => {
+		if (ts.isObjectLiteralExpression(element)) {
+			const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+			handleObject(element, newObj, sourceFile);
+			return newObj;
+		} else if (ts.isArrayLiteralExpression(element)) {
+			return handleArray(element, sourceFile);
+		} else if (ts.isStringLiteral(element)) {
+			return element.text;
+		} else {
+			return element.getText(sourceFile);
 		}
 	});
 }
