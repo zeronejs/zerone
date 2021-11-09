@@ -4,7 +4,9 @@
         "project": "tsconfig.json",
         "sourceType": "module"
     },
-    "plugins": ["@typescript-eslint/eslint-plugin"],
+    "plugins": [
+        "@typescript-eslint/eslint-plugin"
+    ],
     "extends": [
         "plugin:@typescript-eslint/recommended"
         // "plugin:prettier/recommended"
@@ -14,7 +16,10 @@
         "node": true,
         "jest": true
     },
-    "ignorePatterns": [".eslintrc.json"],
+    "ignorePatterns": [
+        ".eslintrc.json",
+        "dist"
+    ],
     "rules": {
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
@@ -24,6 +29,6 @@
         "@typescript-eslint/no-duplicate-imports": "error",
         "eqeqeq": "error",
         "no-eval": "error",
-		"no-var": "error"
+        "no-var": "error"
     }
 }
