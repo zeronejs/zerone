@@ -19,13 +19,8 @@ export class EnumsInterpret {
 				name: ts.unescapeLeadingUnderscores(enumDeclaration.name.escapedText),
 				members: enumDeclaration.members.map((member) => {
 					const enumMember: EnumMemberDeclarationsDoc = {
-						name: '',
+						name: this.interpretCore.getIdentifierTextName(member.name),
 					};
-					if (ts.isIdentifier(member.name)) {
-						enumMember.name = ts.unescapeLeadingUnderscores(member.name.escapedText);
-					} else {
-						enumMember.name = member.name.getText(this.interpretCore.sourceFile);
-					}
 					if (member.initializer) {
 						if (ts.isObjectLiteralExpression(member.initializer)) {
 							const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };

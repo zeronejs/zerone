@@ -64,6 +64,13 @@ export class InterpretCore {
 			})
 			.flat();
 	}
+	getIdentifierTextName(name: ts.PropertyName | ts.BindingName) {
+		if (ts.isIdentifier(name)) {
+			return ts.unescapeLeadingUnderscores(name.escapedText);
+		} else {
+			return name.getText(this.sourceFile);
+		}
+	}
 }
 export enum DeclarationType {
 	importDeclaration,

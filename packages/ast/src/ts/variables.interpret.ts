@@ -18,13 +18,8 @@ export class VariablesInterpret {
 					return;
 				}
 				const variable: SourceFileVariables = {
-					name: '',
+					name: this.interpretCore.getIdentifierTextName(declaration.name),
 				};
-				if (ts.isIdentifier(declaration.name)) {
-					variable.name = ts.unescapeLeadingUnderscores(declaration.name.escapedText);
-				} else {
-					variable.name = declaration.name.getText(this.interpretCore.sourceFile);
-				}
 				if (declaration.type) {
 					variable.type = declaration.type.getText(this.interpretCore.sourceFile);
 				}

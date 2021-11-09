@@ -13,6 +13,8 @@ export function generateObjectDoc(
 		if (ts.isPropertyAssignment(propertie)) {
 			if (ts.isIdentifier(propertie.name)) {
 				obj.name = ts.unescapeLeadingUnderscores(propertie.name.escapedText);
+			} else {
+				obj.name = propertie.name.getText(sourceFile);
 			}
 			if (ts.isObjectLiteralExpression(propertie.initializer)) {
 				generateObjectDoc(sourceFile, propertie.initializer, obj.value);

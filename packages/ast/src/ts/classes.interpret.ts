@@ -44,7 +44,7 @@ export class ClassesInterpret {
 				if (ts.isPropertyDeclaration(member)) {
 					const symbol = checker.getSymbolAtLocation(member.name);
 					const property: ClassPropertyDeclarationDoc = {
-						name: '',
+						name: this.interpretCore.getIdentifierTextName(member.name),
 						documentation: '',
 						isOptional: ts.SymbolFlags.Property + ts.SymbolFlags.Optional === symbol?.flags,
 						decorators: generateDecoratorDoc(this.interpretCore.sourceFile, member.decorators),
@@ -52,11 +52,6 @@ export class ClassesInterpret {
 							value: member.type?.getText(this.interpretCore.sourceFile) ?? 'any',
 						},
 					};
-					if (ts.isIdentifier(member.name)) {
-						property.name = ts.unescapeLeadingUnderscores(member.name.escapedText);
-					} else {
-						property.name = member.name.getText(this.interpretCore.sourceFile);
-					}
 					if (symbol) {
 						property.documentation = ts.displayPartsToString(
 							symbol.getDocumentationComment(checker)
