@@ -8,6 +8,8 @@ export interface DocEntry {
 	fileName: string;
 	inports: FileImports[];
 	classes: FileClasses[];
+	variables: FileVariables[];
+	enums: FileEnums[];
 }
 export interface FileImports {
 	from: string;
@@ -20,7 +22,15 @@ export interface FileClasses {
 	decorators: DecoratorDoc[];
 	documentation: string;
 }
-
+export interface FileVariables {
+	name: string;
+	type?: string;
+	value?: any;
+}
+export interface FileEnums {
+	name: string;
+	members: EnumMemberDeclarationsDoc[];
+}
 /** Generate documentation for all classes in a set of .ts files */
 export function generateDocumentation(
 	fileNames: string[],
@@ -40,6 +50,7 @@ export function generateDocumentation(
 	for (const sourceFile of sourceFiles) {
 		output.push(visit(sourceFile));
 	}
+	debugger
 	return output;
 	function visit(sourceFile: ts.SourceFile) {
 		// todo
@@ -47,11 +58,15 @@ export function generateDocumentation(
 			getDeclarations(sourceFile);
 		const inports = generateImportDeclarationsDoc(importDeclarations);
 		const classes = generateClassDeclarationsDoc(classDeclarations, sourceFile, program);
+		const variables = generateVariableStatementsDoc(variableStatements, sourceFile);
+		const enums = generateEnumDeclarationsDoc(enumDeclarations, sourceFile);
 		return {
 			// path: sourceFile.fileName,
 			fileName: basename(sourceFile.fileName),
 			inports,
 			classes,
+			variables,
+			enums,
 		};
 	}
 }
@@ -156,11 +171,85 @@ export function generateClassDeclarationsDoc(
 				properties.push(property);
 			}
 		});
-		debugger;
 
 		classes.push(fileClasses);
 	}
 	return classes;
+}
+interface EnumMemberDeclarationsDoc {
+	name: string;
+	value?: any;
+}
+export function generateEnumDeclarationsDoc(
+	enumDeclarations: ts.EnumDeclaration[],
+	sourceFile: ts.SourceFile
+) {
+	return enumDeclarations.map((enumDeclaration) => {
+		const enumsItem: FileEnums = {
+			name: ts.unescapeLeadingUnderscores(enumDeclaration.name.escapedText),
+			members: enumDeclaration.members.map((member) => {
+				const enumMember: EnumMemberDeclarationsDoc = {
+					name: '',
+				};
+				if (ts.isIdentifier(member.name)) {
+					enumMember.name = ts.unescapeLeadingUnderscores(member.name.escapedText);
+				} else {
+					enumMember.name = member.name.getText(sourceFile);
+				}
+				if (member.initializer) {
+					if (ts.isObjectLiteralExpression(member.initializer)) {
+						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+						generateObjectDoc(sourceFile, member.initializer, newObj);
+						enumMember.value = newObj;
+					} else if (ts.isArrayLiteralExpression(member.initializer)) {
+						enumMember.value = generateArrayDoc(sourceFile, member.initializer);
+					} else {
+						enumMember.value = member.initializer.getText(sourceFile);
+					}
+				}
+				return enumMember;
+			}),
+		};
+		return enumsItem;
+	});
+}
+
+export function generateVariableStatementsDoc(
+	variableStatements: ts.VariableStatement[],
+	sourceFile: ts.SourceFile
+) {
+	const variables: FileVariables[] = [];
+	for (const variableStatement of variableStatements) {
+		variableStatement.declarationList.declarations.map((declaration) => {
+			if (!ts.isVariableDeclaration(declaration)) {
+				return;
+			}
+			const variable: FileVariables = {
+				name: '',
+			};
+			if (ts.isIdentifier(declaration.name)) {
+				variable.name = ts.unescapeLeadingUnderscores(declaration.name.escapedText);
+			} else {
+				variable.name = declaration.name.getText(sourceFile);
+			}
+			if (declaration.type) {
+				variable.type = declaration.type.getText(sourceFile);
+			}
+			if (declaration.initializer) {
+				if (ts.isObjectLiteralExpression(declaration.initializer)) {
+					const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+					generateObjectDoc(sourceFile, declaration.initializer, newObj);
+					variable.value = newObj;
+				} else if (ts.isArrayLiteralExpression(declaration.initializer)) {
+					variable.value = generateArrayDoc(sourceFile, declaration.initializer);
+				} else {
+					variable.value = declaration.initializer.getText(sourceFile);
+				}
+			}
+			variables.push(variable);
+		});
+	}
+	return variables;
 }
 export interface DecoratorDoc {
 	name: string;
@@ -190,7 +279,6 @@ export function generateDecoratorDoc(sourceFile: ts.SourceFile, decorators?: ts.
 				decorator.name = ts.unescapeLeadingUnderscores(expression.escapedText);
 			} else if (ts.isCallExpression(expression)) {
 				const args = expression.arguments.map((arg) => {
-					////////////// See you next week
 					if (ts.isObjectLiteralExpression(arg)) {
 						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
 						generateObjectDoc(sourceFile, arg, newObj);
