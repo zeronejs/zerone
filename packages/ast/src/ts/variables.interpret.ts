@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { generateArrayDoc } from './common/array.interpret';
-import { generateObjectDoc, ObjectLiteralExpressionDoc } from './common/object.interpret';
+import { generateObjectDoc } from './common/object.interpret';
 import { DeclarationType, InterpretCore } from './interpret.core';
 export interface SourceFileVariables {
 	name: string;
@@ -25,7 +25,7 @@ export class VariablesInterpret {
 				}
 				if (declaration.initializer) {
 					if (ts.isObjectLiteralExpression(declaration.initializer)) {
-						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+						const newObj = {};
 						generateObjectDoc(this.interpretCore.sourceFile, declaration.initializer, newObj);
 						variable.value = newObj;
 					} else if (ts.isArrayLiteralExpression(declaration.initializer)) {

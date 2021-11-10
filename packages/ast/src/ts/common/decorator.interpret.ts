@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { generateArrayDoc } from './array.interpret';
-import { generateObjectDoc, ObjectLiteralExpressionDoc } from './object.interpret';
+import { generateObjectDoc } from './object.interpret';
 export interface DecoratorDoc {
 	name: string;
 	expression?: DecoratorExpressionDoc;
@@ -27,7 +27,7 @@ export function generateDecoratorDoc(sourceFile: ts.SourceFile, decorators?: ts.
 			} else if (ts.isCallExpression(expression)) {
 				const args = expression.arguments.map((arg) => {
 					if (ts.isObjectLiteralExpression(arg)) {
-						const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+						const newObj = {};
 						generateObjectDoc(sourceFile, arg, newObj);
 						return newObj;
 					} else if (ts.isArrayLiteralExpression(arg)) {

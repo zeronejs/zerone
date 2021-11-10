@@ -1,31 +1,25 @@
 import * as ts from 'typescript';
 import { generateArrayDoc } from './array.interpret';
-export interface ObjectLiteralExpressionDoc {
-	name: string;
-	value: any;
-}
-export function generateObjectDoc(
-	sourceFile: ts.SourceFile,
-	object: ts.ObjectLiteralExpression,
-	obj: ObjectLiteralExpressionDoc
-) {
+export function generateObjectDoc(sourceFile: ts.SourceFile, object: ts.ObjectLiteralExpression, obj: any) {
 	object.properties.map((propertie) => {
 		if (ts.isPropertyAssignment(propertie)) {
+			let key = '';
 			if (ts.isIdentifier(propertie.name)) {
-				obj.name = ts.unescapeLeadingUnderscores(propertie.name.escapedText);
+				key = ts.unescapeLeadingUnderscores(propertie.name.escapedText);
 			} else {
-				obj.name = propertie.name.getText(sourceFile);
+				key = propertie.name.getText(sourceFile);
 			}
 			if (ts.isObjectLiteralExpression(propertie.initializer)) {
-				generateObjectDoc(sourceFile, propertie.initializer, obj.value);
+				obj[key] = {};
+				generateObjectDoc(sourceFile, propertie.initializer, obj[key]);
 			} else if (ts.isArrayLiteralExpression(propertie.initializer)) {
-				obj.value = generateArrayDoc(sourceFile, propertie.initializer);
+				obj[key] = generateArrayDoc(sourceFile, propertie.initializer);
 			}
 			// else if (ts.isStringLiteral(propertie.initializer)) {
 			// 	return propertie.initializer.text;
 			// }
 			else {
-				obj.value = propertie.initializer.getText(sourceFile);
+				obj[key] = propertie.initializer.getText(sourceFile);
 			}
 		}
 	});

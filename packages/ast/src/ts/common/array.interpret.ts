@@ -1,10 +1,10 @@
 import * as ts from 'typescript';
-import { generateObjectDoc, ObjectLiteralExpressionDoc } from './object.interpret';
+import { generateObjectDoc } from './object.interpret';
 
 export function generateArrayDoc(sourceFile: ts.SourceFile, arr: ts.ArrayLiteralExpression): any {
 	return arr.elements.map((element) => {
 		if (ts.isObjectLiteralExpression(element)) {
-			const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+			const newObj = {};
 			generateObjectDoc(sourceFile, element, newObj);
 			return newObj;
 		} else if (ts.isArrayLiteralExpression(element)) {

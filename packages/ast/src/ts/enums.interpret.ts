@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import { generateArrayDoc } from './common/array.interpret';
-import { generateObjectDoc, ObjectLiteralExpressionDoc } from './common/object.interpret';
+import { generateObjectDoc } from './common/object.interpret';
 import { DeclarationType, InterpretCore } from './interpret.core';
 export interface SourceFileEnums {
 	name: string;
@@ -23,7 +23,7 @@ export class EnumsInterpret {
 					};
 					if (member.initializer) {
 						if (ts.isObjectLiteralExpression(member.initializer)) {
-							const newObj: ObjectLiteralExpressionDoc = { name: '', value: null };
+							const newObj = {};
 							generateObjectDoc(this.interpretCore.sourceFile, member.initializer, newObj);
 							enumMember.value = newObj;
 						} else if (ts.isArrayLiteralExpression(member.initializer)) {
