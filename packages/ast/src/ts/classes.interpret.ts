@@ -5,6 +5,7 @@ export interface SourceFileClasses {
 	name: string;
 	decorators: DecoratorDoc[];
 	documentation: string;
+	properties: ClassPropertyDeclarationDoc[];
 }
 export interface ClassPropertyDeclarationDoc {
 	name: string;
@@ -27,6 +28,7 @@ export class ClassesInterpret {
 				name: '',
 				decorators: generateDecoratorDoc(this.interpretCore.sourceFile, classDeclaration.decorators),
 				documentation: '',
+				properties: [],
 			};
 			if (classDeclaration.name) {
 				fileClasses.name = ts.unescapeLeadingUnderscores(classDeclaration.name.escapedText);
@@ -38,8 +40,6 @@ export class ClassesInterpret {
 				}
 			}
 			// const properties = classDeclaration.members.filter((it) => ts.isPropertyDeclaration(it));
-			const properties: ClassPropertyDeclarationDoc[] = [];
-
 			classDeclaration.members.map((member) => {
 				if (ts.isPropertyDeclaration(member)) {
 					const symbol = checker.getSymbolAtLocation(member.name);
@@ -57,8 +57,7 @@ export class ClassesInterpret {
 							symbol.getDocumentationComment(checker)
 						);
 					}
-
-					properties.push(property);
+					fileClasses.properties.push(property);
 				}
 			});
 
