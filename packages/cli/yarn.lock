@@ -114,6 +114,13 @@
     "@types/expect" "^1.20.4"
     "@types/node" "*"
 
+"@zeronejs/ast@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@zeronejs/ast/-/ast-1.0.0-beta.3.tgz#85d4ec099083c4be236a442834b9c16b7a92c5ce"
+  integrity sha512-poOhrIibU9t2GO5v9ir/Seje3qN/kFN2yqvd/djGt1iDDcbSbjkVemJ69pc8S+jCQkONsn4xWr76L0Unlj7CfQ==
+  dependencies:
+    typescript "^4.4.4"
+
 ansi-colors@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-1.1.0.tgz#6374b4dd5d4718ff3ce27a671a3b1cad077132a9"

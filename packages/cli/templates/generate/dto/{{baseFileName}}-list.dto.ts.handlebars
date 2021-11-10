@@ -2,18 +2,21 @@ import { Limit } from '@common/utils/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+{{#each dotImports}}
+{{{this}}}
+{{/each}}
 class {{BaseName}}ListWhereDto {
-	{{#each property}}
+	{{#each properties}}
     {{#unless isSpecialColumn }}
     /**
-     * {{documentation.[0].text}}
+     * {{documentation}}
      */
     @ApiProperty({
-        description: '{{documentation.[0].text}}',
+        description: '{{documentation}}',
         required: false,
     })
     @IsOptional()
-    {{escapedName}}?: {{{type}}};
+    {{name}}?: {{{type.value}}};
     {{/unless}}
 	{{/each}}
 }

@@ -3,9 +3,10 @@ import { Command } from 'commander';
 import {
 	// AddAction,
 	BuildAction,
-	GenerateAction,
+	// GenerateAction,
 	InfoAction,
 	NewAction,
+	GenerateAstAction,
 	// StartAction,
 	// UpdateAction,
 } from '../actions';
@@ -25,7 +26,7 @@ export class CommandLoader {
 		new InfoCommand(new InfoAction()).load(program);
 		// new UpdateCommand(new UpdateAction()).load(program);
 		// new AddCommand(new AddAction()).load(program);
-		new GenerateCommand(new GenerateAction()).load(program);
+		new GenerateCommand(new GenerateAstAction()).load(program);
 
 		this.handleInvalidCommand(program);
 	}

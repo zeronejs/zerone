@@ -1,24 +1,27 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+{{#each dotImports}}
+{{{this}}}
+{{/each}}
 export class {{BaseName}}CreateDto {
-	{{#each property}}
+	{{#each properties}}
     {{#unless isSpecialColumn }}
     /**
-     * {{documentation.[0].text}}
+     * {{documentation}}
      */
     @ApiProperty({
-        description: '{{documentation.[0].text}}',
+        description: '{{documentation}}',
         required: {{#unless isOptional }}true{{else unless isRead}}false{{/unless}},
     })
     {{#if isOptional }}
     @IsOptional()
-    {{escapedName}}?: {{{type}}};
+    {{name}}?: {{{type.value}}};
 
     {{else}}
     @IsNotEmpty({
-        message: '{{documentation.[0].text}}不能为空',
+        message: '{{documentation}}不能为空',
     })
-    {{escapedName}}: {{{type}}};
+    {{name}}: {{{type.value}}};
 
     {{/if}}
     {{/unless}}
