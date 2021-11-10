@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
 import { DecoratorDoc, generateDecoratorDoc } from './common/decorator.interpret';
+import { getTypeReferences } from './common/type.interpret';
 import { DeclarationType, InterpretCore } from './interpret.core';
 export interface SourceFileClasses {
 	name: string;
@@ -15,6 +16,7 @@ export interface ClassPropertyDeclarationDoc {
 	type: {
 		// 预留  后期丰富
 		value: string;
+		typeReferences: string[];
 	};
 }
 export class ClassesInterpret {
@@ -50,8 +52,12 @@ export class ClassesInterpret {
 						decorators: generateDecoratorDoc(this.interpretCore.sourceFile, member.decorators),
 						type: {
 							value: member.type?.getText(this.interpretCore.sourceFile) ?? 'any',
+							typeReferences: [],
 						},
 					};
+					if (member.type) {
+						property.type.typeReferences = getTypeReferences(member.type);
+					}
 					if (symbol) {
 						property.documentation = ts.displayPartsToString(
 							symbol.getDocumentationComment(checker)

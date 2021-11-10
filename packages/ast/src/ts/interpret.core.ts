@@ -24,6 +24,8 @@ export class InterpretCore {
 	sourceFile: ts.SourceFile;
 
 	getDeclarationsItem(declarationType: DeclarationType.importDeclaration): ts.ImportDeclaration[];
+	getDeclarationsItem(declarationType: DeclarationType.interfaceDeclarations): ts.InterfaceDeclaration[];
+	getDeclarationsItem(declarationType: DeclarationType.typeAliasDeclarations): ts.TypeAliasDeclaration[];
 	getDeclarationsItem(declarationType: DeclarationType.enumDeclarations): ts.EnumDeclaration[];
 	getDeclarationsItem(declarationType: DeclarationType.variableStatements): ts.VariableStatement[];
 	getDeclarationsItem(declarationType: DeclarationType.classDeclarations): ts.ClassDeclaration[];
@@ -53,6 +55,18 @@ export class InterpretCore {
 							return statement;
 						}
 						break;
+					// interface
+					case DeclarationType.interfaceDeclarations:
+						if (ts.isInterfaceDeclaration(statement)) {
+							return statement;
+						}
+						break;
+					// interface
+					case DeclarationType.typeAliasDeclarations:
+						if (ts.isTypeAliasDeclaration(statement)) {
+							return statement;
+						}
+						break;
 					// 类
 					case DeclarationType.classDeclarations:
 						if (ts.isClassDeclaration(statement)) {
@@ -77,4 +91,6 @@ export enum DeclarationType {
 	variableStatements,
 	enumDeclarations,
 	classDeclarations,
+	interfaceDeclarations,
+	typeAliasDeclarations,
 }
