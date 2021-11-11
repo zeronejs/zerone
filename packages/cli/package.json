@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {
@@ -39,7 +39,6 @@
     "commander": "^8.2.0",
     "consola": "^2.15.3",
     "fs-extra": "^10.0.0",
-    "gulp": "4.0.2",
     "handlebars": "^4.7.7",
     "inquirer": "^8.2.0",
     "node-emoji": "^1.11.0",
