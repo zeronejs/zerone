@@ -67,6 +67,9 @@
       "@zeronejs/*": [
         "packages/*/src"
       ],
+      "@zeronejs/ast-*": [
+        "packages/ast/*/src"
+      ],
     }
   },
   // "include": [

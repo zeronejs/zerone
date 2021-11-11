@@ -9,6 +9,7 @@ module.exports = {
 	testEnvironment: 'node',
 	// moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
 	moduleNameMapper: {
+		'^@zeronejs/ast-(.*)$': '<rootDir>/packages/ast/$1/src',
 		'^@zeronejs/(.*)$': '<rootDir>/packages/$1/src',
 	},
 	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist'],

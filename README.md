@@ -5,7 +5,7 @@
 | Project             | Status                                                            | Description               |
 | ------------------- | ----------------------------------------------------------------- | ------------------------- |
 | @zeronejs/cli       | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/cli)       | 命令行工具                |
-| @zeronejs/ast       | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast)       | 读取解释AST（抽象语法树） |
+| @zeronejs/ast-ts    | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts)    | 读取解释AST（抽象语法树） |
 | @zeronejs/role-easy | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/role-easy) | 简单的角色授权            |
 | @zeronejs/auth      | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/auth)      | 身份验证                  |
 | @zeronejs/redis     | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/redis)     | 高速缓存                  |

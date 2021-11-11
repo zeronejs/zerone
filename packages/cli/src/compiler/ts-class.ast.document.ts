@@ -7,7 +7,7 @@ import {
 	TypeAliasInterpret,
 	InterfaceInterpret,
 	ClassPropertyDeclarationDoc,
-} from '@zeronejs/ast';
+} from '@zeronejs/ast-ts';
 import { basename } from 'path';
 export interface DocEntry {
 	fileName: string;
