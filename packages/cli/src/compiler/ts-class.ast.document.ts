@@ -8,9 +8,18 @@ import {
 	InterfaceInterpret,
 	ClassPropertyDeclarationDoc,
 } from '@zeronejs/ast-ts';
-import { basename } from 'path';
+import { basename, join } from 'path';
 export interface DocEntry {
 	fileName: string;
+	entitiesName: string;
+	/**
+	 * 整个模块名称
+	 */
+	moduleName: string;
+	/**
+	 * 大驼峰 moduleName
+	 */
+	ModuleName: string;
 	baseFileName: string;
 	BaseName: string;
 	baseName: string;
@@ -52,22 +61,25 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 		let isSpecialColumn = false;
 		let isOptional = Boolean(property.isOptional);
 		let defaultValue: string | undefined;
-		if (property.decorators.some((it) => specialColumns.includes(it.name))) {
+		if (property.decorators.some((it) => it.name && specialColumns.includes(it.name))) {
 			isSpecialColumn = true;
 		}
 		const columnDecorator = property.decorators.find((it) => it.name === 'Column');
 		if (columnDecorator) {
-			isOptional = columnDecorator.expression?.args[0]?.nullable === 'true';
-			defaultValue = columnDecorator.expression?.args[0]?.default;
+			isOptional = columnDecorator.expression?.args?.[0]?.nullable === 'true';
+			defaultValue = columnDecorator.expression?.args?.[0]?.default;
 		}
 		return { ...property, isSpecialColumn, isOptional, defaultValue };
 	});
 
 	const dotImports = getDtoImports();
 	const BaseName = entityClasses[0].name.replace(/Entity$/, '');
-
+	const moduleName = basename(join(fileName, '../../'));
 	return {
 		fileName: originName,
+		entitiesName: basename(join(fileName, '../')),
+		moduleName,
+		ModuleName: moduleName.charAt(0).toUpperCase() + moduleName.slice(1),
 		baseFileName: originName.replace(/.entity.ts$/, ''),
 		BaseName: BaseName,
 		baseName: BaseName.charAt(0).toLowerCase() + BaseName.slice(1),
