@@ -1,4 +1,5 @@
 import * as ts from 'typescript';
+import { generateCallExpressionDoc } from './callExpression.interpret';
 import { generateObjectDoc } from './object.interpret';
 
 export function generateArrayDoc(sourceFile: ts.SourceFile, arr: ts.ArrayLiteralExpression): any {
@@ -9,6 +10,8 @@ export function generateArrayDoc(sourceFile: ts.SourceFile, arr: ts.ArrayLiteral
 			return newObj;
 		} else if (ts.isArrayLiteralExpression(element)) {
 			return generateArrayDoc(sourceFile, element);
+		} else if (ts.isCallExpression(element)) {
+			return generateCallExpressionDoc(sourceFile, element);
 		}
 		// else if (ts.isStringLiteral(element)) {
 		// 	return element.text;
