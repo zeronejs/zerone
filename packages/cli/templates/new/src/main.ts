@@ -2,10 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as dayjs from 'dayjs';
-require('dayjs/locale/zh-cn');
 async function bootstrap() {
-    dayjs.locale('zh-cn');
     const app = await NestFactory.create(AppModule);
 
     const config = new DocumentBuilder()
