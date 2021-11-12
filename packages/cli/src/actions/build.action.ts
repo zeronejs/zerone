@@ -5,7 +5,7 @@ import consola from 'consola';
 import { AbstractAction } from './abstract.action';
 import { join } from 'path';
 import { watch } from 'chokidar';
-import { copy, remove, readJSON } from 'fs-extra';
+import { copy, remove, readJSON, pathExists } from 'fs-extra';
 export class BuildAction extends AbstractAction {
 	public async handle() {
 		try {
@@ -145,11 +145,16 @@ export class BuildAction extends AbstractAction {
 				const copyRootFiles = ['README.md', 'readme.md', 'package.json', 'LICENSE', 'templates'];
 				return Promise.all(
 					copyRootFiles.map((it) => {
-						return copy(join(root, it), join(options.output, it), {
-							overwrite: true,
-						});
+						return copyToFile(join(root, it), join(options.output, it));
 					})
 				);
+			}
+			async function copyToFile(src: string, dest: string) {
+				if (await pathExists(src)) {
+					return copy(src, dest, {
+						overwrite: true,
+					});
+				}
 			}
 		} catch (err) {
 			if (err instanceof Error) {

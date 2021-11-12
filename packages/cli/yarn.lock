@@ -114,10 +114,10 @@
     "@types/expect" "^1.20.4"
     "@types/node" "*"
 
-"@zeronejs/ast-ts@^1.0.0-beta.4":
-  version "1.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@zeronejs/ast-ts/-/ast-ts-1.0.0-beta.4.tgz#39bf159f7463e0e3325774f8f2ada805880259e5"
-  integrity sha512-Qc+LCDkEc2N2LqIX2UkxQI0JSlFz+PjpvudMUEbq6egC/uwRpnWWvc//WW1v2Ea8ebeJtesqAinbwCFX1piw/w==
+"@zeronejs/ast-ts@^1.0.0-beta.6":
+  version "1.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@zeronejs/ast-ts/-/ast-ts-1.0.0-beta.6.tgz#7ed8fa0b79d041a77ce3e03dbde8362709fbbd4c"
+  integrity sha512-+Za8eN/2NeO5pNAZsoYFN0J2g9au8ZPtE44PcZtTc2HxmECsFxKBqWBpnlwqOw4uE//3ThlNx55DcJSE7c5Igg==
   dependencies:
     typescript "^4.4.4"
 

@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {
@@ -33,7 +33,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@zeronejs/ast-ts": "^1.0.0-beta.4",
+    "@zeronejs/ast-ts": "^1.0.0-beta.6",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "commander": "^8.2.0",
