@@ -24,6 +24,7 @@ export class InterpretCore {
 	sourceFile: ts.SourceFile;
 
 	getDeclarationsItem(declarationType: DeclarationType.importDeclaration): ts.ImportDeclaration[];
+	getDeclarationsItem(declarationType: DeclarationType.exportDeclaration): ts.ExportDeclaration[];
 	getDeclarationsItem(declarationType: DeclarationType.interfaceDeclarations): ts.InterfaceDeclaration[];
 	getDeclarationsItem(declarationType: DeclarationType.typeAliasDeclarations): ts.TypeAliasDeclaration[];
 	getDeclarationsItem(declarationType: DeclarationType.enumDeclarations): ts.EnumDeclaration[];
@@ -40,6 +41,12 @@ export class InterpretCore {
 					// 导入
 					case DeclarationType.importDeclaration:
 						if (ts.isImportDeclaration(statement)) {
+							return statement;
+						}
+						break;
+					// 导入
+					case DeclarationType.exportDeclaration:
+						if (ts.isExportDeclaration(statement)) {
 							return statement;
 						}
 						break;
@@ -88,6 +95,7 @@ export class InterpretCore {
 }
 export enum DeclarationType {
 	importDeclaration,
+	exportDeclaration,
 	variableStatements,
 	enumDeclarations,
 	classDeclarations,

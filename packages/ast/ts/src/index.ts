@@ -6,4 +6,5 @@ export * from './variables.interpret';
 export * from './interpret.core';
 export * from './typeAlias.interpret';
 export * from './interface.interpret';
-export * from './common'
+export * from './exports.interpret';
+export * from './common';

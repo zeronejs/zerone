@@ -15,6 +15,11 @@ export enum Gender {
 	// mam,
 	// woman,
 }
+interface UserInput {
+	username: string;
+}
+type Password = string;
+
 /**
  * 用户表1
  * 234
@@ -28,12 +33,12 @@ export enum Gender {
  * 1235566
  */
 @Entity()
-export class UserEntity {
+export class UserEntity  {
 	/**
 	 * id
 	 */
 	@PrimaryGeneratedColumn()
-	id?: number;
+	id: number;
 	/**
 	 * 用户名
 	 */
@@ -44,7 +49,7 @@ export class UserEntity {
 	 * 密码
 	 */
 	@Column()
-	password: string;
+	password: Password;
 	/**
 	 * 性别
 	 */

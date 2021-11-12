@@ -1,6 +1,6 @@
-# @zeronejs/ast
+# @zeronejs/ast-ts
 
-![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast)
+![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts)
  
 <!-- ## Documentation
 
