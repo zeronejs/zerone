@@ -2,7 +2,7 @@ import { Controller, Get, Post, Patch, Body, Param, Delete, Query } from '@nestj
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Limit } from '@common/utils/constants';
 import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
-import { {{BaseName}}Service } from './{{baseName}}.service';
+import { {{BaseName}}Service } from './{{baseFileName}}.service';
 
 @ApiTags('{{baseName}}')
 @ApiBearerAuth()
