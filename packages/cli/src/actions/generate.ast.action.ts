@@ -61,8 +61,9 @@ const generateWriteFile = async (
 		{ url: 'dto/index.ts.handlebars', handle: indexSupplementary },
 		{ url: '{{moduleName}}.module.ts.handlebars', handle: moduleSupplementary },
 	];
-	// todo   可优化
-	for (const filename of fileNames) {
+	await Promise.all(fileNames.map((filename) => writeItemFile(filename)));
+
+	async function writeItemFile(filename: string) {
 		// fileNames.forEach(async (filename) => {
 		const fileUri = join(readUri, filename);
 		if (await _isDir(fileUri)) {
@@ -73,7 +74,7 @@ const generateWriteFile = async (
 				docEntryItem,
 				filename
 			);
-			continue;
+			return;
 		}
 		await ensureDir(writeUri);
 		const writeFileName = compile(filename)(docEntryItem).replace('.handlebars', '');
@@ -95,7 +96,7 @@ const generateWriteFile = async (
 					chalk.gray(join(dirName, basename(writeFileUri)).padEnd(35)),
 					chalk.yellow('文件已修改!')
 				);
-				continue;
+				return;
 			}
 		}
 

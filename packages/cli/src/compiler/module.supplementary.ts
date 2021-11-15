@@ -1,6 +1,6 @@
-import { ClassesInterpret, ImportsInterpret, InterpretCore } from '@zeronejs/ast-ts';
-import * as ts from 'typescript';
 import { DocEntry } from './ts-class.ast.document';
+import { Project, ts, Node } from 'ts-morph';
+import { compact } from '@zeronejs/utils';
 
 enum DtoFormNamesType {
 	controller,
@@ -8,9 +8,15 @@ enum DtoFormNamesType {
 	entity,
 }
 export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
-	const interpretCore = new InterpretCore(fileUrl);
-	const imports = new ImportsInterpret(interpretCore).interpret();
-	const froms = imports.map((it) => it.from).filter(Boolean);
+	const project = new Project();
+	const sourceProject = project.addSourceFileAtPath(fileUrl);
+	const appModule = sourceProject.getClass(`${docEntry.ModuleName}Module`);
+	if (!appModule) {
+		return false;
+	}
+	const froms = compact(
+		sourceProject.getImportDeclarations().map((it) => it.getStructure().moduleSpecifier)
+	);
 
 	const dtoFormNames = [
 		{ fromUrl: `./${docEntry.baseFileName}.controller`, type: DtoFormNamesType.controller },
@@ -23,38 +29,98 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 	if (dtoFormNames.length === 0) {
 		return false;
 	}
-	const moduleClass = new ClassesInterpret(interpretCore)
-		.interpret()
-		.find((it) => it.name === `${docEntry.ModuleName}Module`);
-	if (!moduleClass) {
+
+	const properties = appModule.getDecorator('Module')?.getArguments()?.[0];
+	if (!Node.isObjectLiteralExpression(properties)) {
 		return false;
 	}
-	const sourceClass = interpretCore.sourceFile.statements.find(
-		(it) =>
-			ts.isClassDeclaration(it) &&
-			it.name &&
-			moduleClass.name === ts.unescapeLeadingUnderscores(it.name?.escapedText)
-	);
-	// todo next week
+	let isChangeFlags = false;
 
 	for (const dtoFormName of dtoFormNames) {
 		switch (dtoFormName.type) {
 			case DtoFormNamesType.controller:
-				const ctrlName = ts.factory.createIdentifier(`${docEntry.BaseName}Controller`);
+				const ctrlName = `${docEntry.BaseName}Controller`;
 
+				sourceProject.addImportDeclaration({
+					namedImports: [ctrlName],
+					moduleSpecifier: dtoFormName.fromUrl,
+				});
+				isChangeFlags = true;
+				const sourceControllers = properties.getProperty('controllers');
+				if (Node.isPropertyAssignment(sourceControllers)) {
+					const initializer = sourceControllers.getInitializer();
+					if (Node.isArrayLiteralExpression(initializer)) {
+						if (!initializer.getElements().find((it) => it.getText() === ctrlName)) {
+							initializer.addElement(ctrlName);
+						}
+					}
+				}
 				break;
 			case DtoFormNamesType.service:
-				const serviceName = ts.factory.createIdentifier(`${docEntry.BaseName}Service`);
+				const serviceName = `${docEntry.BaseName}Service`;
+				const sourceProperties = properties.getProperty('providers');
+				const sourceExports = properties.getProperty('exports');
+				sourceProject.addImportDeclaration({
+					namedImports: [serviceName],
+					moduleSpecifier: dtoFormName.fromUrl,
+				});
+				isChangeFlags = true;
+				if (Node.isPropertyAssignment(sourceProperties)) {
+					const initializer = sourceProperties.getInitializer();
+					if (Node.isArrayLiteralExpression(initializer)) {
+						if (!initializer.getElements().find((it) => it.getText() === serviceName)) {
+							initializer.addElement(serviceName);
+						}
+					}
+				}
+				if (Node.isPropertyAssignment(sourceExports)) {
+					const initializer = sourceExports.getInitializer();
+					if (Node.isArrayLiteralExpression(initializer)) {
+						if (!initializer.getElements().find((it) => it.getText() === serviceName)) {
+							initializer.addElement(serviceName);
+						}
+					}
+				}
 
 				break;
 			case DtoFormNamesType.entity:
-				const entityName = ts.factory.createIdentifier(`${docEntry.BaseName}Entity`);
+				const entityName = `${docEntry.className}`;
+				sourceProject.addImportDeclaration({
+					namedImports: [entityName],
+					moduleSpecifier: dtoFormName.fromUrl,
+				});
+				isChangeFlags = true;
+				const sourceEntities = properties.getProperty('imports');
+				if (Node.isPropertyAssignment(sourceEntities)) {
+					const initializer = sourceEntities.getInitializer();
+					if (Node.isArrayLiteralExpression(initializer)) {
+						const typeormModule = initializer.getElements();
+						const typeormStrings = ['TypeOrmModule', 'forFeature'];
+
+						const typeormForFeature = typeormModule.find((typeormModuleItem) => {
+							const importsIdentifier = typeormModuleItem
+								.getDescendantsOfKind(ts.SyntaxKind.Identifier)
+								.map((it) => it.getText());
+							return typeormStrings.every((it) => importsIdentifier.includes(it));
+						});
+						if (Node.isCallExpression(typeormForFeature)) {
+							const typeormArgs = typeormForFeature.getArguments()[0];
+							if (Node.isArrayLiteralExpression(typeormArgs)) {
+								if (!typeormArgs.getElements().find((it) => it.getText() === entityName)) {
+									typeormArgs.addElement(entityName);
+									isChangeFlags = true;
+								}
+							}
+						}
+					}
+				}
 
 				break;
 		}
 	}
-
-	debugger;
-
-	return true;
+	if (isChangeFlags) {
+		sourceProject.saveSync();
+		return true;
+	}
+	return false;
 }

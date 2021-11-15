@@ -23,6 +23,7 @@ export interface DocEntry {
 	baseFileName: string;
 	BaseName: string;
 	baseName: string;
+	className: string;
 	documentation: string;
 	dotImports: string[];
 	properties?: DocEntryProperty[];
@@ -84,6 +85,7 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 		BaseName: BaseName,
 		baseName: BaseName.charAt(0).toLowerCase() + BaseName.slice(1),
 		documentation: entityClasses[0].documentation,
+		className: entityClasses[0].name,
 		properties,
 		dotImports,
 	};

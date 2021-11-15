@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {
@@ -34,6 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "@zeronejs/ast-ts": "^1.0.0-beta.6",
+    "@zeronejs/utils": "^1.0.9",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
     "commander": "^8.2.0",
@@ -44,6 +45,7 @@
     "node-emoji": "^1.11.0",
     "ora": "^5.4.1",
     "os-name": "^4.0.1",
+    "ts-morph": "^12.2.0",
     "typescript": "^4.4.4"
   },
   "devDependencies": {

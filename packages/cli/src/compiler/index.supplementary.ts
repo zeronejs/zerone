@@ -1,11 +1,13 @@
-import { ExportsInterpret, InterpretCore } from '@zeronejs/ast-ts';
-import { createWriteStream } from 'fs-extra';
 import { DocEntry } from './ts-class.ast.document';
+import { Project } from 'ts-morph';
+import { compact } from '@zeronejs/utils';
 
 export function indexSupplementary(fileUrl: string, docEntry: DocEntry) {
-	const interpretCore = new InterpretCore(fileUrl);
-	const fileExports = new ExportsInterpret(interpretCore).interpret();
-	const froms = fileExports.map((it) => it.from).filter(Boolean);
+	const project = new Project();
+	const sourceProject = project.addSourceFileAtPath(fileUrl);
+	const froms = compact(
+		sourceProject.getExportDeclarations().map((it) => it.getStructure().moduleSpecifier)
+	);
 
 	const dtoFormNames = [
 		`./${docEntry.baseFileName}-create.dto`,
@@ -15,11 +17,11 @@ export function indexSupplementary(fileUrl: string, docEntry: DocEntry) {
 	if (dtoFormNames.length === 0) {
 		return false;
 	}
-	const writeStream = createWriteStream(fileUrl, {
-		flags: 'a', //'a'为追加，'w'为覆盖
-	});
-	dtoFormNames.forEach((dtoFormName) => {
-		writeStream.write(`export * from '${dtoFormName}';\n`);
-	});
+	sourceProject.addExportDeclarations(
+		dtoFormNames.map((it) => {
+			return { moduleSpecifier: it };
+		})
+	);
+	sourceProject.saveSync();
 	return true;
 }
