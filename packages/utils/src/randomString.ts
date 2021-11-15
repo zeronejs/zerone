@@ -30,20 +30,20 @@ const _randomChars = (count: number, type: RandomCharsType) => {
  * 随机字符串, 包括大小写字母和数字
  * @param {number} count 随机个数
  */
-export const randomChars = (count: number = 32) => {
+export const randomChars = (count = 32) => {
 	return _randomChars(count, RandomCharsType.all);
 };
 /**
  * 随机字符串，只包括数字
  * @param {number} count 随机个数
  */
-export const randomNumChars = (count: number = 32) => {
+export const randomNumChars = (count = 32) => {
 	return _randomChars(count, RandomCharsType.num);
 };
 /**
  * 随机字符串，只有字母
  * @param {number} count 随机个数
  */
-export const randomStrChars = (count: number = 32) => {
+export const randomStrChars = (count = 32) => {
 	return _randomChars(count, RandomCharsType.str);
 };
