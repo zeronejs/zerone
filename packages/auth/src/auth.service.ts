@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { verifyUserPassword } from '@zeronejs/utils';
+import { verifyUserPassword } from './utils';
 import { ReqUser } from './index';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

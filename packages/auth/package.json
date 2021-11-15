@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/auth",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Zerone auth",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -28,6 +28,7 @@
   "dependencies": {
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
+    "bcrypt": "^5.0.1",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
@@ -37,9 +38,9 @@
     "@nestjs/core": "^8.1.1",
     "@nestjs/testing": "^8.1.1",
     "@nestjs/typeorm": "^8.0.2",
+    "@types/bcrypt": "^5.0.0",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
-    "@zeronejs/utils": "^1.0.0",
     "express": "^4.17.1",
     "rxjs": "^7.4.0",
     "typeorm": "^0.2.38"
