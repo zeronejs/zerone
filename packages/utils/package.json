@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/utils",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Zerone utils",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -24,11 +24,5 @@
   },
   "homepage": "https://zerone.top/",
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "bcrypt": "^5.0.1"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.0"
-  }
+  "license": "MIT"
 }
