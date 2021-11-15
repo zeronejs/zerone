@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
-import { {{BaseName}}Entity } from './entities/{{baseFileName}}.entity';
+import { {{className}} } from './entities/{{baseFileName}}.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 @Injectable()
 export class {{BaseName}}Service {
-    constructor(@InjectRepository({{BaseName}}Entity) private {{baseName}}Repository: Repository<{{BaseName}}Entity>) {}
+    constructor(@InjectRepository({{className}}) private {{baseName}}Repository: Repository<{{className}}>) {}
 
     async create(entity: {{BaseName}}CreateDto) {
         return await this.{{baseName}}Repository.save(entity);
