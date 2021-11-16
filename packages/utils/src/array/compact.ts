@@ -13,15 +13,15 @@
  * _.compact([0, 1, false, 2, '', 3]);
  * // => [1, 2, 3]
  */
- export function compact<T>(array: Array<T | null | undefined | false | '' | 0> | null | undefined): T[] {
-	let index = -1,
-		resIndex = 0;
+export function compact<T>(array: Array<T | null | undefined | false | '' | 0> | null | undefined): T[] {
+	let resIndex = 0;
+	const result: T[] = [];
 
-	const length = !array ? 0 : array.length,
-		result: T[] = [];
+	if (!array) {
+		return result;
+	}
 
-	while (++index < length) {
-		const value = array?.[index];
+	for (const value of array) {
 		if (value) {
 			result[resIndex++] = value;
 		}
