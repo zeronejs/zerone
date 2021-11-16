@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Input } from '../commands';
-import { ensureDir, readdir, readFile, stat, writeFile, pathExists } from 'fs-extra';
+import { ensureDir, readdir, readFile, stat, writeFile, pathExists, remove } from 'fs-extra';
 import * as inquirer from 'inquirer';
 import { join, basename } from 'path';
 import { compile } from 'handlebars';
@@ -8,11 +8,17 @@ import { AbstractAction } from './abstract.action';
 import { generateAstDocumentation, DocEntry } from '../compiler/ts-class.ast.document';
 import { indexSupplementary } from '../compiler/index.supplementary';
 import { moduleSupplementary } from '../compiler/module.supplementary';
-
+interface GenerateOptions {
+	root: string;
+	delete: boolean;
+}
 export class GenerateAstAction extends AbstractAction {
-	public async handle(inputs: Input[], options: Input[]) {
-		const root = process.cwd();
-		const allfiles = await readdir(root);
+	public async handle(options: Input[]) {
+		const option: GenerateOptions = {
+			root: process.cwd(),
+			delete: Boolean(options.find((it) => it.name === 'delete')?.value),
+		};
+		const allfiles = await readdir(option.root);
 		const fileNames = allfiles.filter((it) => it.includes('.entity.ts'));
 		if (fileNames.length === 0) {
 			const message = '未找到.entity.ts结尾的文件，如需新建，请输入文件的基础名称！';
@@ -32,20 +38,59 @@ export class GenerateAstAction extends AbstractAction {
 
 			// return console.log('未找到.entity.ts结尾的文件');
 		}
-		for (const fileName of fileNames) {
-			const docEntry = generateAstDocumentation(join(root, fileName));
-			await generate(docEntry);
+		const fileNamesDoc = await Promise.all(
+			fileNames.map(async (it) => {
+				const docEntry = generateAstDocumentation(join(option.root, it));
+				if (option.delete) {
+					const readUri = join(__dirname, '../../templates/generate');
+					const writeUri = join(process.cwd(), '../');
+					const files = await readdir(readUri);
+					for (const file of files) {
+						await removeItemFile(docEntry, readUri, writeUri, file);
+					}
+				}
+				return {
+					fileName: it,
+					docEntry,
+				};
+			})
+		);
+		for (const it of fileNamesDoc) {
+			// 这里不同时执行是为了 同文件的追加
+			await generate(it.docEntry, option);
+		}
+		async function removeItemFile(
+			docEntryItem: DocEntry,
+			readUri: string,
+			writeUri: string,
+			filename: string
+		) {
+			const rmFileName = compile(filename)(docEntryItem).replace('.handlebars', '');
+			if (await _isDir(join(readUri, filename))) {
+				const readDirs = await readdir(join(readUri, filename));
+				for (const dirFileName of readDirs) {
+					await removeItemFile(
+						docEntryItem,
+						join(readUri, filename),
+						join(writeUri, filename),
+						dirFileName
+					);
+				}
+				return;
+			}
+			await remove(join(writeUri, rmFileName));
 		}
 	}
 }
 
-const generate = async (docEntryItem: DocEntry) => {
+const generate = async (docEntryItem: DocEntry, option: GenerateOptions) => {
 	const generateUri = join(__dirname, '../../templates/generate');
 	const files = await readdir(generateUri);
 
-	await generateWriteFile(generateUri, join(process.cwd(), '../'), files, docEntryItem);
+	await generateWriteFile(option, generateUri, join(process.cwd(), '../'), files, docEntryItem);
 };
 const generateWriteFile = async (
+	option: GenerateOptions,
 	readUri: string,
 	writeUri: string,
 	/**
@@ -61,6 +106,9 @@ const generateWriteFile = async (
 		{ url: 'dto/index.ts.handlebars', handle: indexSupplementary },
 		{ url: '{{moduleName}}.module.ts.handlebars', handle: moduleSupplementary },
 	];
+	// if (option.delete) {
+	// 	await Promise.all(fileNames.map((filename) => removeItemFile(readUri, writeUri, filename)));
+	// }
 	await Promise.all(fileNames.map((filename) => writeItemFile(filename)));
 
 	async function writeItemFile(filename: string) {
@@ -68,6 +116,7 @@ const generateWriteFile = async (
 		const fileUri = join(readUri, filename);
 		if (await _isDir(fileUri)) {
 			await generateWriteFile(
+				option,
 				fileUri,
 				join(writeUri, filename),
 				await readdir(fileUri),

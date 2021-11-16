@@ -10,8 +10,8 @@ enum DtoFormNamesType {
 export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 	const project = new Project();
 	const sourceProject = project.addSourceFileAtPath(fileUrl);
-	const appModule = sourceProject.getClass(`${docEntry.ModuleName}Module`);
-	if (!appModule) {
+	const apiModule = sourceProject.getClass(`${docEntry.ModuleName}Module`);
+	if (!apiModule) {
 		return false;
 	}
 	const froms = compact(
@@ -30,7 +30,7 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 		return false;
 	}
 
-	const properties = appModule.getDecorator('Module')?.getArguments()?.[0];
+	const properties = apiModule.getDecorator('Module')?.getArguments()?.[0];
 	if (!Node.isObjectLiteralExpression(properties)) {
 		return false;
 	}
