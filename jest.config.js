@@ -12,5 +12,6 @@ module.exports = {
 		'^@zeronejs/ast-(.*)$': '<rootDir>/packages/ast/$1/src',
 		'^@zeronejs/(.*)$': '<rootDir>/packages/$1/src',
 	},
+	testMatch: ['<rootDir>/packages/**/*.(test|spec).ts'],
 	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist'],
 };
