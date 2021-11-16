@@ -1,6 +1,3 @@
-test('this test will not run', () => {
-	expect('A').toBe('A');
-});
 // import { Role } from '@common/role';
 import path1 from 'path';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
