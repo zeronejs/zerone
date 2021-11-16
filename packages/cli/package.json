@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {

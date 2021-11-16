@@ -8,20 +8,23 @@ import { AbstractAction } from './abstract.action';
 import { generateAstDocumentation, DocEntry } from '../compiler/ts-class.ast.document';
 import { indexSupplementary } from '../compiler/index.supplementary';
 import { moduleSupplementary } from '../compiler/module.supplementary';
+import { appModuleSupplementary } from '../compiler/appModule.supplementary';
 interface GenerateOptions {
 	root: string;
 	delete: boolean;
 }
 export class GenerateAstAction extends AbstractAction {
 	public async handle(options: Input[]) {
+		const now = Date.now();
+		console.log(chalk.gray('i am generating...'));
 		const option: GenerateOptions = {
 			root: process.cwd(),
 			delete: Boolean(options.find((it) => it.name === 'delete')?.value),
 		};
 		const allfiles = await readdir(option.root);
-		const fileNames = allfiles.filter((it) => it.includes('.entity.ts'));
+		const fileNames = allfiles.filter((it) => it.endsWith('.entity.ts'));
 		if (fileNames.length === 0) {
-			const message = '未找到.entity.ts结尾的文件，如需新建，请输入文件的基础名称！';
+			const message = `File ending in '.entity.ts' not found, need to create?`;
 			const answers = await inquirer.prompt([
 				{
 					type: 'input',
@@ -56,9 +59,20 @@ export class GenerateAstAction extends AbstractAction {
 			})
 		);
 		for (const it of fileNamesDoc) {
+			console.info(chalk.green(`[${it.fileName}]`));
 			// 这里不同时执行是为了 同文件的追加
 			await generate(it.docEntry, option);
 		}
+		// app module
+		if (appModuleSupplementary(fileNamesDoc[0].docEntry)) {
+			console.info(chalk.green(`[AppModule]`));
+			console.info(
+				chalk.yellow('  - '),
+				chalk.gray('app.module.ts'.padEnd(35)),
+				chalk.yellow('modified!')
+			);
+		}
+		console.log(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
 		async function removeItemFile(
 			docEntryItem: DocEntry,
 			readUri: string,
@@ -143,7 +157,7 @@ const generateWriteFile = async (
 				console.info(
 					chalk.yellow('  - '),
 					chalk.gray(join(dirName, basename(writeFileUri)).padEnd(35)),
-					chalk.yellow('文件已修改!')
+					chalk.yellow('modified!')
 				);
 				return;
 			}
@@ -189,14 +203,14 @@ async function _writeFile(url: string, content: string | Buffer, dirName = '', i
 		return console.info(
 			chalk.red('  x '),
 			chalk.gray(join(dirName, baseFileName).padEnd(35)),
-			chalk.red('文件已存在')
+			chalk.red('File already exists')
 		);
 	} else if (exists) {
 		await writeFile(url, content);
 		return console.info(
 			chalk.yellow('  - '),
 			chalk.gray(join(dirName, baseFileName).padEnd(35)),
-			chalk.yellow('文件已修改!!')
+			chalk.yellow('modified!!')
 		);
 	}
 	await writeFile(url, content);
