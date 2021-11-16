@@ -64,7 +64,8 @@ export class GenerateAstAction extends AbstractAction {
 			await generate(it.docEntry, option);
 		}
 		// app module
-		if (appModuleSupplementary(fileNamesDoc[0].docEntry)) {
+		const appFileUrl: string = join(process.cwd(), '../../../', 'app.module.ts');
+		if (appModuleSupplementary(appFileUrl, fileNamesDoc[0].docEntry)) {
 			console.info(chalk.green(`[AppModule]`));
 			console.info(
 				chalk.yellow('  - '),

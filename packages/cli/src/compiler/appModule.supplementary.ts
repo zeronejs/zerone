@@ -1,11 +1,9 @@
 import { DocEntry } from './ts-class.ast.document';
 import { Project, Node } from 'ts-morph';
 import { compact } from '@zeronejs/utils';
-import { join } from 'path';
 import { pathExistsSync } from 'fs-extra';
 
-export function appModuleSupplementary(docEntry: DocEntry) {
-	const fileUrl: string = join(process.cwd(), '../../../', 'app.module.ts');
+export function appModuleSupplementary(fileUrl: string, docEntry: DocEntry) {
 	if (!pathExistsSync(fileUrl)) {
 		return false;
 	}
