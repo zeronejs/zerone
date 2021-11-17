@@ -14,4 +14,6 @@ module.exports = {
 	},
 	testMatch: ['<rootDir>/packages/**/*.(test|spec).ts'],
 	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist'],
+	// 不算入覆盖率的文件夹
+	coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
 };
