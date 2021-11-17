@@ -1,0 +1,3 @@
+import { MockTestModule } from '@api/mockTest/mockTest.module';
+
+export class AppModule {}

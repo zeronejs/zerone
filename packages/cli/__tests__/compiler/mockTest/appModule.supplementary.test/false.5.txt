@@ -1,0 +1,4 @@
+@Module({
+    imports: [ MockTestModule ],
+})
+export class AppModule {}
