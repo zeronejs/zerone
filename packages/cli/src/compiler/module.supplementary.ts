@@ -29,12 +29,10 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 	if (dtoFormNames.length === 0) {
 		return false;
 	}
-
 	const properties = apiModule.getDecorator('Module')?.getArguments()?.[0];
 	if (!Node.isObjectLiteralExpression(properties)) {
 		return false;
 	}
-	let isChangeFlags = false;
 
 	for (const dtoFormName of dtoFormNames) {
 		switch (dtoFormName.type) {
@@ -45,7 +43,6 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 					namedImports: [ctrlName],
 					moduleSpecifier: dtoFormName.fromUrl,
 				});
-				isChangeFlags = true;
 				const sourceControllers = properties.getProperty('controllers');
 				if (Node.isPropertyAssignment(sourceControllers)) {
 					const initializer = sourceControllers.getInitializer();
@@ -64,7 +61,6 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 					namedImports: [serviceName],
 					moduleSpecifier: dtoFormName.fromUrl,
 				});
-				isChangeFlags = true;
 				if (Node.isPropertyAssignment(sourceProperties)) {
 					const initializer = sourceProperties.getInitializer();
 					if (Node.isArrayLiteralExpression(initializer)) {
@@ -89,7 +85,6 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 					namedImports: [entityName],
 					moduleSpecifier: dtoFormName.fromUrl,
 				});
-				isChangeFlags = true;
 				const sourceEntities = properties.getProperty('imports');
 				if (Node.isPropertyAssignment(sourceEntities)) {
 					const initializer = sourceEntities.getInitializer();
@@ -108,7 +103,6 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 							if (Node.isArrayLiteralExpression(typeormArgs)) {
 								if (!typeormArgs.getElements().find((it) => it.getText() === entityName)) {
 									typeormArgs.addElement(entityName);
-									isChangeFlags = true;
 								}
 							}
 						}
@@ -118,9 +112,6 @@ export function moduleSupplementary(fileUrl: string, docEntry: DocEntry) {
 				break;
 		}
 	}
-	if (isChangeFlags) {
-		sourceProject.saveSync();
-		return true;
-	}
-	return false;
+	sourceProject.saveSync();
+	return true;
 }
