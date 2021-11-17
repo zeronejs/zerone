@@ -18,9 +18,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@nestjs/common": "^8.1.2",
-    "@nestjs/core": "^8.1.2",
     "@nestjs/testing": "^8.1.2",
+    "@types/ioredis": "^4.28.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
@@ -39,6 +38,18 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
+    "@nestjs/common": "^8.1.2",
+    "@nestjs/core": "^8.1.2",
+    "@nestjs/jwt": "^8.0.0",
+    "@nestjs/passport": "^8.0.1",
+    "@nestjs/typeorm": "^8.0.2",
+    "bcrypt": "^5.0.1",
+    "fs-extra": "^10.0.0",
+    "ioredis": "^4.28.0",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "ts-morph": "^12.2.0",
     "typeorm": "^0.2.38"
   }
 }
