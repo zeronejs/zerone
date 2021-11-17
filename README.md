@@ -1,5 +1,7 @@
 # zerone
 
+![GitHub](https://img.shields.io/github/license/zeronejs/zerone)
+
 ## Ecosystem
 
 | Project             | Status                                                            | Description               |
