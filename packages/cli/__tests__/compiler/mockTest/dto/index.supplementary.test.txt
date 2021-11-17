@@ -1,0 +1,4 @@
+// index.supplementary.test 读取的文件
+export * from "./test-create.dto";
+export * from "./test-list.dto";
+export * from "./test-update.dto";

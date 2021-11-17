@@ -1,6 +1,6 @@
 import { indexSupplementary } from '../../src/compiler/index.supplementary';
 import { join } from 'path';
-import { generateAstDocumentation } from '../../src/compiler/ts-class.ast.document';
+import { DocEntry, generateAstDocumentation } from '../../src/compiler/ts-class.ast.document';
 
 jest.mock('fs', () => {
 	const originalModule = jest.requireActual('fs');
@@ -12,9 +12,17 @@ jest.mock('fs', () => {
 });
 
 describe('@zeronejs/cli => compiler index.supplementary', () => {
+	let docEntry: DocEntry;
+	beforeAll(() => {
+		docEntry = generateAstDocumentation(join(__dirname, 'mockTest', 'entities', 'test.entity.ts'));
+	});
 	it('index.ts 追加', async () => {
-		const docEntry = generateAstDocumentation(join(__dirname, 'test.entity.ts'));
-		const res = indexSupplementary(join(__dirname, 'test.index.ts'), docEntry);
-		expect(res).toBe(true);
+		const testIndex = indexSupplementary(
+			join(__dirname, 'mockTest', 'dto', 'index.supplementary.test.txt'),
+			docEntry
+		);
+		expect(testIndex).toBe(false);
+		const testThis = indexSupplementary(__filename, docEntry);
+		expect(testThis).toBe(true);
 	});
 });

@@ -1,10 +1,10 @@
 import { generateDocumentation } from '../../src/compiler/ts-class.document';
 import { join } from 'path';
 import ts from 'typescript';
-import { TestEntity } from './test.entity';
+import { TestEntity } from './mockTest/entities/test.entity';
 describe('@zeronejs/cli => compiler ts-class.document', () => {
 	it('entity 文件读取', async () => {
-		const docEntry = generateDocumentation([join(__dirname, 'test.entity.ts')], {
+		const docEntry = generateDocumentation([join(__dirname, 'mockTest', 'entities', 'test.entity.ts')], {
 			target: ts.ScriptTarget.ES5,
 			module: ts.ModuleKind.CommonJS,
 		});
