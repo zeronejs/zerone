@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([])],
-    controllers: [],
-    providers: [],
-    exports: [],
+    imports: [TypeOrmModule.forFeature([Test])],
+    controllers: [Test],
+    providers: [Test],
+    exports: [Test],
 })
 export class MockTestModule {}
