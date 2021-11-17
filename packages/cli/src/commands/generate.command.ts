@@ -9,7 +9,10 @@ export class GenerateCommand extends AbstractCommand {
 			.alias('g')
 			.description('Generate a Zerone CRUD element')
 			.option('-d, --delete', 'Delete files generated before this module.')
-			.option('-p, --path <path>', '')
+			.option(
+				'-p, --path <path>',
+				'Specifies the path to the "entities" folder (relative to the command line).'
+			)
 			// .option('-o, --output <path>', '')
 			// .option('-p, --project [project]', 'Project in which to generate files.')
 			// .option('--flat', 'Enforce flat structure of generated element.')
