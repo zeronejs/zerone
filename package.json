@@ -19,6 +19,8 @@
   "license": "MIT",
   "devDependencies": {
     "@nestjs/testing": "^8.1.2",
+    "@types/bcrypt": "^5.0.0",
+    "@types/fs-extra": "^9.0.13",
     "@types/ioredis": "^4.28.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
