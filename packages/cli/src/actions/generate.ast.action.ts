@@ -9,6 +9,7 @@ import { generateAstDocumentation, DocEntry } from '../compiler/ts-class.ast.doc
 import { indexSupplementary } from '../compiler/index.supplementary';
 import { moduleSupplementary } from '../compiler/module.supplementary';
 import { appModuleSupplementary } from '../compiler/appModule.supplementary';
+import { isString } from '@zeronejs/utils';
 interface GenerateOptions {
 	root: string;
 	delete: boolean;
@@ -17,8 +18,13 @@ export class GenerateAstAction extends AbstractAction {
 	public async handle(options: Input[]) {
 		const now = Date.now();
 		console.log(chalk.gray('i am generating...'));
+		let root = process.cwd();
+		const pathOption = options.find((it) => it.name === 'path')?.value;
+		if (isString(pathOption)) {
+			root = join(root, pathOption);
+		}
 		const option: GenerateOptions = {
-			root: process.cwd(),
+			root,
 			delete: Boolean(options.find((it) => it.name === 'delete')?.value),
 		};
 		const allfiles = await readdir(option.root);
@@ -35,7 +41,7 @@ export class GenerateAstAction extends AbstractAction {
 			]);
 			const baseName = answers.name;
 
-			await generateBaseEntityFile(baseName);
+			await generateBaseEntityFile(baseName, option);
 			return console.log('文件已生成，请自定义后再执行 generate');
 			// fileNames.push(answers.name.replace(/.entity.ts$/, '') + '.entity.ts');
 
@@ -46,7 +52,7 @@ export class GenerateAstAction extends AbstractAction {
 				const docEntry = generateAstDocumentation(join(option.root, it));
 				if (option.delete) {
 					const readUri = join(__dirname, '../../templates/generate');
-					const writeUri = join(process.cwd(), '../');
+					const writeUri = join(option.root, '../');
 					const files = await readdir(readUri);
 					for (const file of files) {
 						await removeItemFile(docEntry, readUri, writeUri, file);
@@ -64,7 +70,7 @@ export class GenerateAstAction extends AbstractAction {
 			await generate(it.docEntry, option);
 		}
 		// app module
-		const appFileUrl: string = join(process.cwd(), '../../../', 'app.module.ts');
+		const appFileUrl: string = join(option.root, '../../../', 'app.module.ts');
 		if (appModuleSupplementary(appFileUrl, fileNamesDoc[0].docEntry)) {
 			console.info(chalk.green(`[AppModule]`));
 			console.info(
@@ -102,10 +108,9 @@ const generate = async (docEntryItem: DocEntry, option: GenerateOptions) => {
 	const generateUri = join(__dirname, '../../templates/generate');
 	const files = await readdir(generateUri);
 
-	await generateWriteFile(option, generateUri, join(process.cwd(), '../'), files, docEntryItem);
+	await generateWriteFile(generateUri, join(option.root, '../'), files, docEntryItem);
 };
 const generateWriteFile = async (
-	option: GenerateOptions,
 	readUri: string,
 	writeUri: string,
 	/**
@@ -131,7 +136,6 @@ const generateWriteFile = async (
 		const fileUri = join(readUri, filename);
 		if (await _isDir(fileUri)) {
 			await generateWriteFile(
-				option,
 				fileUri,
 				join(writeUri, filename),
 				await readdir(fileUri),
@@ -168,8 +172,8 @@ const generateWriteFile = async (
 		// });
 	}
 };
-const generateBaseEntityFile = async (baseName: string) => {
-	const root = process.cwd();
+const generateBaseEntityFile = async (baseName: string, option: GenerateOptions) => {
+	const root = option.root;
 	const handlebarsName = '{{baseName}}.entity.ts.handlebars';
 	const entityUri = join(__dirname, '../../templates/entity');
 	const handlebarsContent = await readFile(join(entityUri, handlebarsName));

@@ -9,6 +9,8 @@ export class GenerateCommand extends AbstractCommand {
 			.alias('g')
 			.description('Generate a Zerone CRUD element')
 			.option('-d, --delete', 'Delete files generated before this module.')
+			.option('-p, --path <path>', '')
+			// .option('-o, --output <path>', '')
 			// .option('-p, --project [project]', 'Project in which to generate files.')
 			// .option('--flat', 'Enforce flat structure of generated element.')
 			// .option(
@@ -30,6 +32,8 @@ export class GenerateCommand extends AbstractCommand {
 			.action(async (command) => {
 				const options: Input[] = [];
 				options.push({ name: 'delete', value: Boolean(command.delete) });
+				options.push({ name: 'path', value: command.path });
+				options.push({ name: 'output', value: command.output });
 				// options.push({ name: 'flat', value: command.flat });
 				// options.push({
 				//   name: 'spec',
