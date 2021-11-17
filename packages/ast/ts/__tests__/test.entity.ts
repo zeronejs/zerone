@@ -1,36 +1,26 @@
 // import { Role } from '@common/role';
-import path1 from 'path';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import path from 'path';
+import fs, { TimeLike } from 'fs';
+import { CpuInfo } from 'os';
 
-const tes2 = {
-	a: 1,
-	b: null,
-};
-const tes3 = [1, {}];
+import * as ts from 'typescript';
 export enum Gender {
-	unknown = 's',
-	// mam,
-	// woman,
+	unknown,
+	mam,
+	woman,
 }
-interface UserInput {
-	username: string;
-}
-type Password = string;
+export const TRUE = true;
 
+export type MyString = string;
+export interface MyObject {
+	a: string;
+}
 /**
- * 用户表1
- * 234
- * 55
- */
-//123
-/**
- * 1234
- */
-/**
- * 1235566
+ * 用户表
  */
 @Entity()
-export class UserEntity  {
+export class TestEntity {
 	/**
 	 * id
 	 */
@@ -40,13 +30,8 @@ export class UserEntity  {
 	 * 用户名
 	 */
 	@Index({ unique: true })
-	@Column({ unique: true })
+	@Column({ unique: TRUE })
 	username: string;
-	/**
-	 * 密码
-	 */
-	@Column()
-	password: Password;
 	/**
 	 * 性别
 	 */
@@ -54,22 +39,7 @@ export class UserEntity  {
 		default: Gender.unknown,
 	})
 	gender: Gender;
-	/**
-	 * 手机号
-	 */
 
-	@Column({ nullable: true })
-	phone?: string;
-	/**
-	 * 头像
-	 */
-	@Column({ nullable: true })
-	avatar?: string;
-	/**
-	 * 昵称
-	 */
-	@Column({ nullable: true })
-	nickname?: string;
 	/**
 	 * 签名
 	 */
@@ -79,19 +49,87 @@ export class UserEntity  {
 	 * 创建时间
 	 */
 	@CreateDateColumn()
-	createdAt: Date & string;
+	createdAt: Date;
 	/**
 	 * 修改时间
 	 */
 	@UpdateDateColumn()
-	updatedAt: Date | string;
-
+	updatedAt: Date;
+	/**
+	 * dates
+	 */
+	@Column()
+	dates: Date[];
+	/**
+	 * number
+	 */
+	@Column({ nullable: true })
+	number?: number;
+	/**
+	 * boolean
+	 */
+	@Column({ nullable: true })
+	boolean?: boolean;
+	/**
+	 * numbers
+	 */
+	@Column({ nullable: true })
+	numbers?: number[];
 	// /**
-	//  * 角色
+	//  * undefined
 	//  */
-	// @Column('int', {
-	//     default: [Role.User],
-	//     array: true,
-	// })
-	// roles: Role[];
+	// @Column({ nullable: true })
+	// undefined1?: undefined;
+	/**
+	 * any
+	 */
+	@Column({ nullable: true })
+	any?: any;
+	/**
+	 * unknown
+	 */
+	@Column({ nullable: true })
+	unknown?: unknown;
+	/**
+	 * isUnionType
+	 */
+	@Column({ nullable: true })
+	isUnionType?: number | string;
+	/**
+	 * tsTextRange
+	 */
+	@Column({ nullable: true })
+	tsTextRange?: ts.TextRange;
+	/**
+	 * platformPath
+	 */
+	@Column({ nullable: true })
+	platformPath?: path.PlatformPath;
+	/**
+	 * pathLike
+	 */
+	@Column({ nullable: true })
+	pathLike?: fs.PathLike;
+
+	/**
+	 * timeLike
+	 */
+	@Column({ nullable: true })
+	timeLike?: TimeLike;
+	/**
+	 * CpuInfo
+	 */
+	@Column({ nullable: true })
+	cpuInfo?: CpuInfo;
+	/**
+	 * MyString
+	 */
+	@Column({ nullable: true })
+	myString?: MyString;
+
+	/**
+	 * MyObject
+	 */
+	@Column({ nullable: true })
+	myObject?: MyObject;
 }

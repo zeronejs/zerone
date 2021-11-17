@@ -9,7 +9,7 @@ import {
 	VariablesInterpret,
 } from '../src';
 
-import { UserEntity } from './test.entity';
+import { TestEntity } from './test.entity';
 
 describe('@zeronejs/ast => ts InterpretCore', () => {
 	it('entity 文件读取', async () => {
@@ -21,6 +21,6 @@ describe('@zeronejs/ast => ts InterpretCore', () => {
 		const typeAlias = new TypeAliasInterpret(interpretCore).interpret();
 		const interfaces = new InterfaceInterpret(interpretCore).interpret();
 
-		expect(classes[0].name).toBe(UserEntity.name);
+		expect(classes[0].name).toBe(TestEntity.name);
 	});
 });

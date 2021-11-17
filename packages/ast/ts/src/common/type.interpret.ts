@@ -4,6 +4,8 @@ export function getTypeReferences(type: ts.TypeNode, arr: Set<string> = new Set(
 		let typeName = '';
 		if (ts.isIdentifier(type.typeName)) {
 			typeName = ts.unescapeLeadingUnderscores(type.typeName.escapedText);
+		} else if (ts.isQualifiedName(type.typeName) && ts.isIdentifier(type.typeName.left)) {
+			typeName = ts.unescapeLeadingUnderscores(type.typeName.left.escapedText);
 		}
 		arr.add(typeName);
 	} else if (ts.isUnionTypeNode(type) || ts.isIntersectionTypeNode(type)) {
