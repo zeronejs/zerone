@@ -16,13 +16,16 @@ describe('@zeronejs/cli => compiler index.supplementary', () => {
 	beforeAll(() => {
 		docEntry = generateAstDocumentation(join(__dirname, 'mockTest', 'entities', 'test.entity.ts'));
 	});
-	it('index.ts 追加', async () => {
+	it('index.ts 全部dto追加', () => {
+		const testThis = indexSupplementary(__filename, docEntry);
+		expect(testThis).toBe(true);
+	});
+
+	it('index.ts dto imports已存在', () => {
 		const testIndex = indexSupplementary(
 			join(__dirname, 'mockTest', 'dto', 'index.supplementary.test.txt'),
 			docEntry
 		);
 		expect(testIndex).toBe(false);
-		const testThis = indexSupplementary(__filename, docEntry);
-		expect(testThis).toBe(true);
 	});
 });
