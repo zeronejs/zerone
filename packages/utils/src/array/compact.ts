@@ -13,14 +13,9 @@
  * _.compact([0, 1, false, 2, '', 3]);
  * // => [1, 2, 3]
  */
-export function compact<T>(array: Array<T | null | undefined | false | '' | 0> | null | undefined): T[] {
+export function compact<T>(array: Array<T | null | undefined | false | '' | 0>): T[] {
 	let resIndex = 0;
 	const result: T[] = [];
-
-	if (!array) {
-		return result;
-	}
-
 	for (const value of array) {
 		if (value) {
 			result[resIndex++] = value;
