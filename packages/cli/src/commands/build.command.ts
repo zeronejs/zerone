@@ -1,14 +1,18 @@
 import { Command } from 'commander';
 import { AbstractCommand } from './abstract.command';
+import { Input } from './command.input';
 
 export class BuildCommand extends AbstractCommand {
 	public load(program: Command) {
 		program
 			.command('build')
 			// .alias('b')
+			.option('-p, --path <path>', '')
 			.description('ts代码打包为js')
-			.action(async () => {
-				await this.action.handle();
+			.action(async (command) => {
+				const options: Input[] = [];
+				options.push({ name: 'path', value: command.path });
+				await this.action.handle(options);
 			});
 	}
 }

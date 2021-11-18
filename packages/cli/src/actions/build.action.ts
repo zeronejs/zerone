@@ -5,11 +5,17 @@ import consola from 'consola';
 import { AbstractAction } from './abstract.action';
 import { join } from 'path';
 import { watch } from 'chokidar';
-import { copy, remove, readJSON, pathExists } from 'fs-extra';
+import { copy, remove, readJSON, pathExists, pathExistsSync, copySync } from 'fs-extra';
+import { Input } from '../commands';
+import { isString } from '@zeronejs/utils';
 export class BuildAction extends AbstractAction {
-	public async handle() {
+	public async handle(inputOptions: Input[]) {
 		try {
-			const root = process.cwd();
+			let root = process.cwd();
+			const pathOption = inputOptions.find((it) => it.name === 'path')?.value;
+			if (isString(pathOption)) {
+				root = join(root, pathOption);
+			}
 			const options = {
 				tsconfig: join(root, 'tsconfig.json'),
 				src: root,
@@ -82,7 +88,8 @@ export class BuildAction extends AbstractAction {
 					}
 
 					const configPath = ts.findConfigFile(
-						/*searchPath*/ './',
+						// /*searchPath*/ './',
+						/*searchPath*/ options.src,
 						ts.sys.fileExists,
 						'tsconfig.json'
 					);
@@ -102,14 +109,19 @@ export class BuildAction extends AbstractAction {
 					);
 
 					const origCreateProgram = host.createProgram;
-					host.createProgram = (rootNames: any, options: any, host: any, oldProgram: any) => {
+					host.createProgram = (
+						rootNames: any,
+						programOptions: any,
+						host: any,
+						oldProgram: any
+					) => {
 						consola.info("We're about to create the program!");
-						Reflect.deleteProperty(options, 'outDir');
-						Reflect.set(options, 'outDir', join(process.cwd(), 'dist'));
-						Reflect.set(options, 'baseUrl', join(process.cwd()));
-						Reflect.set(options, 'rootDir', join(process.cwd()));
+						Reflect.deleteProperty(programOptions, 'outDir');
+						Reflect.set(programOptions, 'outDir', join(options.src, 'dist'));
+						Reflect.set(programOptions, 'baseUrl', join(options.src));
+						Reflect.set(programOptions, 'rootDir', join(options.src));
 						// consola.info({ rootNames, options, host, oldProgram });
-						return origCreateProgram(rootNames, options, host, oldProgram);
+						return origCreateProgram(rootNames, programOptions, host, oldProgram);
 					};
 					const origPostProgramCreate = host.afterProgramCreate;
 
@@ -125,13 +137,14 @@ export class BuildAction extends AbstractAction {
 			}
 			async function copyFiles() {
 				console.log(`i am copy...`);
-				await Promise.all([copyIncludeFiles(), copyRootFiles()]);
+				await copyIncludeFiles();
+				copyRootFiles();
 				console.log(`i am copy finish`);
 			}
 			async function copyIncludeFiles() {
 				return Promise.all(
 					tsconfig.include.map((it) => {
-						return copy(it, join(options.output, it), {
+						return copy(join(options.src, it), join(options.output, it), {
 							overwrite: true,
 							filter: (src) => {
 								const filterEndsWith = ['.ts', '.tsx', 'node_modules', '__tests__', 'dist'];
@@ -141,22 +154,18 @@ export class BuildAction extends AbstractAction {
 					})
 				);
 			}
-			async function copyRootFiles() {
+			// todo 同步copy不会出问题 ？
+			function copyRootFiles() {
 				const copyRootFiles = ['README.md', 'readme.md', 'package.json', 'LICENSE', 'templates'];
-				return Promise.all(
-					copyRootFiles.map((it) => {
-						return copyToFile(join(root, it), join(options.output, it));
-					})
-				);
-			}
-			async function copyToFile(src: string, dest: string) {
-				if (await pathExists(src)) {
-					return copy(src, dest, {
-						overwrite: true,
-					});
+				for (const it of copyRootFiles) {
+					const copySrc = join(options.src, it);
+					if (pathExistsSync(copySrc)) {
+						copySync(copySrc, join(options.output, it));
+					}
 				}
 			}
 		} catch (err) {
+			console.log(err);
 			if (err instanceof Error) {
 				console.log(`\n${ERROR_PREFIX} ${err.message}\n`);
 			} else {
