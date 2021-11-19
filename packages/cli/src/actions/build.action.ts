@@ -5,9 +5,9 @@ import consola from 'consola';
 import { AbstractAction } from './abstract.action';
 import { join } from 'path';
 // import { watch } from 'chokidar';
-import { copy, remove, readJSON, pathExistsSync, copySync } from 'fs-extra';
+import { copy, pathExistsSync, copySync, removeSync, readFile } from 'fs-extra';
 import { Input } from '../commands';
-import { isBoolean, isString } from '@zeronejs/utils';
+import { isBoolean, isString, jsonMinify } from '@zeronejs/utils';
 import EventEmitter from 'events';
 export class BuildAction extends AbstractAction {
 	public async handle(inputOptions: Input[]) {
@@ -30,19 +30,20 @@ export class BuildAction extends AbstractAction {
 			if (isBoolean(deleteOption)) {
 				options.delete = deleteOption;
 			}
-
-			const tsconfig: { exclude: string[]; include: string[]; outDir?: string } = await readJSON(
-				options.tsconfig
+			const configPath = ts.findConfigFile(
+				// /*searchPath*/ './',
+				/*searchPath*/ options.src,
+				ts.sys.fileExists,
+				'tsconfig.json'
 			);
-			if (tsconfig.outDir) {
-				options.output = join(options.src, tsconfig.outDir);
+			if (!configPath) {
+				throw new Error("Could not find a valid 'tsconfig.json'.");
 			}
-			tsconfig.exclude = tsconfig.exclude || [];
-			tsconfig.include = tsconfig.include || [];
-			if (options.output && options.delete) {
-				await remove(options.output);
-				console.log(`i am deleted`);
-			}
+
+			const tsconfig: { include?: string[] } = JSON.parse(
+				jsonMinify((await readFile(configPath)).toString())
+			);
+
 			const compilingEvent = new EventEmitter();
 
 			compilingEvent.on('success', async () => {
@@ -99,20 +100,10 @@ export class BuildAction extends AbstractAction {
 					}
 				}
 
-				const configPath = ts.findConfigFile(
-					// /*searchPath*/ './',
-					/*searchPath*/ options.src,
-					ts.sys.fileExists,
-					'tsconfig.json'
-				);
-				if (!configPath) {
-					throw new Error("Could not find a valid 'tsconfig.json'.");
-				}
-
 				const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
 
 				const host = ts.createWatchCompilerHost(
-					configPath,
+					configPath ?? join(root, 'tsconfig.json'),
 					{},
 					ts.sys,
 					createProgram,
@@ -121,11 +112,31 @@ export class BuildAction extends AbstractAction {
 				);
 
 				const origCreateProgram = host.createProgram;
-				host.createProgram = (rootNames: any, programOptions: any, host: any, oldProgram: any) => {
-					consola.info("We're about to create the program!");
-					Reflect.set(programOptions, 'outDir', options.output);
-					Reflect.set(programOptions, 'baseUrl', options.src);
-					Reflect.set(programOptions, 'rootDir', options.src);
+				// const tes = ts.readConfigFile(configPath, (path) => {
+				// 	console.log(path);
+				// 	return path;
+				// });
+				host.createProgram = (
+					rootNames: any,
+					programOptions: ts.CompilerOptions | undefined,
+					host: any,
+					oldProgram: any
+				) => {
+					if (programOptions) {
+						consola.info("We're about to create the program!");
+						if (programOptions.outDir?.includes(options.src)) {
+							options.output = programOptions.outDir;
+						} else {
+							programOptions.outDir = options.output;
+						}
+						if (options.delete) {
+							removeSync(options.output);
+							console.log(`i am deleted`);
+						}
+						programOptions.baseUrl = options.src;
+						programOptions.rootDir = options.src;
+					}
+
 					// consola.info({ rootNames, options, host, oldProgram });
 					return origCreateProgram(rootNames, programOptions, host, oldProgram);
 				};
@@ -149,7 +160,7 @@ export class BuildAction extends AbstractAction {
 			async function copyIncludeFiles() {
 				return Promise.all(
 					// todo tsconfig
-					tsconfig.include.map((it) => {
+					tsconfig.include?.map((it) => {
 						return copy(join(options.src, it), join(options.output, it), {
 							overwrite: true,
 							filter: (src) => {
@@ -157,7 +168,7 @@ export class BuildAction extends AbstractAction {
 								return !filterEndsWith.some((it) => src.endsWith(it));
 							},
 						});
-					})
+					}) ?? []
 				);
 			}
 			// todo 同步copy不会出问题 ？
