@@ -164,7 +164,15 @@ export class BuildAction extends AbstractAction {
 						return copy(join(options.src, it), join(options.output, it), {
 							overwrite: true,
 							filter: (src) => {
-								const filterEndsWith = ['.ts', '.tsx', 'node_modules', '__tests__', 'dist'];
+								const filterEndsWith = [
+									'.ts',
+									'.tsx',
+									'node_modules',
+									'__tests__',
+									'dist',
+									'tsconfig.json',
+									'yarn.lock',
+								];
 								return !filterEndsWith.some((it) => src.endsWith(it));
 							},
 						});
