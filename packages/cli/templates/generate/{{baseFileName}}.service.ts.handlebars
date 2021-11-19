@@ -8,7 +8,7 @@ export class {{BaseName}}Service {
     constructor(@InjectRepository({{className}}) private {{baseName}}Repository: Repository<{{className}}>) {}
 
     async create(entity: {{BaseName}}CreateDto) {
-        return await this.{{baseName}}Repository.save(entity);
+        return this.{{baseName}}Repository.save(entity);
     }
 
     findAll() {
@@ -17,7 +17,7 @@ export class {{BaseName}}Service {
     async list(dto: {{BaseName}}ListDto) {
         const { page = 0, psize = 20 } = dto.limit || {};
 
-        return await this.{{baseName}}Repository.find({
+        return this.{{baseName}}Repository.find({
             where: dto.where,
             order: { createdAt: 'DESC' },
             skip: page * psize,
@@ -32,9 +32,9 @@ export class {{BaseName}}Service {
     }
 
     async update(id: number, update: {{BaseName}}UpdateDto) {
-        return await this.{{baseName}}Repository.update(id, update);
+        return this.{{baseName}}Repository.update(id, update);
     }
     async delete(id: number) {
-        return await this.{{baseName}}Repository.delete({ id });
+        return this.{{baseName}}Repository.delete({ id });
     }
 }
