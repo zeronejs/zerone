@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "commit": "git-cz",
-    "build": "ts-node ./packages/cli/src/bin.ts build -d",
+    "build": "ts-node -r tsconfig-paths/register ./packages/cli/src/bin.ts build -d",
     "test": "jest",
     "test:cov": "jest --coverage"
   },
