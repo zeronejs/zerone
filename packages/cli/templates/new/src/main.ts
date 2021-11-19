@@ -12,15 +12,19 @@ async function bootstrap() {
         .addTag('cats')
         .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('docs', app, document);
     app.useGlobalPipes(
         new ValidationPipe({
             // 过滤dto外的字段
             whitelist: true,
         })
     );
-    await app.listen(5000, '0.0.0.0', async () => {
-        console.log(`Application is running on: ${await app.getUrl()}`);
-    });
+    await app.listen(
+        process.env.SERVICE_PORT ?? 5000,
+        process.env.SERVICE_HOSTNAME ?? '0.0.0.0',
+        async () => {
+            console.log(`Application is running on: ${await app.getUrl()}`);
+        }
+    );
 }
 bootstrap();
