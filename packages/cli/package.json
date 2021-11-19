@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "Zerone Cli",
   "main": "index.js",
   "publishConfig": {
@@ -8,8 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "rimraf dist",
-    "build": "ts-node ./src/bin.ts build",
+    "build": "ts-node ./src/bin.ts build -d",
     "info": "ts-node ./src/bin.ts info",
     "prepublish:npm": "npm run build",
     "publish:npm": "npm publish dist/"
@@ -53,7 +52,6 @@
     "@types/inquirer": "^8.1.3",
     "@types/node-emoji": "^1.8.1",
     "@types/ora": "^3.2.0",
-    "@types/os-name": "3.1.0",
-    "rimraf": "^3.0.2"
+    "@types/os-name": "3.1.0"
   }
 }

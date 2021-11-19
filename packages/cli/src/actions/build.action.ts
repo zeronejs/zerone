@@ -7,7 +7,7 @@ import { join } from 'path';
 // import { watch } from 'chokidar';
 import { copy, remove, readJSON, pathExistsSync, copySync } from 'fs-extra';
 import { Input } from '../commands';
-import { isString } from '@zeronejs/utils';
+import { isBoolean, isString } from '@zeronejs/utils';
 import EventEmitter from 'events';
 export class BuildAction extends AbstractAction {
 	public async handle(inputOptions: Input[]) {
@@ -20,17 +20,28 @@ export class BuildAction extends AbstractAction {
 			const options = {
 				tsconfig: join(root, 'tsconfig.json'),
 				src: root,
-				output: join(root, 'dist'),
-				types: join(root, 'dist'),
+				output: join(root, 'dist'), // 默认dist
+				// types: join(root, 'dist'),
 				watch: true,
-				delete: !!false,
+				delete: false,
 			};
-			const tsconfig: { exclude: string[]; include: string[] } = await readJSON(options.tsconfig);
+
+			const deleteOption = inputOptions.find((it) => it.name === 'delete')?.value;
+			if (isBoolean(deleteOption)) {
+				options.delete = deleteOption;
+			}
+
+			const tsconfig: { exclude: string[]; include: string[]; outDir?: string } = await readJSON(
+				options.tsconfig
+			);
+			if (tsconfig.outDir) {
+				options.output = join(options.src, tsconfig.outDir);
+			}
 			tsconfig.exclude = tsconfig.exclude || [];
 			tsconfig.include = tsconfig.include || [];
-
 			if (options.output && options.delete) {
-				await remove(join(options.output));
+				await remove(options.output);
+				console.log(`i am deleted`);
 			}
 			const compilingEvent = new EventEmitter();
 
@@ -112,7 +123,7 @@ export class BuildAction extends AbstractAction {
 				const origCreateProgram = host.createProgram;
 				host.createProgram = (rootNames: any, programOptions: any, host: any, oldProgram: any) => {
 					consola.info("We're about to create the program!");
-					Reflect.set(programOptions, 'outDir', join(options.src, 'dist'));
+					Reflect.set(programOptions, 'outDir', options.output);
 					Reflect.set(programOptions, 'baseUrl', options.src);
 					Reflect.set(programOptions, 'rootDir', options.src);
 					// consola.info({ rootNames, options, host, oldProgram });
@@ -137,6 +148,7 @@ export class BuildAction extends AbstractAction {
 			}
 			async function copyIncludeFiles() {
 				return Promise.all(
+					// todo tsconfig
 					tsconfig.include.map((it) => {
 						return copy(join(options.src, it), join(options.output, it), {
 							overwrite: true,

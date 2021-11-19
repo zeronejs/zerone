@@ -7,11 +7,13 @@ export class BuildCommand extends AbstractCommand {
 		program
 			.command('build')
 			// .alias('b')
-			.option('-p, --path <path>', '')
+			.option('-p, --path <path>', 'Specify the path to tsconfig.json')
+			.option('-d, --delete', 'Delete files specified by "outDir".')
 			.description('ts代码打包为js')
 			.action(async (command) => {
 				const options: Input[] = [];
 				options.push({ name: 'path', value: command.path });
+				options.push({ name: 'delete', value: command.delete });
 				await this.action.handle(options);
 			});
 	}
