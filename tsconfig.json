@@ -69,14 +69,16 @@
       ],
       "@zeronejs/ast-*": [
         "packages/ast/*/src"
-      ],
+      ]
     }
   },
-  // "include": [
-  //   "packages/global.d.ts",
-  //   "packages/*/src",
-  //   "packages/runtime-dom/types/jsx.d.ts",
-  //   "packages/*/__tests__",
-  //   "test-dts"
-  // ]
+  "exclude": [
+    "**/templates/**",
+    "**/test/**",
+    "**/dist/**",
+    "**/node_modules/**",
+  ],
+  "include": [
+    "packages",
+  ]
 }
