@@ -13,7 +13,7 @@ module.exports = {
 		'^@zeronejs/(.*)$': '<rootDir>/packages/$1/src',
 	},
 	testMatch: ['<rootDir>/packages/**/*.(test|spec).ts'],
-	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist'],
+	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist', '<rootDir>/dist'],
 	// 不算入覆盖率的文件夹
-	coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/'],
+	coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', 'dist'],
 };
