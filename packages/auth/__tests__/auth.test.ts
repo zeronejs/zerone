@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from '../src/auth.service';
-import { jwtConstants } from '../src/constants';
+import { JwtConstantsSecret } from '../src/constants';
 import { UserSpareEntity } from '../src/entities/userBase.entity';
 import { JwtAuthGuard } from '../src/jwt-auth.guard';
 import { JwtStrategy } from '../src/jwt.strategy';
@@ -27,7 +27,7 @@ describe('@zeronejs/auth', () => {
 				}),
 				PassportModule,
 				JwtModule.register({
-					secret: jwtConstants.secret,
+					secret: 'jwtConstants.secret',
 					signOptions: { expiresIn: '6h' },
 				}),
 				TypeOrmModule.forFeature([UserSpareEntity]),
@@ -35,7 +35,12 @@ describe('@zeronejs/auth', () => {
 			providers: [
 				AuthService,
 				LocalStrategy,
+				{
+					provide: JwtConstantsSecret,
+					useValue: 'jwtConstants.secret',
+				},
 				JwtStrategy,
+
 				{
 					provide: APP_GUARD,
 					useClass: JwtAuthGuard,

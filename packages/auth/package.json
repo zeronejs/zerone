@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/auth",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Zerone auth",
   "main": "src/index.js",
   "types": "src/index.d.ts",
