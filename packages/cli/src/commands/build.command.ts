@@ -7,7 +7,7 @@ export class BuildCommand extends AbstractCommand {
 		program
 			.command('build')
 			// .alias('b')
-			.option('-p, --path <path>', 'Specify the path to tsconfig.json')
+			.option('-p, --path <path>', 'Specify the path of the folder where "tsconfig.json" is located.')
 			.option('-d, --delete', 'Delete files specified by "outDir".')
 			.description('ts代码打包为js')
 			.action(async (command) => {
