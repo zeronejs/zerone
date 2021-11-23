@@ -26,12 +26,22 @@ export interface DocEntry {
 	className: string;
 	documentation: string;
 	dotImports: string[];
+	// 主键字段
+	primaryColumnsProperty: PrimaryColumnsProperty;
 	properties?: DocEntryProperty[];
 }
 export interface DocEntryProperty extends ClassPropertyDeclarationDoc {
 	isSpecialColumn: boolean;
 	isOptional: boolean;
 	defaultValue: string | undefined;
+}
+interface PrimaryColumnsProperty extends Partial<DocEntryProperty> {
+	Name: string;
+	name: string;
+	type: {
+		value: string;
+		typeReferences: string[];
+	};
 }
 /** Generate documentation for all classes in a set of .ts files */
 export function generateAstDocumentation(fileName: string): DocEntry {
@@ -57,7 +67,18 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 	}
 	const entityClass = entityClasses[0];
 	const originName = basename(fileName);
-	const specialColumns = ['PrimaryGeneratedColumn', 'CreateDateColumn', 'UpdateDateColumn'];
+	const specialColumns = [
+		'PrimaryGeneratedColumn',
+		'CreateDateColumn',
+		'UpdateDateColumn',
+		'VersionColumn',
+	];
+	const primaryColumns = ['PrimaryGeneratedColumn', 'PrimaryColumn'];
+	let primaryColumnsProperty: PrimaryColumnsProperty = {
+		Name: 'Id',
+		name: 'id',
+		type: { value: 'number', typeReferences: [] },
+	};
 	const properties = entityClass.properties.map((property) => {
 		let isSpecialColumn = false;
 		let isOptional = Boolean(property.isOptional);
@@ -66,13 +87,24 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 			isSpecialColumn = true;
 		}
 		const columnDecorator = property.decorators.find((it) => it.name === 'Column');
+
 		if (columnDecorator) {
 			isOptional = columnDecorator.expression?.args?.[0]?.nullable === 'true';
 			defaultValue = columnDecorator.expression?.args?.[0]?.default;
 		}
-		return { ...property, isSpecialColumn, isOptional, defaultValue };
+		const resProperty = { ...property, isSpecialColumn, isOptional, defaultValue };
+		// 寻找主键字段
+		if (
+			property.decorators.some((it) => it.name && primaryColumns.includes(it.name)) ||
+			columnDecorator?.expression?.args?.[0].primary === 'true'
+		) {
+			primaryColumnsProperty = {
+				...resProperty,
+				Name: resProperty.name.charAt(0).toUpperCase() + resProperty.name.slice(1),
+			};
+		}
+		return resProperty;
 	});
-
 	const dotImports = getDtoImports();
 	const BaseName = entityClasses[0].name.replace(/Entity$/, '');
 	const moduleName = basename(join(fileName, '../../'));
@@ -87,6 +119,7 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 		documentation: entityClasses[0].documentation,
 		className: entityClasses[0].name,
 		properties,
+		primaryColumnsProperty,
 		dotImports,
 	};
 	function getDtoImports() {

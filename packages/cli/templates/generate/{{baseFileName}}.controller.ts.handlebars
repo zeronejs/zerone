@@ -29,7 +29,7 @@ export class {{BaseName}}Controller {
      * {{documentation}}列表
      */
     @ApiOperation({ summary: '{{documentation}}列表' })
-    @Get('/user/list')
+    @Get('/{{baseName}}/list')
     list(@Query() limit: Limit) {
         return this.{{baseName}}Service.list({ limit });
     }
@@ -40,30 +40,30 @@ export class {{BaseName}}Controller {
     /**
      * {{documentation}}详情
      */
-    @Get('/{{baseName}}/details/:id')
+    @Get('/{{baseName}}/details/:{{primaryColumnsProperty.name}}')
     @ApiOperation({ summary: '某个{{documentation}}信息' })
     @ApiResponse({
         status: 200,
         // description: 'The found record',
         // type: Get{{BaseName}}InfoResult,
     })
-    details(@Param('id') id: number) {
-        return this.{{baseName}}Service.findById(id);
+    details(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        return this.{{baseName}}Service.findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}});
     }
     /**
      * 修改{{documentation}}
      */
-    @Patch('/{{baseName}}/update/:id')
+    @Patch('/{{baseName}}/update/:{{primaryColumnsProperty.name}}')
     @ApiOperation({ summary: '修改{{documentation}}信息' })
-    update(@Param('id') id: number, @Body() update{{BaseName}}Dto: {{BaseName}}UpdateDto) {
-        return this.{{baseName}}Service.update(id, update{{BaseName}}Dto);
+    update(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}, @Body() update{{BaseName}}Dto: {{BaseName}}UpdateDto) {
+        return this.{{baseName}}Service.update({{primaryColumnsProperty.name}}, update{{BaseName}}Dto);
     }
     /**
      * 删除{{documentation}}
      */
     @ApiOperation({ summary: '删除{{documentation}}' })
-    @Delete('/{{baseName}}/remove/:id')
-    remove(@Param('id') id: string) {
-        return this.{{baseName}}Service.delete(+id);
+    @Delete('/{{baseName}}/remove/:{{primaryColumnsProperty.name}}')
+    remove(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        return this.{{baseName}}Service.delete({{primaryColumnsProperty.name}});
     }
 }

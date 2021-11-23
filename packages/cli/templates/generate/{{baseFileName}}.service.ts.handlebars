@@ -24,17 +24,17 @@ export class {{BaseName}}Service {
             take: psize,
         });
     }
-    async findById(id: number) {
-        const entity = await this.{{baseName}}Repository.findOne(id);
+    async findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        const entity = await this.{{baseName}}Repository.findOne({{primaryColumnsProperty.name}});
 
         if (!entity) throw new BadRequestException('数据不存在');
         return entity;
     }
 
-    async update(id: number, update: {{BaseName}}UpdateDto) {
-        return this.{{baseName}}Repository.update(id, update);
+    async update({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}, update: {{BaseName}}UpdateDto) {
+        return this.{{baseName}}Repository.update({{primaryColumnsProperty.name}}, update);
     }
-    async delete(id: number) {
-        return this.{{baseName}}Repository.delete({ id });
+    async delete({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        return this.{{baseName}}Repository.delete({ {{primaryColumnsProperty.name}} });
     }
 }
