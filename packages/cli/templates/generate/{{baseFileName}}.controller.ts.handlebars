@@ -6,6 +6,10 @@ import { {{BaseName}}Service } from './{{baseFileName}}.service';
 
 @ApiTags('{{baseName}}')
 @ApiBearerAuth()
+@ApiHeader({
+    name: 'Authorization',
+    description: 'Custom token',
+})
 @Controller()
 export class {{BaseName}}Controller {
     constructor(private readonly {{baseName}}Service: {{BaseName}}Service) {}
