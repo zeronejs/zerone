@@ -1,7 +1,7 @@
 # zerone
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/zeronejs/zerone/Node.js%20CI)
 ![GitHub](https://img.shields.io/github/license/zeronejs/zerone)
-
 ## Ecosystem
 
 | Project             | Status                                                            | Description               |
