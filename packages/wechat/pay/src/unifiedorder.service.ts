@@ -8,6 +8,9 @@ import { KJUR, hextob64 } from 'jsrsasign';
 import { WechatPayApiHostname, WechatPayBaseOptions } from './constants';
 import { WechatPayModuleOptions } from './wechatPay.module';
 
+/**
+ * 下单服务
+ */
 @Injectable()
 export class WechatPayUnifiedorderService {
     constructor(
@@ -15,7 +18,6 @@ export class WechatPayUnifiedorderService {
         @Inject(WechatPayBaseOptions) private readonly baseOptions: WechatPayModuleOptions
     ) {}
     async jsapi(params: UnifiedTransactionsRequestParams) {
-        this.baseOptions.private_key = readFileSync(join(__dirname, './rsa/rsa_private_key.pem')).toString();
         const url = {
             method: 'POST',
             pathname: '/v3/pay/transactions/jsapi',
