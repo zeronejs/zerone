@@ -1,0 +1,34 @@
+{
+  "name": "@zeronejs/wechat-pay",
+  "version": "1.0.0-beta.1",
+  "description": "Zerone Wechat Pay",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "zerone build -d",
+    "prepublish:npm": "npm run build",
+    "publish:npm": "npm publish dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zerone",
+    "zeronejs",
+    "wechat pay",
+    "wechat"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronejs/zerone.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jsrsasign": "^10.5.0"
+  },
+  "devDependencies": {
+    "@types/jsrsasign": "^8.0.13"
+  }
+}

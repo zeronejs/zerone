@@ -862,6 +862,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/jsrsasign@^8.0.13":
+  version "8.0.13"
+  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-8.0.13.tgz#770c1e429107dfb0cc4f5b78b472584511a55a28"
+  integrity sha512-+0Ij59D6NXP48KkeLhPXeQKOyLjvA9CD7zacc0Svy2IWHdl62BmDeTvGSIwKaGZSoamLJOo+on1AG/wPRLsd7A==
+
 "@types/mime@^1":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.2.tgz#93e25bf9ee75fe0fd80b594bc4feb0e862111b5a"
@@ -3770,6 +3775,11 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+jsrsasign@^10.5.0:
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.5.0.tgz#28acf0dbe7565633d306190fd9400c38dd862cb0"
+  integrity sha512-AC1kfL1LJASKBLGv4bLLl+auFlsBajOxEcggL7fn8cp7nMRPhyln3LK/Q9lEDCrxYFU35NGUeFtUBCbasoF2Uw==
 
 jwa@^1.4.1:
   version "1.4.1"
