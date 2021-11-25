@@ -72,7 +72,7 @@ export interface WechatPayOrderQueryResult {
 			quantity: number;
 			unit_price: number;
 			discount_amount: number;
-			goods_remark: string;
+			goods_remark?: string;
 		}[];
 	}[];
 }
