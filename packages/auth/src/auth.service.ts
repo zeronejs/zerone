@@ -18,7 +18,6 @@ export class AuthService {
 		if (!user) {
 			return null;
 		}
-		console.log(user);
 		const verify = await verifyUserPassword(pass, user.password);
 		if (user && verify) {
 			Reflect.deleteProperty(user, 'password');
