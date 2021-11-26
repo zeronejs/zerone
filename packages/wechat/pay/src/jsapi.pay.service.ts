@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import {
+	WechatPayBillService,
+	WechatPayBillServiceApplyFundFlowBillInput,
+	WechatPayBillServiceApplyTradeBillInput,
+} from './bill';
 import { WechatPayChoosePayService, WechatPayChoosePayServiceJsapiInput } from './choosePay';
 import { WechatPayCloseService, WechatPayCloseServiceByOutTradeNoInput } from './close';
 import { WechatPayDecodeService, WechatPayDecodeServiceNotifyInput } from './common/decode.service';
@@ -25,7 +30,8 @@ export class WechatPayJsapiService {
 		private readonly closeService: WechatPayCloseService,
 		private readonly choosePayService: WechatPayChoosePayService,
 		private readonly refundService: WechatPayRefundService,
-		private readonly decodeService: WechatPayDecodeService
+		private readonly decodeService: WechatPayDecodeService,
+		private readonly billService: WechatPayBillService
 	) {}
 	/**
 	 * 下单
@@ -74,5 +80,23 @@ export class WechatPayJsapiService {
 	 */
 	async decodeResource(params: WechatPayDecodeServiceNotifyInput) {
 		return this.decodeService.resource(params);
+	}
+	/**
+	 * 申请交易账单
+	 */
+	async tradeBill(mchid: string, params: WechatPayBillServiceApplyTradeBillInput) {
+		return this.billService.tradeBill(mchid, params);
+	}
+	/**
+	 * 申请资金账单
+	 */
+	async fundFlowBill(mchid: string, params: WechatPayBillServiceApplyFundFlowBillInput) {
+		return this.billService.fundFlowBill(mchid, params);
+	}
+	/**
+	 * 下载账单
+	 */
+	async billDownload(mchid: string, download_url: string) {
+		return this.billService.download(mchid, download_url);
 	}
 }

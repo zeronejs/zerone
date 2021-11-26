@@ -9,6 +9,7 @@ import { WechatPayRefundService } from './refund';
 import { WechatPayDecodeService } from './common/decode.service';
 import { WechatPayAppService } from './app.pay.service';
 import { WechatPayNativeService } from './native.pay.service';
+import { WechatPayBillService } from './bill';
 export interface WechatPayModuleOptions {
 	/**
 	 * 证书序列号(必填, 证书序列号，可在微信支付平台获取 也可以通过此命令获取(*_cert.pem为你的证书文件) openssl x509 -in *_cert.pem -noout -serial )
@@ -43,6 +44,7 @@ export class WechatPayModule {
 				WechatPayChoosePayService,
 				WechatPayRefundService,
 				WechatPayDecodeService,
+				WechatPayBillService,
 			],
 			exports: [WechatPayJsapiService, WechatPayNativeService, WechatPayAppService],
 		};
