@@ -1,7 +1,7 @@
 {
-  "name": "@zeronejs/wechat-pay",
+  "name": "@zeronejs/wechat-login",
   "version": "1.0.0-beta.1",
-  "description": "Zerone Wechat Pay",
+  "description": "Zerone Wechat login",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "publishConfig": {
@@ -16,7 +16,7 @@
   "keywords": [
     "zerone",
     "zeronejs",
-    "wechat pay",
+    "wechat login",
     "wechat"
   ],
   "repository": {
@@ -26,10 +26,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@zeronejs/utils": "^1.1.2",
-    "jsrsasign": "^10.5.0"
-  },
-  "devDependencies": {
-    "@types/jsrsasign": "^8.0.13"
+    "@zeronejs/utils": "^1.1.3"
   }
 }
