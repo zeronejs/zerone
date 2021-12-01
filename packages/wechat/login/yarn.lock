@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@zeronejs/utils@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@zeronejs/utils/-/utils-1.1.3.tgz#f30eb64d4ffa2b1e6cc1a30269622e3516ab5785"
-  integrity sha512-4RjWtzzVRsge1LL37Ztwax6duhE0Joi/wMQ7P+xB26nrZ4Uz5BAMAONNZbwlgAIPZJL8CNoTAQEr5Z3wRaHR1w==
+"@zeronejs/utils@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@zeronejs/utils/-/utils-1.1.4.tgz#c3df4b0f4e631ce0895f933276781a36724c9a14"
+  integrity sha512-ZVKh8FtXjkScQlvIwJz8270S8EjAhsGcIEGl3Q8MlfmqsBSmi/Qhinbmy6mCUy1QpXZ8BV8V+4XNjD7QnEN3OQ==
