@@ -20,16 +20,14 @@ export class WXBizDataCrypt {
 			decipher.setAutoPadding(true);
 			decoded = decipher.update(encryptedData, 'binary', 'utf8');
 			decoded += decipher.final('utf8');
-
 			decoded = JSON.parse(decoded);
 		} catch (err) {
 			throw new Error('Illegal Buffer');
 		}
 
 		if (decoded.watermark.appid !== this.appId) {
-			throw new Error('Illegal Buffer');
+			throw new Error('Illegal Buffer!');
 		}
-
 		return decoded;
 	}
 }
