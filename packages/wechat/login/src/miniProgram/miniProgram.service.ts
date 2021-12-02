@@ -21,7 +21,7 @@ export class WechatLoginMiniProgramService {
 	async wxLogin(
 		input: WechatLoginMiniProgramServiceWxLogin
 	): Promise<WechatLoginMiniProgramServiceWxLoginResult> {
-		const sessionKeyObj = await this.jscode2session(input);
+		const sessionKeyObj = await this.code2session(input);
 		const { openid, unionid } = sessionKeyObj;
 		const data = this.getUserProfile({
 			...input,
@@ -42,7 +42,7 @@ export class WechatLoginMiniProgramService {
 	/**
 	 * 获取session_key
 	 */
-	async jscode2session(input: WechatLoginMiniProgramServiceGetSessionKey) {
+	async code2session(input: WechatLoginMiniProgramServiceGetSessionKey) {
 		const { status, data } = await axios.get<WechatLoginMiniProgramServiceGetSessionKeyResult>(
 			`https://api.weixin.qq.com/sns/jscode2session?appid=${input.appId}&secret=${input.secret}&js_code=${input.code}&grant_type=authorization_code`
 		);
