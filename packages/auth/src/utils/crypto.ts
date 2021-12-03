@@ -5,9 +5,9 @@ import * as bcrypt from 'bcrypt';
  * @returns
  */
 export const encryptedUserPassword = async (password: string): Promise<string> => {
-	// const saltOrRounds = 10;
-	const salt = await bcrypt.genSalt();
-	return bcrypt.hash(password, salt);
+    // const saltOrRounds = 10;
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
 };
 /**
  * 验证密码
@@ -16,5 +16,5 @@ export const encryptedUserPassword = async (password: string): Promise<string> =
  * @returns
  */
 export const verifyUserPassword = async (password: string, hash: string): Promise<boolean> => {
-	return bcrypt.compare(password, hash);
+    return bcrypt.compare(password, hash);
 };

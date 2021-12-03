@@ -14,12 +14,12 @@
  * // => [1, 2, 3]
  */
 export function compact<T>(array: Array<T | null | undefined | false | '' | 0>): T[] {
-	let resIndex = 0;
-	const result: T[] = [];
-	for (const value of array) {
-		if (value) {
-			result[resIndex++] = value;
-		}
-	}
-	return result;
+    let resIndex = 0;
+    const result: T[] = [];
+    for (const value of array) {
+        if (value) {
+            result[resIndex++] = value;
+        }
+    }
+    return result;
 }

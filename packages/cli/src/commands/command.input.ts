@@ -1,5 +1,5 @@
 export interface Input {
-  name: string;
-  value: boolean | string;
-  options?: any;
+    name: string;
+    value: boolean | string;
+    options?: any;
 }

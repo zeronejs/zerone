@@ -28,7 +28,7 @@
 // 				},
 // 			]);
 // 			const baseName = answers.name;
-			
+
 // 			await generateBaseEntityFile(baseName)
 // 			return	console.log('文件已生成，请自定义后再执行 generate')
 // 			// fileNames.push(answers.name.replace(/.entity.ts$/, '') + '.entity.ts');

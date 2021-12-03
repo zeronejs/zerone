@@ -1,4 +1,4 @@
-import { BadRequestException, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 

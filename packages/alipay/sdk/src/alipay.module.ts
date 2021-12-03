@@ -7,18 +7,18 @@ import { ALIPAY_MODULE_OPTIONS } from './constants';
 @Global()
 @Module({})
 export class AlipayModule {
-	static forRoot(options: AlipayModuleOptions | AlipayModuleOptions[]): DynamicModule {
-		return {
-			module: AlipayModule,
-			providers: [
-				{
-					provide: ALIPAY_MODULE_OPTIONS,
-					useValue: options,
-				},
-				createInstanceProvider(),
-				AlipayService,
-			],
-			exports: [AlipayService],
-		};
-	}
+    static forRoot(options: AlipayModuleOptions | AlipayModuleOptions[]): DynamicModule {
+        return {
+            module: AlipayModule,
+            providers: [
+                {
+                    provide: ALIPAY_MODULE_OPTIONS,
+                    useValue: options,
+                },
+                createInstanceProvider(),
+                AlipayService,
+            ],
+            exports: [AlipayService],
+        };
+    }
 }

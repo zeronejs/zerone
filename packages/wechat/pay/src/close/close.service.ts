@@ -8,13 +8,13 @@ import { WechatPayCloseServiceByOutTradeNoInput } from './close.types';
  */
 @Injectable()
 export class WechatPayCloseService {
-	constructor(private readonly fetchService: WechatPayFetchService) {}
+    constructor(private readonly fetchService: WechatPayFetchService) {}
 
-	async byOutTradeNo(params: WechatPayCloseServiceByOutTradeNoInput) {
-		const url: WechatPayUnifiedorderUrl = {
-			method: 'GET',
-			pathname: `/v3/pay/transactions/out-trade-no/${params.out_trade_no}/close`,
-		};
-		return this.fetchService.fetchWechat(params.mchid, url);
-	}
+    async byOutTradeNo(params: WechatPayCloseServiceByOutTradeNoInput) {
+        const url: WechatPayUnifiedorderUrl = {
+            method: 'GET',
+            pathname: `/v3/pay/transactions/out-trade-no/${params.out_trade_no}/close`,
+        };
+        return this.fetchService.fetchWechat(params.mchid, url);
+    }
 }

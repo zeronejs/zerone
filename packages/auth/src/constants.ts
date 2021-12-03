@@ -7,9 +7,9 @@ export const SkipJwtAuth = () => SetMetadata(IS_SKIP_JWT_AUTH_KEY, true);
 export const JwtConstantsSecret = Symbol('JwtConstantsSecret');
 
 export interface ReqUser {
-	id: number;
-	username: string;
+    id: number;
+    username: string;
 }
 export interface Request extends ExpressRequest {
-	user: ReqUser;
+    user: ReqUser;
 }

@@ -11,52 +11,52 @@ import { JwtStrategy } from '../src/jwt.strategy';
 import { LocalStrategy } from '../src/local.strategy';
 
 describe('@zeronejs/auth', () => {
-	let service: AuthService;
-	let localStrategy: LocalStrategy;
-	let jwtStrategy: JwtStrategy;
+    let service: AuthService;
+    let localStrategy: LocalStrategy;
+    let jwtStrategy: JwtStrategy;
 
-	beforeEach(async () => {
-		const module: TestingModule = await Test.createTestingModule({
-			imports: [
-				TypeOrmModule.forRoot({
-					type: 'sqlite',
-					database: './mydb.sql',
-					autoLoadEntities: true,
-					// entities: [],
-					synchronize: true,
-				}),
-				PassportModule,
-				JwtModule.register({
-					secret: 'jwtConstants.secret',
-					signOptions: { expiresIn: '6h' },
-				}),
-				TypeOrmModule.forFeature([UserSpareEntity]),
-			],
-			providers: [
-				AuthService,
-				LocalStrategy,
-				{
-					provide: JwtConstantsSecret,
-					useValue: 'jwtConstants.secret',
-				},
-				JwtStrategy,
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            imports: [
+                TypeOrmModule.forRoot({
+                    type: 'sqlite',
+                    database: './mydb.sql',
+                    autoLoadEntities: true,
+                    // entities: [],
+                    synchronize: true,
+                }),
+                PassportModule,
+                JwtModule.register({
+                    secret: 'jwtConstants.secret',
+                    signOptions: { expiresIn: '6h' },
+                }),
+                TypeOrmModule.forFeature([UserSpareEntity]),
+            ],
+            providers: [
+                AuthService,
+                LocalStrategy,
+                {
+                    provide: JwtConstantsSecret,
+                    useValue: 'jwtConstants.secret',
+                },
+                JwtStrategy,
 
-				{
-					provide: APP_GUARD,
-					useClass: JwtAuthGuard,
-				},
-			],
-			exports: [AuthService],
-		}).compile();
+                {
+                    provide: APP_GUARD,
+                    useClass: JwtAuthGuard,
+                },
+            ],
+            exports: [AuthService],
+        }).compile();
 
-		service = module.get<AuthService>(AuthService);
-		localStrategy = module.get<LocalStrategy>(LocalStrategy);
-		jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
-	});
+        service = module.get<AuthService>(AuthService);
+        localStrategy = module.get<LocalStrategy>(LocalStrategy);
+        jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
+    });
 
-	it('should be defined', () => {
-		expect(service).toBeDefined();
-		expect(localStrategy).toBeDefined();
-		expect(jwtStrategy).toBeDefined();
-	});
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+        expect(localStrategy).toBeDefined();
+        expect(jwtStrategy).toBeDefined();
+    });
 });
