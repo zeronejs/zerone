@@ -6,6 +6,7 @@
   "scripts": {
     "commit": "git-cz",
     "build": "ts-node -r tsconfig-paths/register ./packages/cli/src/bin.ts build -d",
+    "lint": "eslint --fix --ext .ts,.js packages",
     "test": "jest",
     "test:cov": "jest --coverage"
   },
@@ -43,6 +44,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "git-cz": "^4.8.0",
     "jest": "^27.3.1",
+    "prettier": "^2.5.0",
     "rxjs": "^7.4.0",
     "sqlite3": "^5.0.2",
     "ts-jest": "^27.0.7",

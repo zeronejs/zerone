@@ -5,11 +5,12 @@
         "sourceType": "module"
     },
     "plugins": [
+        "prettier",
         "@typescript-eslint/eslint-plugin"
     ],
     "extends": [
-        "plugin:@typescript-eslint/recommended"
-        // "plugin:prettier/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
     ],
     "root": true,
     "env": {
@@ -18,6 +19,8 @@
     },
     "ignorePatterns": [
         ".eslintrc.json",
+        "templates",
+        "test",
         "dist"
     ],
     "rules": {
