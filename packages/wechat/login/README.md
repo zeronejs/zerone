@@ -1,4 +1,4 @@
-# @zeronejs/wechat-pay
+# @zeronejs/wechat-login
 
 <!-- ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts) -->
  
