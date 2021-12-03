@@ -1,0 +1,2 @@
+export const ALIPAY_INSTANCES = Symbol('ALIPAY_INSTANCES');
+export const ALIPAY_MODULE_OPTIONS = Symbol('ALIPAY_MODULE_OPTIONS');
