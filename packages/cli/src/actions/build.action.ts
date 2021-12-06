@@ -14,6 +14,7 @@ export class BuildAction extends AbstractAction {
         try {
             let root = process.cwd();
             const pathOption = inputOptions.find(it => it.name === 'path')?.value;
+            const watch = Boolean(inputOptions.find(it => it.name === 'watch')?.value);
             if (isString(pathOption)) {
                 root = join(root, pathOption);
             }
@@ -22,7 +23,7 @@ export class BuildAction extends AbstractAction {
                 src: root,
                 output: join(root, 'dist'), // 默认dist
                 // types: join(root, 'dist'),
-                watch: true,
+                watch,
                 delete: false,
             };
 
@@ -51,10 +52,11 @@ export class BuildAction extends AbstractAction {
                 process.exit();
             });
             compilingEvent.on('fail', async () => {
-                await copyFiles();
                 if (!options.watch) {
+                    // throw new Error('编译失败');
                     process.exit();
                 }
+                await copyFiles();
             });
             tscCompiling();
             // compiling
