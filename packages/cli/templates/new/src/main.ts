@@ -1,10 +1,12 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { join } from 'path';
 import { AppModule } from './app.module';
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    app.useStaticAssets(join(__dirname, '..', 'public'), { prefix: '/public/' });
     const config = new DocumentBuilder()
         .setTitle('Cats example')
         .setDescription('The cats API description')

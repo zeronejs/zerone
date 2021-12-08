@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { RolesModule } from '@zeronejs/role-easy';
-import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { AuthModule } from '@zeronejs/auth';
 @Module({
     imports: [
         // TypeOrmModule.forRoot({
@@ -28,12 +24,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             synchronize: true,
         }),
         ConfigModule.forRoot(),
-        // RolesModule,
-        // AuthModule,
-        ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', 'public'),
-            exclude: ['/docs*'],
-        }),
     ],
     controllers: [AppController],
     providers: [AppService],
