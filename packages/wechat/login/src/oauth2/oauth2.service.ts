@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { URL } from 'url';
 import {
     WechatLoginOauth2ServiceGetCodeInput,
     WechatLoginOauth2ServiceGetAccessTokenInput,
@@ -18,11 +19,16 @@ import {
 @Injectable()
 export class WechatLoginOauth2Service {
     getCode(input: WechatLoginOauth2ServiceGetCodeInput) {
-        return `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${input.appid}&redirect_uri=${
-            input.redirect_uri
-        }&response_type=code&scope=${input.scope}${
-            input.state ? '&state=' + input.state : ''
-        }#wechat_redirect`;
+        const myURL = new URL('https://open.weixin.qq.com/connect/oauth2/authorize');
+        myURL.searchParams.set('app_id', input.appid);
+        myURL.searchParams.set('redirect_uri', input.redirect_uri);
+        myURL.searchParams.set('response_type', 'code');
+        myURL.searchParams.set('scope', input.scope);
+        if (input.state) {
+            myURL.searchParams.set('state', input.state);
+        }
+        myURL.hash = '#wechat_redirect';
+        return myURL.href;
     }
     getAccessToken(input: WechatLoginOauth2ServiceGetAccessTokenInput) {
         return axios.get<WechatLoginOauth2ServiceGetAccessTokenResult>(

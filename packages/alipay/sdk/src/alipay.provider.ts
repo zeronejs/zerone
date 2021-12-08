@@ -1,8 +1,9 @@
 import { Provider } from '@nestjs/common';
-import { AlipayModuleInstances, AlipayModuleOptions } from './alipay.types';
-import { ALIPAY_INSTANCES, ALIPAY_MODULE_OPTIONS } from './constants';
 import AlipaySdk from 'alipay-sdk';
 import { v4 as uuidv4 } from 'uuid';
+import { AlipayModuleInstances, AlipayModuleOptions } from './alipay.types';
+import { ALIPAY_INSTANCES, ALIPAY_MODULE_OPTIONS } from './constants';
+
 export const createInstanceProvider = (): Provider => ({
     provide: ALIPAY_INSTANCES,
     useFactory: (options: AlipayModuleOptions | AlipayModuleOptions[]): AlipayModuleInstances => {

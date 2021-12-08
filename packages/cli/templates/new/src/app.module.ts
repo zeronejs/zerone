@@ -32,7 +32,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         // AuthModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'public'),
-            exclude: ['/api*'],
+            exclude: ['/docs*'],
         }),
     ],
     controllers: [AppController],
