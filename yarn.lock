@@ -4020,10 +4020,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jsrsasign@^10.5.0:
-  version "10.5.0"
-  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.5.0.tgz#28acf0dbe7565633d306190fd9400c38dd862cb0"
-  integrity sha512-AC1kfL1LJASKBLGv4bLLl+auFlsBajOxEcggL7fn8cp7nMRPhyln3LK/Q9lEDCrxYFU35NGUeFtUBCbasoF2Uw==
+jsrsasign@^10.5.1:
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-10.5.1.tgz#85dc7c6c3f6a5fded26030971c08ce5058f525f6"
+  integrity sha512-yW0fq87KNZFw4Pn5ySllXs3ztZAROQZczEheKZTqmiNpCe/Xj9r5NhuAQ7MXTOyEZGJ/+MPHGTsfbgPFaLpwHQ==
 
 jwa@^1.4.1:
   version "1.4.1"
