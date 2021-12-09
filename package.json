@@ -45,7 +45,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "git-cz": "^4.8.0",
     "jest": "^27.4.3",
-    "packageout": "^1.2.2",
     "prettier": "^2.5.1",
     "rxjs": "^7.4.0",
     "sqlite3": "^5.0.2",
