@@ -75,7 +75,7 @@
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "ts-morph": "^12.2.0",
+    "ts-morph": "^13.0.2",
     "tsconfig-paths": "^3.11.0",
     "typeorm": "^0.2.38",
     "uuid": "^8.3.2"
