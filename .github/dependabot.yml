@@ -10,3 +10,7 @@ updates:
     schedule:
       interval: "daily"
     versioning-strategy: increase
+    ignore:
+    - dependency-name: "ora"
+    - dependency-name: "chalk"
+    - dependency-name: "os-name"
