@@ -4838,10 +4838,10 @@ pac-resolver@^5.0.0:
     ip "^1.1.5"
     netmask "^2.0.1"
 
-packageout@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/packageout/-/packageout-1.2.1.tgz#3d4a175f99c6ca466d39c11de218278dbb59e937"
-  integrity sha512-1TIP0u7OwhpFxWgtFGuycs7A6I0F505WbG60upDBUHo/1g0/0shhePz/Ct4XN1DLn1V1mKBlmG2rjxfqGT/CYw==
+packageout@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/packageout/-/packageout-1.2.2.tgz#8f1d6e1ed7125fec64bffc571483720a2cf0438a"
+  integrity sha512-BENyscQWkXP2h7xFNYBFaa3ED23awZfAyzbQDUF7XLFjxZQRWk9SPSGAS6soGsHHYjHrPMT6cYu1Uxwx41PS6g==
   dependencies:
     lodash "^4.17.15"
 
