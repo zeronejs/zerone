@@ -67,7 +67,7 @@
     "fs-extra": "^10.0.0",
     "handlebars": "^4.7.7",
     "inquirer": "^8.2.0",
-    "ioredis": "^4.28.0",
+    "ioredis": "^4.28.2",
     "jsrsasign": "^10.5.1",
     "node-emoji": "^1.11.0",
     "ora": "^5.4.1",
