@@ -1199,10 +1199,10 @@ ajv@^6.10.0, ajv@^6.12.3, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alipay-sdk@^3.1.7:
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/alipay-sdk/-/alipay-sdk-3.1.7.tgz#5303928a9288615b42d6d3962364385fbbb717a1"
-  integrity sha512-ITla/2vYiMfY9/qC/d821jIWAuSVdZ7GHmzJxVGrPMowtA2CejgakIYrkz/RSZX7j+4bWl259b0Fd0wVdaAITg==
+alipay-sdk@^3.1.8:
+  version "3.1.8"
+  resolved "https://registry.yarnpkg.com/alipay-sdk/-/alipay-sdk-3.1.8.tgz#5f236fb297eb011db5cf8e8855a10f666ea1de66"
+  integrity sha512-TDLMHt9W+BPIDJ9c4d6wH3TVwsreVVr0y5Sl9XwExyrrfdgnGVTE7cm42TcmiQpykOrLSwLFucnmUn5UBcFDPg==
   dependencies:
     "@fidm/x509" "^1.2.1"
     "@types/node" "^9.6.0"
