@@ -1,5 +1,13 @@
 // import { Role } from '@common/role';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    Index,
+    BaseEntity,
+} from 'typeorm';
 export enum Gender {
     unknown,
     mam,
@@ -9,7 +17,7 @@ export enum Gender {
  * 用户表
  */
 @Entity()
-export class UserEntity {
+export class UserEntity extends BaseEntity{
     /**
      * id
      */
@@ -42,12 +50,12 @@ export class UserEntity {
     /**
      * 头像
      */
-    @Column({nullable: true })
+    @Column({ nullable: true })
     avatar?: string;
     /**
      * 昵称
      */
-    @Column({ nullable: true})
+    @Column({ nullable: true })
     nickname?: string;
     /**
      * 签名

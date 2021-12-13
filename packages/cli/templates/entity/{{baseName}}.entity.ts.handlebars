@@ -1,10 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    BaseEntity,
+} from 'typeorm';
 
 /**
  * {{BaseName}}表
  */
 @Entity()
-export class {{BaseName}}Entity {
+export class {{BaseName}}Entity extends BaseEntity {
     /**
      * id
      */
