@@ -25,7 +25,10 @@ async function bootstrap() {
         process.env.SERVICE_PORT ?? 5000,
         process.env.SERVICE_HOSTNAME ?? '0.0.0.0',
         async () => {
-            console.log(`Application is running on: ${await app.getUrl()}`);
+            const url = await app.getUrl();
+            console.log(`⭐️ Application Starting on: ${url}`);
+            console.log(`⭐️ Swagger API Starting on: ${url}/docs`);
+            console.log(`⭐️ Admin view  Starting on: ${url}/admin`);
         }
     );
 }
