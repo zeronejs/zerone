@@ -2,6 +2,7 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/zeronejs/zerone/Node.js%20CI)
 ![GitHub](https://img.shields.io/github/license/zeronejs/zerone)
+[![Node.js CI](https://github.com/zeronejs/zerone/actions/workflows/node.js.yml/badge.svg)](https://github.com/zeronejs/zerone/actions/workflows/node.js.yml)
 ## Ecosystem
 
 | Project              | Status                                                             | Description               |
