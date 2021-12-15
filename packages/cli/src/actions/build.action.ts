@@ -161,7 +161,6 @@ export class BuildAction extends AbstractAction {
             }
             async function copyIncludeFiles() {
                 return Promise.all(
-                    // todo tsconfig
                     tsconfig.include?.map(it => {
                         return copy(join(options.src, it), join(options.output, it), {
                             overwrite: true,
