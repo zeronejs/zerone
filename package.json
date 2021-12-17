@@ -64,7 +64,7 @@
     "chokidar": "^3.5.2",
     "commander": "^8.2.0",
     "consola": "^2.15.3",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "fs-extra": "^10.0.0",
     "handlebars": "^4.7.7",
     "inquirer": "^8.2.0",
