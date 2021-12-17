@@ -73,7 +73,7 @@
     "node-emoji": "^1.11.0",
     "ora": "^5.4.1",
     "os-name": "^4.0.1",
-    "passport": "^0.5.1",
+    "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "ts-morph": "^13.0.2",
