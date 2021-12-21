@@ -32,3 +32,21 @@ export type Trim<S extends string> = S extends `${Space}${infer T}` | `${infer T
 export type Merge<F, S> = {
     [Key in keyof F | keyof S]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key] : never;
 };
+
+export type MergeType<T> = {
+    [K in keyof T]: T[K];
+};
+
+/**
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/2757-medium-partialbykeys/README.md
+ */
+export type PartialByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K>> = MergeType<
+    Partial<Pick<T, P>> & Omit<T, P>
+>;
+
+/**
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/2759-medium-requiredbykeys/README.md
+ */
+export type RequiredByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K>> = MergeType<
+    Required<Pick<T, P>> & Omit<T, P>
+>;

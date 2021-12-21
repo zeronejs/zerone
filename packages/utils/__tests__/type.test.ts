@@ -1,4 +1,4 @@
-import { PickMethodsKey } from '../src/type';
+import type { PickMethodsKey } from '../src/type';
 
 describe('@zeronejs/utils => type', () => {
     it('PickMethodsKey', () => {
