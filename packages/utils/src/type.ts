@@ -27,6 +27,10 @@ export type TrimLeft<S extends string> = S extends `${Space}${infer Other}` ? Tr
  */
 export type Trim<S extends string> = S extends `${Space}${infer T}` | `${infer T}${Space}` ? Trim<T> : S;
 /**
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/4803-medium-trim-right/README.md
+ */
+export type TrimRight<S extends string> = S extends `${infer L}${Space}` ? TrimRight<L> : S;
+/**
  * https://github.com/type-challenges/type-challenges/blob/master/questions/599-medium-merge/README.md
  */
 export type Merge<F, S> = {
@@ -50,3 +54,14 @@ export type PartialByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K
 export type RequiredByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K>> = MergeType<
     Required<Pick<T, P>> & Omit<T, P>
 >;
+/**
+ * @example Tuple2Union<[1,2]>  // 1 | 2
+ * type[number]
+ */
+export type Tuple2Union<T extends any[]> = T extends Array<infer K> ? K : never;
+/**
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/55-hard-union-to-intersection/README.zh-CN.md
+ */
+export type UnionToIntersection<U> = (U extends any ? (arg: U) => any : never) extends (arg: infer I) => void
+    ? I
+    : never;
