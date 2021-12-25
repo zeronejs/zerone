@@ -1,3 +1,4 @@
+export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? true : false;
 /**
  * From T, pick 出所有方法的key
  * @example type keys = PickMethodsKey<{ a: () => void; b: () => void }>;
@@ -65,3 +66,26 @@ export type Tuple2Union<T extends any[]> = T extends Array<infer K> ? K : never;
 export type UnionToIntersection<U> = (U extends any ? (arg: U) => any : never) extends (arg: infer I) => void
     ? I
     : never;
+/**
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/399-hard-tuple-filter/README.md
+ */
+export type TupleFilterOut<T extends any[], F> = T extends [infer First, ...infer R]
+    ? [First] extends [F]
+        ? TupleFilterOut<R, F>
+        : [First, ...TupleFilterOut<R, F>]
+    : [];
+
+type IsUnion<T, O = T> = T extends O ? ([O] extends [T] ? false : true) : never;
+/**
+ * LastInUnion<1 | 2> = 2.
+ */
+type LastInUnion<U> = UnionToIntersection<U extends unknown ? (x: U) => 0 : never> extends (x: infer L) => 0
+    ? L
+    : never;
+
+/**
+ * UnionToTuple<1 | 2> = [1, 2].
+ */
+type UnionToTuple<U, Last = LastInUnion<U>> = [U] extends [never]
+    ? []
+    : [...UnionToTuple<Exclude<U, Last>>, Last];
