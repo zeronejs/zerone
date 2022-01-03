@@ -875,10 +875,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/jsrsasign@^9.0.1":
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-9.0.1.tgz#b98c94f09478138aafb5dd3ea00425d376560779"
-  integrity sha512-84hBaNlih+u0xuTw6i3rfZSVrXGDg8+SoY81YgTUGet3B32HrZjHBTx+GU8UTKbx3KrRUFnZiqX//pIZ3eFgfA==
+"@types/jsrsasign@^9.0.2":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@types/jsrsasign/-/jsrsasign-9.0.2.tgz#4fe8aa87bcf6c5ff5f459508b50f9febbb60b107"
+  integrity sha512-HabJWSfZbcYQ655IIJEIOWENLvjdLP/8KJ+mqsZVUNBo5MA3wA4Zcz2KTCGBNJ08/j/OB6Xx/SY9dcengEeUuA==
 
 "@types/mime@^1":
   version "1.3.2"
