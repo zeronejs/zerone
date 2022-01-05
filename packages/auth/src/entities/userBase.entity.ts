@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
     // 仅仅为方便查询用户信息设置的一个Entity,不允许开启同步
@@ -6,7 +6,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
     name: 'user_entity',
     // title: 'user_spare_entity'
 })
-export class UserSpareEntity {
+export class UserSpareEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     /**
