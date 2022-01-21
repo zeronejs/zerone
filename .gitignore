@@ -40,3 +40,5 @@ dist
 public/*
 test
 *.sql
+
+yarn*
