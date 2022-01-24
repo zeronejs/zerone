@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.2.23",
+  "version": "1.2.24",
   "description": "Zerone Cli",
   "publishConfig": {
     "access": "public"
@@ -10,7 +10,7 @@
     "build": "ts-node ./src/bin.ts build -d",
     "info": "ts-node ./src/bin.ts info",
     "prepublish:npm": "pnpm run build",
-    "publish:npm": "pnpm publish"
+    "publish:npm": "pnpm publish dist/"
   },
   "bin": {
     "zerone": "src/bin.js"
