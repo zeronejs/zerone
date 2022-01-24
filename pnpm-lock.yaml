@@ -63,7 +63,7 @@ importers:
 
   packages/alipay/sdk:
     specifiers:
-      '@types/uuid': ^8.3.3
+      '@types/uuid': ^8.3.4
       alipay-sdk: ^3.2.0
       uuid: ^8.3.2
     dependencies:
@@ -74,19 +74,19 @@ importers:
 
   packages/ast/ts:
     specifiers:
-      typescript: ^4.4.4
+      typescript: ^4.5.5
     dependencies:
       typescript: 4.5.5
 
   packages/auth:
     specifiers:
       '@nestjs/jwt': ^8.0.0
-      '@nestjs/passport': ^8.0.1
+      '@nestjs/passport': ^8.1.0
       '@types/bcrypt': ^5.0.0
       '@types/passport-jwt': ^3.0.6
       '@types/passport-local': ^1.0.34
       bcrypt: ^5.0.1
-      passport: ^0.5.0
+      passport: ^0.5.2
       passport-jwt: ^4.0.0
       passport-local: ^1.0.0
     dependencies:
@@ -109,10 +109,10 @@ importers:
       '@types/node-emoji': ^1.8.1
       '@types/ora': ^3.2.0
       '@types/os-name': 3.1.0
-      '@zeronejs/ast-ts': ^1.0.0-beta.7
-      '@zeronejs/utils': ^1.1.6
+      '@zeronejs/ast-ts': workspace:^1.0.0-beta.7
+      '@zeronejs/utils': workspace:^1.1.6
       chalk: ^4.1.2
-      commander: ^8.2.0
+      commander: ^8.3.0
       consola: ^2.15.3
       fs-extra: ^10.0.0
       handlebars: ^4.7.7
@@ -120,8 +120,8 @@ importers:
       node-emoji: ^1.11.0
       ora: ^5.4.1
       os-name: ^4.0.1
-      ts-morph: ^13.0.2
-      typescript: ^4.5.3
+      ts-morph: ^13.0.3
+      typescript: ^4.5.5
     dependencies:
       '@zeronejs/ast-ts': link:../ast/ts
       '@zeronejs/utils': link:../utils
@@ -146,8 +146,8 @@ importers:
 
   packages/redis:
     specifiers:
-      '@types/ioredis': ^4.27.8
-      ioredis: ^4.28.0
+      '@types/ioredis': ^4.28.7
+      ioredis: ^4.28.3
     dependencies:
       ioredis: 4.28.3
     devDependencies:
@@ -161,15 +161,15 @@ importers:
 
   packages/wechat/login:
     specifiers:
-      '@zeronejs/utils': ^1.1.4
+      '@zeronejs/utils': workspace:^1.1.6
     dependencies:
       '@zeronejs/utils': link:../../utils
 
   packages/wechat/pay:
     specifiers:
       '@types/jsrsasign': ^8.0.13
-      '@zeronejs/utils': ^1.1.2
-      jsrsasign: ^10.5.0
+      '@zeronejs/utils': workspace:^1.1.6
+      jsrsasign: ^10.5.1
     dependencies:
       '@zeronejs/utils': link:../../utils
       jsrsasign: 10.5.1

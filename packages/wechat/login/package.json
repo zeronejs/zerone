@@ -24,6 +24,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@zeronejs/utils": "^1.1.4"
+    "@zeronejs/utils": "workspace:^1.1.6"
   }
 }

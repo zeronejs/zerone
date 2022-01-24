@@ -23,10 +23,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "ioredis": "^4.28.0"
+    "ioredis": "^4.28.3"
   },
   "devDependencies": {
-    "@types/ioredis": "^4.27.8"
+    "@types/ioredis": "^4.28.7"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.1.1",
