@@ -47,7 +47,7 @@
     "@nestjs/common": "^8.2.6",
     "@nestjs/core": "^8.1.1",
     "@nestjs/testing": "^8.2.6",
-    "@nestjs/typeorm": "^8.0.2",
+    "@nestjs/typeorm": "^8.0.3",
     "@zeronejs/ast-ts": "workspace:*",
     "@zeronejs/utils": "workspace:*"
   }
