@@ -2,8 +2,6 @@
   "name": "@zeronejs/alipay-sdk",
   "version": "1.0.1",
   "description": "Zerone alipay sdk",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },

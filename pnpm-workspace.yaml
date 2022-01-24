@@ -1,4 +1,5 @@
 packages:
   - 'packages/**'
     # 不包括在 templates 文件夹下的 package
-  - '!**/cli/templates/**'
+  - '!**/cli/**/templates/**'
+  - '!**/dist/**'

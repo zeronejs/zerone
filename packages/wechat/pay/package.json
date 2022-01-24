@@ -2,8 +2,6 @@
   "name": "@zeronejs/wechat-pay",
   "version": "1.0.0-beta.1",
   "description": "Zerone Wechat Pay",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },

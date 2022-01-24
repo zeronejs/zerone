@@ -2,8 +2,6 @@
   "name": "@zeronejs/ast-ts",
   "version": "1.0.0-beta.7",
   "description": "Zerone Abstract Syntax Tree",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },

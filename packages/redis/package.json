@@ -2,8 +2,6 @@
   "name": "@zeronejs/redis",
   "version": "1.0.3",
   "description": "Zerone redis",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },

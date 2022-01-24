@@ -2,8 +2,6 @@
   "name": "@zeronejs/auth",
   "version": "1.1.1",
   "description": "Zerone auth",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
