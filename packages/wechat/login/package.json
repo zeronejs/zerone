@@ -7,8 +7,7 @@
   },
   "scripts": {
     "build": "zerone build -d",
-    "prepublish:npm": "npm run build",
-    "publish:npm": "npm publish dist/",
+    "publish:npm": "pnpm build && pnpm publish dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
