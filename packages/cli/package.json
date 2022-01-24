@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ts-node ./src/bin.ts build -d",
     "info": "ts-node ./src/bin.ts info",
-    "prepublish:npm": "pnpm run build",
+    "prepublish:npm": "pnpm build",
     "publish:npm": "pnpm publish dist/"
   },
   "bin": {
