@@ -2,6 +2,9 @@
   "name": "@zeronejs/role-easy",
   "version": "1.0.2",
   "description": "Zerone role",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "publishConfig": {
     "access": "public"
   },
