@@ -1,6 +1,6 @@
 import { Provider } from '@nestjs/common';
 import AlipaySdk from 'alipay-sdk';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 import { AlipayModuleInstances, AlipayModuleOptions } from './alipay.types';
 import { ALIPAY_INSTANCES, ALIPAY_MODULE_OPTIONS } from './constants';
 
@@ -8,7 +8,7 @@ export const createInstanceProvider = (): Provider => ({
     provide: ALIPAY_INSTANCES,
     useFactory: (options: AlipayModuleOptions | AlipayModuleOptions[]): AlipayModuleInstances => {
         const instances = new Map<string, AlipaySdk>();
-        let defaultKey = uuidv4();
+        let defaultKey = randomUUID();
         if (Array.isArray(options)) {
             for (const option of options) {
                 const key = option.name || defaultKey;

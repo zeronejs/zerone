@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16"
   },
   "scripts": {
     "commit": "git-cz",
