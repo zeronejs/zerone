@@ -7,6 +7,7 @@ import {
     InfoAction,
     NewAction,
     GenerateAstAction,
+    GenerateApiAction,
     // StartAction,
     // UpdateAction,
 } from '../actions';
@@ -14,6 +15,7 @@ import { ERROR_PREFIX } from '../ui';
 // import { AddCommand } from './add.command';
 import { BuildCommand } from './build.command';
 import { GenerateCommand } from './generate.command';
+import { GenerateApiCommand } from './generate.api.command';
 import { InfoCommand } from './info.command';
 import { NewCommand } from './new.command';
 // import { StartCommand } from './start.command';
@@ -27,6 +29,7 @@ export class CommandLoader {
         // new UpdateCommand(new UpdateAction()).load(program);
         // new AddCommand(new AddAction()).load(program);
         new GenerateCommand(new GenerateAstAction()).load(program);
+        new GenerateApiCommand(new GenerateApiAction()).load(program);
 
         this.handleInvalidCommand(program);
     }
