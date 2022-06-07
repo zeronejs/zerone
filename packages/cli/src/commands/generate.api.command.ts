@@ -5,8 +5,8 @@ import { Input } from './command.input';
 export class GenerateApiCommand extends AbstractCommand {
     public async load(program: Command) {
         program
-            .command('api generate')
-            .alias('api g')
+            .command('api')
+            // .alias('api')
             .description('Generate Swagger Api')
             // .option('-d, --delete', 'Delete files generated before this module.')
             // .option(
