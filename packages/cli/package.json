@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Zerone Cli",
   "engines": {
     "node": ">=12.0.0"
@@ -35,6 +35,7 @@
   "dependencies": {
     "@zeronejs/ast-ts": "workspace:^1.0.0-beta.7",
     "@zeronejs/utils": "workspace:^1.1.6",
+    "axios": "^0.27.2",
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
     "consola": "^2.15.3",

@@ -111,6 +111,7 @@ importers:
       '@types/swagger-schema-official': ^2.0.22
       '@zeronejs/ast-ts': workspace:^1.0.0-beta.7
       '@zeronejs/utils': workspace:^1.1.6
+      axios: ^0.27.2
       chalk: ^4.1.2
       commander: ^8.3.0
       consola: ^2.15.3
@@ -127,6 +128,7 @@ importers:
     dependencies:
       '@zeronejs/ast-ts': link:../ast/ts
       '@zeronejs/utils': link:../utils
+      axios: 0.27.2
       chalk: 4.1.2
       commander: 8.3.0
       consola: 2.15.3
@@ -1704,7 +1706,7 @@ packages:
     dev: true
 
   /asynckit/0.4.0:
-    resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
   /aws-sign2/0.7.0:
     resolution: {integrity: sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg=}
@@ -2315,7 +2317,7 @@ packages:
     dev: false
 
   /delayed-stream/1.0.0:
-    resolution: {integrity: sha1-3zrhmayt+31ECqrgsp4icrJOxhk=}
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
   /delegates/1.0.0:
