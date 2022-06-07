@@ -6,8 +6,8 @@ import { join } from 'path';
 import { Path, Operation, Schema } from 'swagger-schema-official';
 import { Project } from 'ts-morph';
 import axios from 'axios';
-import { GInterface } from './generateClass/GInterface';
 import { GController } from './generateClass/GController';
+import { GInterface } from './generateClass/GInterface';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -24,37 +24,45 @@ export class GenerateApiAction extends AbstractAction {
         if (!config.docsUrl) {
             return console.info(chalk.red('docsUrl 未指定文档路径！'));
         }
-        console.log(chalk.gray('reading docs...'));
-        const { data } = await axios.get(config.docsUrl);
+        console.info(chalk.gray('读取json链接中...'));
+        const { data } = await axios.get(config.docsUrl).catch(err => {
+            throw console.info(chalk.red('json链接读取失败 ！！！'));
+        });
         if (!data || !data.paths) {
-            return console.log('read failed！！！');
+            return console.info(chalk.red('json链接读取失败！！！'));
         }
+        console.info(chalk.green(`链接读取成功`));
         const paths = data.paths as { [pathName: string]: Path };
+        console.info(chalk.gray('生成文件中...'));
         // 生成类型文件
-        // await GInterfaceHandle(data.components.schemas as Schema, root);
+        await GInterfaceHandle(data.components.schemas as Schema, root);
         // 生成Controller
         await GControllerHandle(paths, root, config);
-        console.log(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
+        console.info(chalk.green(`生成文件完成`));
+        console.info(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
     }
 }
 // 生成类型文件
 const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
-    const typeFileUrl = join(root, 'interface', 'index.ts');
-    await remove(typeFileUrl);
-    await ensureFile(typeFileUrl);
-    const project = new Project();
     // 类型可能重复  暂时先用一个文件
-    const sourceProject = project.addSourceFileAtPath(typeFileUrl);
-    const now = Date.now();
     const schemas = Object.keys(inputSchemas);
-    sourceProject.addInterfaces(schemas.map(key => ({ name: key })));
-    schemas.map((key, index) => {
+    const indexUrl = join(root, 'interface', 'index.ts');
+    await remove(indexUrl);
+    await ensureFile(indexUrl);
+    const indexProject = new Project();
+    const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
+    schemas.map(async key => {
         const element: Schema = Reflect.get(inputSchemas, key);
-        console.log({ cur: index + 1, total: schemas.length, key });
+        const typeFileUrl = join(root, 'interface', 'apiTypes', key + '.ts');
+        await remove(typeFileUrl);
+        await ensureFile(typeFileUrl);
+        const project = new Project();
+        const sourceProject = project.addSourceFileAtPath(typeFileUrl);
         new GInterface(element, sourceProject, key).genTsType();
+        await sourceProject.save();
     });
-    console.log(Date.now() - now);
-    return sourceProject.save();
+    indexSourceProject.addExportDeclarations(schemas.map(key => ({ moduleSpecifier: `./apiTypes/${key}` })));
+    await indexSourceProject.save();
 };
 const supportMethodKeys = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];
 

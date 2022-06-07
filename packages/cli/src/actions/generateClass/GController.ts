@@ -36,11 +36,11 @@ export class GController {
             return;
         }
         // includeTags
-        if (config.includeTags && !config.includeTags.includes(tagsItem)) {
+        if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
             return;
         }
         // excludeTags
-        if (config.excludeTags && config.excludeTags.includes(tagsItem)) {
+        if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
             return;
         }
         const key = camelCase(methodKey + pathKey);
@@ -51,8 +51,6 @@ export class GController {
         const project = new Project();
         const sourceProject = project.addSourceFileAtPath(sourceFilePath);
         this.sourceProject = sourceProject;
-        console.log({ key });
-
         // import 导入
         this.genImports();
         // 生成方法
@@ -70,20 +68,19 @@ export class GController {
         let resType = 'unknown';
         if (schema) {
             resType = new GInterface(schema, sourceProject, fnName + 'Result').getTsType(schema, '');
-            // 导入复杂类型
-            if (schema.$ref) {
-                // import 导入
-                const importDeclaration = sourceProject.addImportDeclaration({
-                    namedImports: [resType],
-                    moduleSpecifier: '../../interface',
-                });
-            }
+            // // 导入复杂类型
+            // if (schema.$ref) {
+            //     // import 导入
+            //     const importDeclaration = sourceProject.addImportDeclaration({
+            //         namedImports: [resType],
+            //         moduleSpecifier: '../../interface',
+            //     });
+            // }
         }
         const functionDeclaration = sourceProject.addFunction({
             name: fnName,
         });
         const requestBodySchema = this.getRequestBodySchema();
-        debugger;
         functionDeclaration.setBodyText(
             `return request.${this.methodKey}<${resType}>(\`${parseSwaggerPathTemplate(this.pathKey)}\`${
                 requestBodySchema ? ', input' : ''
@@ -160,19 +157,19 @@ export class GController {
                 sourceProject,
                 upperFirst(fnName) + 'Input'
             ).getTsType(requestBodySchema, '');
-            // 导入复杂类型
-            if (requestBodySchema.$ref) {
-                // import 导入
-                let importDeclaration = sourceProject.getImportDeclaration('../../interface');
-                if (!importDeclaration) {
-                    importDeclaration = sourceProject.addImportDeclaration({
-                        namedImports: [inputType],
-                        moduleSpecifier: '../../interface',
-                    });
-                } else {
-                    importDeclaration.addNamedImport(inputType);
-                }
-            }
+            // // 导入复杂类型
+            // if (requestBodySchema.$ref) {
+            //     // import 导入
+            //     let importDeclaration = sourceProject.getImportDeclaration('../../interface');
+            //     if (!importDeclaration) {
+            //         importDeclaration = sourceProject.addImportDeclaration({
+            //             namedImports: [inputType],
+            //             moduleSpecifier: '../../interface',
+            //         });
+            //     } else {
+            //         importDeclaration.addNamedImport(inputType);
+            //     }
+            // }
             functionDeclaration.addParameter({ name: 'input', type: inputType });
         }
         functionDeclaration.addJsDoc(
