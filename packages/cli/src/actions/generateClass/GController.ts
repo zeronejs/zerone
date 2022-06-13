@@ -108,7 +108,7 @@ export class GController {
                 functionDeclaration.setBodyText(writer => {
                     writer.writeLine(`const searchParams = new URLSearchParams('');`);
                     parameters.map(param => {
-                        if (param.name.includes('-')) {
+                        if (param.name.includes('-') || param.name.includes('.')) {
                             writer.write(`if (params['${param.name}'])`).block(() => {
                                 writer.writeLine(
                                     `searchParams.append('${param.name}', String(params['${param.name}']));`
@@ -139,7 +139,8 @@ export class GController {
                     sourceProject,
                     paramsTypeName + upperFirst(param.name)
                 ).getTsType((param as any).schema, '');
-                const paramName = param.name.includes('-') ? `'${param.name}'` : param.name;
+                const paramName =
+                    param.name.includes('-') || param.name.includes('.') ? `'${param.name}'` : param.name;
                 const propertyDeclaration = interfaceDeclaration.addProperty({
                     name: paramName,
                     type: paramType,

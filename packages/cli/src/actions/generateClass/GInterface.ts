@@ -33,7 +33,7 @@ export class GInterface {
             });
         }
         const addPropertiesInput = Object.keys(properties).map(key => {
-            const inputKey = key.includes('-') ? `'${key}'` : key;
+            const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
             if (properties[key].additionalProperties) {
                 // 索引签名
                 return {
