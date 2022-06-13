@@ -8,6 +8,7 @@ import { Project } from 'ts-morph';
 import axios from 'axios';
 import { GController } from './generateClass/GController';
 import { GInterface } from './generateClass/GInterface';
+import { escapeVar } from '../utils/generateUtil';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -53,6 +54,7 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
     schemas.map(async key => {
         const element: Schema = Reflect.get(inputSchemas, key);
+        key = escapeVar(key);
         const typeFileUrl = join(root, 'interface', 'apiTypes', key + '.ts');
         await remove(typeFileUrl);
         await ensureFile(typeFileUrl);
