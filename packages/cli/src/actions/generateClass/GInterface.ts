@@ -64,7 +64,8 @@ export class GInterface {
                 });
             }
             const names = importDeclaration.getNamedImports().map(it => it.getName());
-            if (!names.includes(typeName)) {
+
+            if (!names.includes(typeName) && !this.sourceFile.getInterface(typeName)) {
                 importDeclaration.addNamedImport(typeName);
             }
             return typeName;
