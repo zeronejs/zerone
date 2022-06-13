@@ -56,18 +56,21 @@ export class GInterface {
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
+            const typeNameInterface = this.sourceFile.getInterface(typeName);
             // import 导入
             let importDeclaration = this.sourceFile.getImportDeclaration('@/api/interface');
-            if (!importDeclaration) {
+            if (importDeclaration) {
+                const names = importDeclaration.getNamedImports().map(it => it.getName());
+                if (!names.includes(typeName) && !typeNameInterface) {
+                    importDeclaration.addNamedImport(typeName);
+                }
+            } else if (!typeNameInterface) {
                 importDeclaration = this.sourceFile.addImportDeclaration({
                     moduleSpecifier: '@/api/interface',
                 });
-            }
-            const names = importDeclaration.getNamedImports().map(it => it.getName());
-
-            if (!names.includes(typeName) && !this.sourceFile.getInterface(typeName)) {
                 importDeclaration.addNamedImport(typeName);
             }
+
             return typeName;
         }
 
