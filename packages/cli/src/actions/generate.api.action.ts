@@ -58,8 +58,12 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
         await ensureFile(typeFileUrl);
         const project = new Project();
         const sourceProject = project.addSourceFileAtPath(typeFileUrl);
-        new GInterface(element, sourceProject, key).genTsType();
-        await sourceProject.save();
+        try {
+            new GInterface(element, sourceProject, key).genTsType();
+            await sourceProject.save();
+        } catch (error) {
+            console.log({ error });
+        }
     });
     indexSourceProject.addExportDeclarations(schemas.map(key => ({ moduleSpecifier: `./apiTypes/${key}` })));
     await indexSourceProject.save();
@@ -72,21 +76,40 @@ const GControllerHandle = async (
     root: string,
     config: GenerateApiActionConfig
 ) => {
-    await Promise.all(
-        Object.keys(paths)
-            .map(pathKey => {
-                return Object.keys(paths[pathKey]).map(methodKey => {
-                    // 仅支持这些method
-                    if (!supportMethodKeys.includes(methodKey)) {
-                        return;
-                    }
-                    const operation: Operation = (paths[pathKey] as any)[methodKey];
-                    return new GController(operation, methodKey, pathKey).genController(
+    // await Promise.all(
+    //     Object.keys(paths)
+    //         .map(pathKey => {
+    //             return Object.keys(paths[pathKey]).map(methodKey => {
+    //                 // 仅支持这些method
+    //                 if (!supportMethodKeys.includes(methodKey)) {
+    //                     return;
+    //                 }
+    //                 const operation: Operation = (paths[pathKey] as any)[methodKey];
+    //                 return new GController(operation, methodKey, pathKey).genController(
+    //                     join(root, 'controller'),
+    //                     config
+    //                 );
+    //             });
+    //         })
+    //         .flat()
+    // );
+    Object.keys(paths)
+        .map(pathKey => {
+            return Object.keys(paths[pathKey]).map(async methodKey => {
+                // 仅支持这些method
+                if (!supportMethodKeys.includes(methodKey)) {
+                    return;
+                }
+                const operation: Operation = (paths[pathKey] as any)[methodKey];
+                try {
+                    await new GController(operation, methodKey, pathKey).genController(
                         join(root, 'controller'),
                         config
                     );
-                });
-            })
-            .flat()
-    );
+                } catch (err) {
+                    console.log({ err });
+                }
+            });
+        })
+        .flat();
 };
