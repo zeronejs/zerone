@@ -63,7 +63,7 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
         const project = new Project();
         const sourceProject = project.addSourceFileAtPath(typeFileUrl);
         try {
-            new GInterface(element, sourceProject, key).genTsType();
+            new GInterface(element, sourceProject, key).genTsType(config.prefix);
             await sourceProject.save();
         } catch (error) {
             console.log({ error });

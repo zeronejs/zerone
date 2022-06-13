@@ -12,7 +12,7 @@ export class GInterface {
         this.keyName = keyName;
     }
 
-    private genObjectType() {
+    private genObjectType(prefix = '') {
         let interfaceDeclaration = this.sourceFile.getInterface(this.keyName);
         if (!interfaceDeclaration) {
             interfaceDeclaration = this.sourceFile.addInterface({
@@ -39,11 +39,11 @@ export class GInterface {
                 return {
                     key,
                     name: inputKey,
-                    type: `{ [key: string]: ${this.getTsType(properties[key], key)} }`,
+                    type: `{ [key: string]: ${(this.getTsType(properties[key], key), prefix)} }`,
                 };
             }
             // 普通属性
-            return { key, name: inputKey, type: this.getTsType(properties[key], key) };
+            return { key, name: inputKey, type: this.getTsType(properties[key], key, prefix) };
         });
         const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
         addPropertiesInput.forEach((it, index) => {
@@ -89,17 +89,17 @@ export class GInterface {
                 if (subSchema.items) {
                     if (Array.isArray(subSchema.items)) {
                         return subSchema.items
-                            .map(it => this.getTsType(it, subKeyName))
+                            .map(it => this.getTsType(it, subKeyName, prefix))
                             .map(it => `'${it}'`)
                             .join(' | ');
                     }
-                    return this.getTsType(subSchema.items, subKeyName);
+                    return this.getTsType(subSchema.items, subKeyName, prefix);
                 }
                 return 'unknown[]';
             case 'object':
                 if (subSchema.properties || subSchema.additionalProperties) {
                     const keyName = this.keyName + upperFirst(subKeyName);
-                    new GInterface(subSchema, this.sourceFile, keyName).genTsType();
+                    new GInterface(subSchema, this.sourceFile, keyName).genTsType(prefix);
                     return keyName;
                 }
                 return 'Record<string, any>';
@@ -111,7 +111,7 @@ export class GInterface {
                 return 'unknown';
         }
     }
-    genTsType() {
+    genTsType(prefix = '') {
         // if (!this.schema) {
         //     return this.genUnknownType();
         // }
@@ -137,7 +137,7 @@ export class GInterface {
         // }
 
         if (this.schema.type === 'object') {
-            return this.genObjectType();
+            return this.genObjectType(prefix);
         }
 
         // if (this.schema.type === 'array') {
