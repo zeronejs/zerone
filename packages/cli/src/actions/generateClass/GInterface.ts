@@ -53,9 +53,9 @@ export class GInterface {
             }
         });
     }
-    getTsType(subSchema: SwaggerSchema, subKeyName: string): string {
+    getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
-            const typeName = getRefTypeName(subSchema.$ref);
+            const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
             // import 导入
             let importDeclaration = this.sourceFile.getImportDeclaration('@/api/interface');
             if (!importDeclaration) {

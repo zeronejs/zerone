@@ -22,7 +22,7 @@ export class GController {
     }
     async genController(
         controllerUrl: string,
-        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags'>
+        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags' | 'prefix'>
     ) {
         const operation = this.operation;
         const methodKey = this.methodKey;
@@ -54,11 +54,11 @@ export class GController {
         // import 导入
         this.genImports();
         // 生成方法
-        this.genApiFn(key);
+        this.genApiFn(key, config.prefix);
 
         await sourceProject.save();
     }
-    private genApiFn(fnName: string) {
+    private genApiFn(fnName: string, prefix = '') {
         if (!this.sourceProject) {
             return;
         }
@@ -67,7 +67,11 @@ export class GController {
         const schema = this.getSuccessResponseSchema();
         let resType = 'unknown';
         if (schema) {
-            resType = new GInterface(schema, sourceProject, fnName + 'Result').getTsType(schema, '');
+            resType = new GInterface(schema, sourceProject, upperFirst(fnName) + 'Result').getTsType(
+                schema,
+                '',
+                prefix
+            );
             // // 导入复杂类型
             // if (schema.$ref) {
             //     // import 导入
@@ -138,7 +142,7 @@ export class GController {
                     (param as any).schema,
                     sourceProject,
                     paramsTypeName + upperFirst(param.name)
-                ).getTsType((param as any).schema, '');
+                ).getTsType((param as any).schema, '', prefix);
                 const paramName =
                     param.name.includes('-') || param.name.includes('.') ? `'${param.name}'` : param.name;
                 const propertyDeclaration = interfaceDeclaration.addProperty({
@@ -157,7 +161,7 @@ export class GController {
                 requestBodySchema,
                 sourceProject,
                 upperFirst(fnName) + 'Input'
-            ).getTsType(requestBodySchema, '');
+            ).getTsType(requestBodySchema, '', prefix);
             // // 导入复杂类型
             // if (requestBodySchema.$ref) {
             //     // import 导入

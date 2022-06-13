@@ -9,10 +9,12 @@ import axios from 'axios';
 import { GController } from './generateClass/GController';
 import { GInterface } from './generateClass/GInterface';
 import { escapeVar } from '../utils/generateUtil';
+import { upperFirst } from 'lodash';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
     excludeTags?: string[];
+    prefix?: string;
 }
 export class GenerateApiAction extends AbstractAction {
     public async handle(options: Input[]) {
@@ -36,7 +38,7 @@ export class GenerateApiAction extends AbstractAction {
         const paths = data.paths as { [pathName: string]: Path };
         console.info(chalk.gray('生成文件中...'));
         // 生成类型文件
-        await GInterfaceHandle(data.components.schemas as Schema, root);
+        await GInterfaceHandle(data.components.schemas as Schema, root, config);
         // 生成Controller
         await GControllerHandle(paths, root, config);
         console.info(chalk.green(`生成文件完成`));
@@ -44,7 +46,7 @@ export class GenerateApiAction extends AbstractAction {
     }
 }
 // 生成类型文件
-const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
+const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: GenerateApiActionConfig) => {
     // 类型可能重复  暂时先用一个文件
     const schemas = Object.keys(inputSchemas);
     const indexUrl = join(root, 'interface', 'index.ts');
@@ -54,7 +56,7 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
     schemas.map(async key => {
         const element: Schema = Reflect.get(inputSchemas, key);
-        key = escapeVar(key);
+        key = escapeVar(upperFirst(config.prefix) + key);
         const typeFileUrl = join(root, 'interface', 'apiTypes', key + '.ts');
         await remove(typeFileUrl);
         await ensureFile(typeFileUrl);
@@ -67,7 +69,9 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string) => {
             console.log({ error });
         }
     });
-    indexSourceProject.addExportDeclarations(schemas.map(key => ({ moduleSpecifier: `./apiTypes/${key}` })));
+    indexSourceProject.addExportDeclarations(
+        schemas.map(key => ({ moduleSpecifier: `./apiTypes/${escapeVar(upperFirst(config.prefix) + key)}` }))
+    );
     await indexSourceProject.save();
 };
 const supportMethodKeys = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];
@@ -104,10 +108,11 @@ const GControllerHandle = async (
                 }
                 const operation: Operation = (paths[pathKey] as any)[methodKey];
                 try {
-                    await new GController(operation, methodKey, pathKey).genController(
-                        join(root, 'controller'),
-                        config
-                    );
+                    await new GController(
+                        operation,
+                        methodKey,
+                        config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                    ).genController(join(root, 'controller'), config);
                 } catch (err) {
                     console.log({ err });
                 }
