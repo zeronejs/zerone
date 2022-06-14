@@ -54,7 +54,7 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     await ensureFile(indexUrl);
     const indexProject = new Project();
     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
-    schemas.map(async key => {
+    for (let key of schemas) {
         const element: Schema = Reflect.get(inputSchemas, key);
         key = escapeVar(upperFirst(config.prefix) + key);
         const typeFileUrl = join(root, 'interface', 'apiTypes', key + '.ts');
@@ -68,7 +68,8 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
         } catch (error) {
             console.log({ error });
         }
-    });
+    }
+
     indexSourceProject.addExportDeclarations(
         schemas.map(key => ({ moduleSpecifier: `./apiTypes/${escapeVar(upperFirst(config.prefix) + key)}` }))
     );
@@ -99,24 +100,23 @@ const GControllerHandle = async (
     //         })
     //         .flat()
     // );
-    Object.keys(paths)
-        .map(pathKey => {
-            return Object.keys(paths[pathKey]).map(async methodKey => {
-                // 仅支持这些method
-                if (!supportMethodKeys.includes(methodKey)) {
-                    return;
-                }
-                const operation: Operation = (paths[pathKey] as any)[methodKey];
-                try {
-                    await new GController(
-                        operation,
-                        methodKey,
-                        config.prefix ? `/${config.prefix}${pathKey}` : pathKey
-                    ).genController(join(root, 'controller'), config);
-                } catch (err) {
-                    console.log({ err });
-                }
-            });
-        })
-        .flat();
+    for (const pathKey of Object.keys(paths)) {
+        for (const methodKey of Object.keys(paths[pathKey])) {
+            // 仅支持这些method
+            if (!supportMethodKeys.includes(methodKey)) {
+                console.log('method不支持：', pathKey);
+                continue;
+            }
+            const operation: Operation = (paths[pathKey] as any)[methodKey];
+            try {
+                await new GController(
+                    operation,
+                    methodKey,
+                    config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                ).genController(join(root, 'controller'), config);
+            } catch (err) {
+                console.log({ err });
+            }
+        }
+    }
 };

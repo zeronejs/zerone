@@ -34,17 +34,19 @@ export class GInterface {
         }
         const addPropertiesInput = Object.keys(properties).map(key => {
             const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+
             if (properties[key].additionalProperties) {
                 // 索引签名
                 return {
                     key,
                     name: inputKey,
-                    type: `{ [key: string]: ${(this.getTsType(properties[key], key), prefix)} }`,
+                    type: `{ [key: string]: ${this.getTsType(properties[key], key, prefix)} }`,
                 };
             }
             // 普通属性
             return { key, name: inputKey, type: this.getTsType(properties[key], key, prefix) };
         });
+
         const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
         addPropertiesInput.forEach((it, index) => {
             const desc = properties[it.key].description;
@@ -97,7 +99,7 @@ export class GInterface {
                             .map(it => `'${it}'`)
                             .join(' | ');
                     }
-                    return this.getTsType(subSchema.items, subKeyName, prefix);
+                    return this.getTsType(subSchema.items, subKeyName, prefix) + '[]';
                 }
                 return 'unknown[]';
             case 'object':
