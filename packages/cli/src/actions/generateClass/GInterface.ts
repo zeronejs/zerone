@@ -25,42 +25,58 @@ export class GInterface {
         }
         interfaceDeclaration.setIsExported(true);
         const properties = this.schema.properties;
+        const additionalProperties = this.schema.additionalProperties;
         const requireds = this.schema.required ?? [];
-        if (!properties) {
+        if (!properties && !additionalProperties) {
             return interfaceDeclaration.addIndexSignature({
                 keyName: 'key', // defaults to key
                 keyType: 'string', // defaults to string
                 returnType: 'any',
             });
         }
-        const addPropertiesInput = Object.keys(properties).map(key => {
-            const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
-
-            if (properties[key].additionalProperties) {
-                // 索引签名
+        if (properties) {
+            const addPropertiesInput = Object.keys(properties).map(key => {
+                const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                // 普通属性
                 return {
                     key,
                     name: inputKey,
-                    type: `{ [key: string]: ${this.getTsType(properties[key], key, prefix)} }`,
+                    type: this.getTsType(properties[key], key, prefix),
                     hasQuestionToken: !requireds.includes(key),
                 };
-            }
-            // 普通属性
-            return {
-                key,
-                name: inputKey,
-                type: this.getTsType(properties[key], key, prefix),
-                hasQuestionToken: !requireds.includes(key),
-            };
-        });
+            });
 
-        const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
-        addPropertiesInput.forEach((it, index) => {
-            const desc = properties[it.key].description;
-            if (desc) {
-                propertiesDeclaration[index].addJsDoc(desc);
-            }
-        });
+            const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
+            addPropertiesInput.forEach((it, index) => {
+                const desc = properties[it.key].description;
+                if (desc) {
+                    propertiesDeclaration[index].addJsDoc(desc);
+                }
+            });
+        }
+        if (additionalProperties) {
+            interfaceDeclaration.addIndexSignature({
+                keyName: 'key', // defaults to key
+                keyType: 'string', // defaults to string
+                returnType: 'any',
+            });
+            // const addPropertiesInput = Object.keys(additionalProperties).map(key => {
+            //     const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+            //     interfaceDeclaration.addIndexSignature({
+            //         keyName: 'key', // defaults to key
+            //         keyType: 'string', // defaults to string
+            //         returnType: this.getTsType(additionalProperties, key, prefix),
+            //     });
+            //     // 普通属性
+            //     return {
+            //         key,
+            //         name: inputKey,
+            //         type: `{ [key: string]: ${this.getTsType(additionalProperties, key, prefix)} }`,
+            //         hasQuestionToken: !requireds.includes(key),
+            //     };
+            // });
+            // const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
+        }
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
