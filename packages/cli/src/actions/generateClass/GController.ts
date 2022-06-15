@@ -81,14 +81,18 @@ export class GController {
             //     });
             // }
         }
+        sourceProject.addImportDeclaration({
+            namedImports: ['DeepRequired'],
+            moduleSpecifier: '@/utils/types',
+        });
         const functionDeclaration = sourceProject.addFunction({
             name: fnName,
         });
         const requestBodySchema = this.getRequestBodySchema();
         functionDeclaration.setBodyText(
-            `return request.${this.methodKey}<${resType}>(\`${parseSwaggerPathTemplate(this.pathKey)}\`${
-                requestBodySchema ? ', input' : ''
-            });`
+            `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
+                this.pathKey
+            )}\`${requestBodySchema ? ', input' : ''});`
         );
         functionDeclaration.setIsExported(true);
         // 处理链接上的参数
@@ -129,9 +133,11 @@ export class GController {
                     writer.writeLine(`const searchStr = searchParams.toString();`);
                     writer.writeLine(`const queryStr = searchStr ? '?' + searchStr : '';`);
                     writer.writeLine(
-                        `return request.${this.methodKey}<${resType}>(\`${parseSwaggerPathTemplate(
-                            this.pathKey
-                        )}\` + queryStr${requestBodySchema ? ', input' : ''});`
+                        `return request.${
+                            this.methodKey
+                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\` + queryStr${
+                            requestBodySchema ? ', input' : ''
+                        });`
                     );
                     return writer;
                 });
@@ -175,7 +181,12 @@ export class GController {
             //         importDeclaration.addNamedImport(inputType);
             //     }
             // }
-            functionDeclaration.addParameter({ name: 'input', type: inputType });
+            const requestBody = (this.operation as any).requestBody;
+            functionDeclaration.addParameter({
+                name: 'input',
+                type: inputType,
+                hasQuestionToken: !requestBody.required,
+            });
         }
         functionDeclaration.addJsDoc(
             `${this.operation.summary ? '\n' + this.operation.summary : ''}\n${this.pathKey}`

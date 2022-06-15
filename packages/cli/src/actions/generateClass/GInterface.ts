@@ -25,6 +25,7 @@ export class GInterface {
         }
         interfaceDeclaration.setIsExported(true);
         const properties = this.schema.properties;
+        const requireds = this.schema.required ?? [];
         if (!properties) {
             return interfaceDeclaration.addIndexSignature({
                 keyName: 'key', // defaults to key
@@ -41,10 +42,16 @@ export class GInterface {
                     key,
                     name: inputKey,
                     type: `{ [key: string]: ${this.getTsType(properties[key], key, prefix)} }`,
+                    hasQuestionToken: !requireds.includes(key),
                 };
             }
             // 普通属性
-            return { key, name: inputKey, type: this.getTsType(properties[key], key, prefix) };
+            return {
+                key,
+                name: inputKey,
+                type: this.getTsType(properties[key], key, prefix),
+                hasQuestionToken: !requireds.includes(key),
+            };
         });
 
         const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
