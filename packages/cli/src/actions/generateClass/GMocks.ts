@@ -55,7 +55,7 @@ export class GController {
         this.genImports();
         // 生成方法
         this.genApiFn(key, config.prefix);
-        sourceProject.formatText();
+
         await sourceProject.save();
     }
     private genApiFn(fnName: string, prefix = '') {
@@ -116,50 +116,17 @@ export class GController {
                 functionDeclaration.setBodyText(writer => {
                     writer.writeLine(`const searchParams = new URLSearchParams('');`);
                     parameters.map(param => {
-                        // 名称带横岗
                         if (param.name.includes('-') || param.name.includes('.')) {
                             writer.write(`if (params['${param.name}'])`).block(() => {
-                                if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
-                                    writer
-                                        .writeLine(`for (const key in params['${param.name}'])`)
-                                        .block(() => {
-                                            writer.writeLine(
-                                                `searchParams.append(key, String(Reflect.get(params['${param.name}'], key)));`
-                                            );
-                                        });
-                                } else if ((param as any).schema.type === 'array') {
-                                    writer
-                                        .writeLine(`for (const item of params['${param.name}'])`)
-                                        .block(() => {
-                                            writer.writeLine(
-                                                `searchParams.append('${param.name}', String(item));`
-                                            );
-                                        });
-                                } else {
-                                    writer.writeLine(
-                                        `searchParams.append('${param.name}', String(params['${param.name}']));`
-                                    );
-                                }
+                                writer.writeLine(
+                                    `searchParams.append('${param.name}', String(params['${param.name}']));`
+                                );
                             });
                         } else {
                             writer.write(`if (params.${param.name})`).block(() => {
-                                if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
-                                    writer.writeLine(`for (const key in params.${param.name})`).block(() => {
-                                        writer.writeLine(
-                                            `searchParams.append(key, String(Reflect.get(params.${param.name}, key)));`
-                                        );
-                                    });
-                                } else if ((param as any).schema.type === 'array') {
-                                    writer.writeLine(`for (const item of params.${param.name})`).block(() => {
-                                        writer.writeLine(
-                                            `searchParams.append('${param.name}', String(item));`
-                                        );
-                                    });
-                                } else {
-                                    writer.writeLine(
-                                        `searchParams.append('${param.name}', String(params.${param.name}));`
-                                    );
-                                }
+                                writer.writeLine(
+                                    `searchParams.append('${param.name}', String(params.${param.name}));`
+                                );
                             });
                         }
                     });
