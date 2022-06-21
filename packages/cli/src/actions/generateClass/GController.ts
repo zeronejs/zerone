@@ -143,12 +143,18 @@ export class GController {
                         'putForm',
                         'patchForm',
                     ].includes(this.methodKey);
+                    let inputContent = '';
+                    if (requestBodySchema && hasDataMethods) {
+                        inputContent = 'input,';
+                    } else if (hasDataMethods) {
+                        inputContent = 'null,';
+                    }
                     writer.writeLine(
                         `return request.${
                             this.methodKey
-                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\`, ${
-                            requestBodySchema && hasDataMethods ? 'input,' : 'null,'
-                        } {`
+                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
+                            this.pathKey
+                        )}\`, ${inputContent} {`
                     );
                     writer.writeLine(`params: paramsInput,`);
                     if (requestBodySchema && !hasDataMethods) {
