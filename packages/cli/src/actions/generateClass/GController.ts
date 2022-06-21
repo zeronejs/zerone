@@ -55,7 +55,9 @@ export class GController {
         this.genImports();
         // 生成方法
         this.genApiFn(key, config.prefix);
-        sourceProject.formatText();
+        sourceProject.formatText({
+            placeOpenBraceOnNewLineForFunctions: false,
+        });
         await sourceProject.save();
     }
     private genApiFn(fnName: string, prefix = '') {
@@ -114,88 +116,36 @@ export class GController {
             // query参数处理
             if (parameters.some(param => param.in === 'query')) {
                 functionDeclaration.setBodyText(writer => {
-                    writer.writeLine(`const searchParams = new URLSearchParams('');`);
+                    // writer.writeLine(`const searchParams = new URLSearchParams('');`);
+                    writer.writeLine(`const paramsInput = {`);
                     parameters.map(param => {
-                        // 名称带横岗
+                        if (param.in !== 'query') {
+                            return;
+                        }
                         if (param.name.includes('-') || param.name.includes('.')) {
-                            writer
-                                .write(
-                                    `if (params['${param.name}'] !== undefined && params['${param.name}'] !== null)`
-                                )
-                                .block(() => {
-                                    if (
-                                        (param as any).schema.$ref ||
-                                        (param as any).schema.type === 'object'
-                                    ) {
-                                        writer
-                                            .writeLine(`for (const key in params['${param.name}'])`)
-                                            .block(() => {
-                                                writer.writeLine(
-                                                    `const ele = Reflect.get(params.['${param.name}'], key);`
-                                                );
-                                                writer.writeLine(
-                                                    `ele !== undefined && ele !== null && searchParams.append(key, String(ele));`
-                                                );
-                                            });
-                                    } else if ((param as any).schema.type === 'array') {
-                                        writer
-                                            .writeLine(`for (const item of params['${param.name}'])`)
-                                            .block(() => {
-                                                writer.writeLine(
-                                                    `searchParams.append('${param.name}', String(item));`
-                                                );
-                                            });
-                                    } else {
-                                        writer.writeLine(
-                                            `searchParams.append('${param.name}', String(params['${param.name}']));`
-                                        );
-                                    }
-                                });
+                            if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
+                                return writer.writeLine(`...params['${param.name}'],`);
+                            }
+                            writer.writeLine(`'${param.name}':params['${param.name}'],`);
                         } else {
-                            writer
-                                .write(
-                                    `if (params.${param.name} !== undefined && params.${param.name} !== null)`
-                                )
-                                .block(() => {
-                                    if (
-                                        (param as any).schema.$ref ||
-                                        (param as any).schema.type === 'object'
-                                    ) {
-                                        writer
-                                            .writeLine(`for (const key in params.${param.name})`)
-                                            .block(() => {
-                                                writer.writeLine(
-                                                    `const ele = Reflect.get(params.${param.name}, key);`
-                                                );
-                                                writer.writeLine(
-                                                    `ele !== undefined && ele !== null && searchParams.append(key, String(ele));`
-                                                );
-                                            });
-                                    } else if ((param as any).schema.type === 'array') {
-                                        writer
-                                            .writeLine(`for (const item of params.${param.name})`)
-                                            .block(() => {
-                                                writer.writeLine(
-                                                    `searchParams.append('${param.name}', String(item));`
-                                                );
-                                            });
-                                    } else {
-                                        writer.writeLine(
-                                            `searchParams.append('${param.name}', String(params.${param.name}));`
-                                        );
-                                    }
-                                });
+                            if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
+                                return writer.writeLine(`...params.${param.name},`);
+                            }
+                            writer.writeLine(`${param.name}:params.${param.name},`);
                         }
                     });
-                    writer.writeLine(`const searchStr = searchParams.toString();`);
-                    writer.writeLine(`const queryStr = searchStr ? '?' + searchStr : '';`);
+                    writer.writeLine(`};`);
                     writer.writeLine(
                         `return request.${
                             this.methodKey
-                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\` + queryStr${
-                            requestBodySchema ? ', input' : ''
-                        });`
+                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\`, {`
                     );
+                    writer.writeLine(`params: paramsInput,`);
+                    if (requestBodySchema) {
+                        writer.writeLine(`data: input,`);
+                    }
+                    writer.writeLine(`});`);
+
                     return writer;
                 });
             }

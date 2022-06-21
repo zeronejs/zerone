@@ -1,6 +1,6 @@
 import { upperFirst } from 'lodash';
 import { Schema as SwaggerSchema } from 'swagger-schema-official';
-import { ConstructorDeclaration, SourceFile, VariableDeclarationKind } from 'ts-morph';
+import { ConstructorDeclaration, SourceFile, SyntaxKind, VariableDeclarationKind } from 'ts-morph';
 import { getRefTypeName } from '../../utils/generateUtil';
 export class GMockClass {
     private schema: SwaggerSchema;
@@ -14,6 +14,21 @@ export class GMockClass {
     }
 
     private genObjectType(prefix = '') {
+        let varDeclaration = this.sourceFile.getVariableDeclaration('myNumber');
+        if (!varDeclaration) {
+            const variableStatement = this.sourceFile.addVariableStatement({
+                declarationKind: VariableDeclarationKind.Const, // defaults to "let"
+                declarations: [{ name: 'myNumber', initializer: '{}' }],
+            });
+            varDeclaration = this.sourceFile.getVariableDeclarationOrThrow('myNumber');
+        }
+        const objectLiteralExpression = varDeclaration.getInitializerIfKindOrThrow(
+            SyntaxKind.ObjectLiteralExpression
+        );
+        const propertyAssignment = objectLiteralExpression.addPropertyAssignment({
+            name: "'propertyAssignment|5'",
+            initializer: '5',
+        });
         let classDeclaration = this.sourceFile.getClass(this.keyName);
         if (!classDeclaration) {
             classDeclaration = this.sourceFile.addClass({
