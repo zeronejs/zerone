@@ -118,49 +118,73 @@ export class GController {
                     parameters.map(param => {
                         // 名称带横岗
                         if (param.name.includes('-') || param.name.includes('.')) {
-                            writer.write(`if (params['${param.name}'])`).block(() => {
-                                if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
-                                    writer
-                                        .writeLine(`for (const key in params['${param.name}'])`)
-                                        .block(() => {
-                                            writer.writeLine(
-                                                `searchParams.append(key, String(Reflect.get(params['${param.name}'], key)));`
-                                            );
-                                        });
-                                } else if ((param as any).schema.type === 'array') {
-                                    writer
-                                        .writeLine(`for (const item of params['${param.name}'])`)
-                                        .block(() => {
-                                            writer.writeLine(
-                                                `searchParams.append('${param.name}', String(item));`
-                                            );
-                                        });
-                                } else {
-                                    writer.writeLine(
-                                        `searchParams.append('${param.name}', String(params['${param.name}']));`
-                                    );
-                                }
-                            });
+                            writer
+                                .write(
+                                    `if (params['${param.name}'] !== undefined && params['${param.name}'] !== null)`
+                                )
+                                .block(() => {
+                                    if (
+                                        (param as any).schema.$ref ||
+                                        (param as any).schema.type === 'object'
+                                    ) {
+                                        writer
+                                            .writeLine(`for (const key in params['${param.name}'])`)
+                                            .block(() => {
+                                                writer.writeLine(
+                                                    `const ele = Reflect.get(params.['${param.name}'], key);`
+                                                );
+                                                writer.writeLine(
+                                                    `ele !== undefined && ele !== null && searchParams.append(key, String(ele));`
+                                                );
+                                            });
+                                    } else if ((param as any).schema.type === 'array') {
+                                        writer
+                                            .writeLine(`for (const item of params['${param.name}'])`)
+                                            .block(() => {
+                                                writer.writeLine(
+                                                    `searchParams.append('${param.name}', String(item));`
+                                                );
+                                            });
+                                    } else {
+                                        writer.writeLine(
+                                            `searchParams.append('${param.name}', String(params['${param.name}']));`
+                                        );
+                                    }
+                                });
                         } else {
-                            writer.write(`if (params.${param.name})`).block(() => {
-                                if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
-                                    writer.writeLine(`for (const key in params.${param.name})`).block(() => {
+                            writer
+                                .write(
+                                    `if (params.${param.name} !== undefined && params.${param.name} !== null)`
+                                )
+                                .block(() => {
+                                    if (
+                                        (param as any).schema.$ref ||
+                                        (param as any).schema.type === 'object'
+                                    ) {
+                                        writer
+                                            .writeLine(`for (const key in params.${param.name})`)
+                                            .block(() => {
+                                                writer.writeLine(
+                                                    `const ele = Reflect.get(params.${param.name}, key);`
+                                                );
+                                                writer.writeLine(
+                                                    `ele !== undefined && ele !== null && searchParams.append(key, String(ele));`
+                                                );
+                                            });
+                                    } else if ((param as any).schema.type === 'array') {
+                                        writer
+                                            .writeLine(`for (const item of params.${param.name})`)
+                                            .block(() => {
+                                                writer.writeLine(
+                                                    `searchParams.append('${param.name}', String(item));`
+                                                );
+                                            });
+                                    } else {
                                         writer.writeLine(
-                                            `searchParams.append(key, String(Reflect.get(params.${param.name}, key)));`
+                                            `searchParams.append('${param.name}', String(params.${param.name}));`
                                         );
-                                    });
-                                } else if ((param as any).schema.type === 'array') {
-                                    writer.writeLine(`for (const item of params.${param.name})`).block(() => {
-                                        writer.writeLine(
-                                            `searchParams.append('${param.name}', String(item));`
-                                        );
-                                    });
-                                } else {
-                                    writer.writeLine(
-                                        `searchParams.append('${param.name}', String(params.${param.name}));`
-                                    );
-                                }
-                            });
+                                    }
+                                });
                         }
                     });
                     writer.writeLine(`const searchStr = searchParams.toString();`);

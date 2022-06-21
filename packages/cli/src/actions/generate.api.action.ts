@@ -8,7 +8,7 @@ import { Project } from 'ts-morph';
 import axios from 'axios';
 import { GController } from './generateClass/GController';
 import { GInterface } from './generateClass/GInterface';
-// import { GMockClass } from './generateClass/GMockClass';
+import { GMockClass } from './generateClass/GMockClass';
 import { escapeVar } from '../utils/generateUtil';
 import { upperFirst } from 'lodash';
 export interface GenerateApiActionConfig {
@@ -107,36 +107,36 @@ const GControllerHandle = async (
         }
     }
 };
-// // todo  生成mock
-// const GMockClassHandle = async (inputSchemas: Schema, root: string, config: GenerateApiActionConfig) => {
-//     // 类型可能重复  暂时先用一个文件
-//     const schemas = Object.keys(inputSchemas);
-//     const indexUrl = join(root, 'mocks', 'index.ts');
-//     await remove(indexUrl);
-//     await ensureFile(indexUrl);
-//     const indexProject = new Project();
-//     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
-//     for (let key of schemas) {
-//         const element: Schema = Reflect.get(inputSchemas, key);
-//         key = escapeVar(upperFirst(config.prefix) + key);
-//         const typeFileUrl = join(root, 'mocks', 'apiMocks', key + '.ts');
-//         await remove(typeFileUrl);
-//         await ensureFile(typeFileUrl);
-//         const project = new Project();
-//         const sourceProject = project.addSourceFileAtPath(typeFileUrl);
-//         try {
-//             new GMockClass(element, sourceProject, key).genTsType(config.prefix);
-//             await sourceProject.save();
-//         } catch (error) {
-//             console.log({ error });
-//         }
-//     }
+// todo  生成mock
+const GMockClassHandle = async (inputSchemas: Schema, root: string, config: GenerateApiActionConfig) => {
+    // 类型可能重复  暂时先用一个文件
+    const schemas = Object.keys(inputSchemas);
+    const indexUrl = join(root, 'mocks', 'index.ts');
+    await remove(indexUrl);
+    await ensureFile(indexUrl);
+    const indexProject = new Project();
+    const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
+    for (let key of schemas) {
+        const element: Schema = Reflect.get(inputSchemas, key);
+        key = escapeVar(upperFirst(config.prefix) + key);
+        const typeFileUrl = join(root, 'mocks', 'apiMocks', key + '.ts');
+        await remove(typeFileUrl);
+        await ensureFile(typeFileUrl);
+        const project = new Project();
+        const sourceProject = project.addSourceFileAtPath(typeFileUrl);
+        try {
+            new GMockClass(element, sourceProject, key).genTsType(config.prefix);
+            await sourceProject.save();
+        } catch (error) {
+            console.log({ error });
+        }
+    }
 
-//     indexSourceProject.addExportDeclarations(
-//         schemas.map(key => ({ moduleSpecifier: `./apiMocks/${escapeVar(upperFirst(config.prefix) + key)}` }))
-//     );
-//     await indexSourceProject.save();
-// };
+    indexSourceProject.addExportDeclarations(
+        schemas.map(key => ({ moduleSpecifier: `./apiMocks/${escapeVar(upperFirst(config.prefix) + key)}` }))
+    );
+    await indexSourceProject.save();
+};
 // // 生成Controller
 // const GMockHandle = async (
 //     paths: { [pathName: string]: Path },

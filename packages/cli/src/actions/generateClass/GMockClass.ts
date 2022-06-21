@@ -67,6 +67,7 @@ export class GMockClass {
         //     });
         // }
     }
+    getTsMockCtrlData() {}
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
