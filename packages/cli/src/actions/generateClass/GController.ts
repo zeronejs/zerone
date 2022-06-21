@@ -94,7 +94,7 @@ export class GController {
         functionDeclaration.setBodyText(
             `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
                 this.pathKey
-            )}\`${requestBodySchema ? ', input' : ''});`
+            )}\`${requestBodySchema ? ', {data:input}' : ''});`
         );
         functionDeclaration.setIsExported(true);
         // 处理链接上的参数
