@@ -94,7 +94,7 @@ export class GController {
         functionDeclaration.setBodyText(
             `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
                 this.pathKey
-            )}\`${requestBodySchema ? ', {data:input}' : ''});`
+            )}\`${requestBodySchema ? ',input' : ''});`
         );
         functionDeclaration.setIsExported(true);
         // 处理链接上的参数
@@ -135,13 +135,23 @@ export class GController {
                         }
                     });
                     writer.writeLine(`};`);
+                    const hasDataMethods = [
+                        'post',
+                        'put',
+                        'patch',
+                        'postForm',
+                        'putForm',
+                        'patchForm',
+                    ].includes(this.methodKey);
                     writer.writeLine(
                         `return request.${
                             this.methodKey
-                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\`, {`
+                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(this.pathKey)}\`, ${
+                            requestBodySchema && hasDataMethods ? 'input,' : 'null,'
+                        } {`
                     );
                     writer.writeLine(`params: paramsInput,`);
-                    if (requestBodySchema) {
+                    if (requestBodySchema && !hasDataMethods) {
                         writer.writeLine(`data: input,`);
                     }
                     writer.writeLine(`});`);
