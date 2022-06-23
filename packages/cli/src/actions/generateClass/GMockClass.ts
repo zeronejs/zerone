@@ -82,7 +82,68 @@ export class GMockClass {
         //     });
         // }
     }
-    getTsMockCtrlData() {}
+    getTsMockCtrlData(subSchema: SwaggerSchema, subKeyName: string, prefix = '') {
+        if (subSchema.$ref) {
+            const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
+            const typeNameInterface = this.sourceFile.getInterface(typeName);
+            // import 导入
+            let importDeclaration = this.sourceFile.getImportDeclaration('@/api/mocks');
+            if (importDeclaration) {
+                const names = importDeclaration.getNamedImports().map(it => it.getName());
+                if (!names.includes(typeName) && !typeNameInterface) {
+                    importDeclaration.addNamedImport(typeName);
+                }
+            } else if (!typeNameInterface) {
+                importDeclaration = this.sourceFile.addImportDeclaration({
+                    moduleSpecifier: '@/api/mocks',
+                });
+                importDeclaration.addNamedImport(typeName);
+            }
+            return typeName;
+        }
+
+        switch (subSchema.type) {
+            case 'string':
+                if (subSchema.enum && subSchema.enum.length) {
+                    return `[${subSchema.enum.map(it => `'${it}'`).join(',')}]`;
+                }
+                return '@sentence(1, 2)';
+            case 'number':
+                if (subSchema.enum && subSchema.enum.length) {
+                    return `[${subSchema.enum.join(',')}]`;
+                }
+                return '@integer(300, 5000)';
+            case 'integer':
+                return '@integer(300, 5000)';
+            case 'boolean':
+                return '@boolean()';
+            case 'array':
+                if (subSchema.items) {
+                    if (Array.isArray(subSchema.items)) {
+                        return subSchema.items
+                            .map(it => this.getTsType(it, subKeyName, prefix))
+                            .map(it => `'${it}'`)
+                            .join(' | ');
+                    }
+                    return this.getTsType(subSchema.items, subKeyName, prefix) + '[]';
+                }
+                return 'unknown[]';
+            case 'object':
+                if (subSchema.properties || subSchema.additionalProperties) {
+                    // if (subSchema.properties) {
+                    const keyName = this.keyName + upperFirst(subKeyName);
+                    new GMockClass(subSchema, this.sourceFile, keyName).genTsType(prefix);
+                    return keyName;
+                }
+                return 'Record<string, any>';
+
+            case 'file':
+                return 'File';
+
+            default:
+                return 'unknown';
+        }
+    }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
