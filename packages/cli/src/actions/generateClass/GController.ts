@@ -122,13 +122,18 @@ export class GController {
                         if (param.in !== 'query') {
                             return;
                         }
+                        if (!(param as any).schema) {
+                            throw new Error(this.pathKey + ',请确保此接口参数有类型');
+                        }
                         if (param.name.includes('-') || param.name.includes('.')) {
-                            if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
+                            const paramSchema = (param as any).schema;
+                            if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
                                 return writer.writeLine(`...params['${param.name}'],`);
                             }
                             writer.writeLine(`'${param.name}':params['${param.name}'],`);
                         } else {
-                            if ((param as any).schema.$ref || (param as any).schema.type === 'object') {
+                            const paramSchema = (param as any).schema;
+                            if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
                                 return writer.writeLine(`...params.${param.name},`);
                             }
                             writer.writeLine(`${param.name}:params.${param.name},`);
