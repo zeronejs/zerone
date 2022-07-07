@@ -16,6 +16,7 @@ export interface GenerateApiActionConfig {
     includeTags?: string[];
     excludeTags?: string[];
     prefix?: string;
+    axiosInstanceUrl?: string;
 }
 export class GenerateApiAction extends AbstractAction {
     public async handle(options: Input[]) {
@@ -42,7 +43,7 @@ export class GenerateApiAction extends AbstractAction {
         await GInterfaceHandle(data.components.schemas as Schema, root, config);
         // 生成Controller
         await GControllerHandle(paths, root, config);
-        // // 生成mock类型文件
+        // 生成mock类型文件
         // await GMockClassHandle(data.components.schemas as Schema, root, config);
 
         console.info(chalk.green(`生成文件完成`));
@@ -77,6 +78,13 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     indexSourceProject.addExportDeclarations(
         schemas.map(key => ({ moduleSpecifier: `./apiTypes/${escapeVar(upperFirst(config.prefix) + key)}` }))
     );
+    // 生成 DeepRequired
+    const typeAliasDeclaration = indexSourceProject.addTypeAlias({
+        name: 'DeepRequired',
+        type: 'T extends Record<string, any> ? { [K in keyof T]-?: DeepRequired<T[K]> } : Required<T>',
+    });
+    typeAliasDeclaration.addTypeParameter('T');
+    typeAliasDeclaration.setIsExported(true);
     await indexSourceProject.save();
 };
 const supportMethodKeys = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch'];

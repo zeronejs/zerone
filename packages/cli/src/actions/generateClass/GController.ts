@@ -22,7 +22,7 @@ export class GController {
     }
     async genController(
         controllerUrl: string,
-        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags' | 'prefix'>
+        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl'>
     ) {
         const operation = this.operation;
         const methodKey = this.methodKey;
@@ -52,7 +52,7 @@ export class GController {
         const sourceProject = project.addSourceFileAtPath(sourceFilePath);
         this.sourceProject = sourceProject;
         // import 导入
-        this.genImports();
+        this.genImports(config.axiosInstanceUrl);
         // 生成方法
         this.genApiFn(key, config.prefix);
         sourceProject.formatText({
@@ -83,10 +83,24 @@ export class GController {
             //     });
             // }
         }
-        sourceProject.addImportDeclaration({
-            namedImports: ['DeepRequired'],
-            moduleSpecifier: '@/utils/types',
-        });
+        const DeepRequiredKey = 'DeepRequired';
+        let importDeclaration = sourceProject.getImportDeclaration('../../interface');
+        if (importDeclaration) {
+            const names = importDeclaration.getNamedImports().map(it => it.getName());
+            if (!names.includes(DeepRequiredKey)) {
+                importDeclaration.addNamedImport(DeepRequiredKey);
+            }
+        } else {
+            importDeclaration = sourceProject.addImportDeclaration({
+                moduleSpecifier: '../../interface',
+            });
+            importDeclaration.addNamedImport(DeepRequiredKey);
+        }
+
+        // sourceProject.addImportDeclaration({
+        //     namedImports: ['DeepRequired'],
+        //     moduleSpecifier: '@/utils/types',
+        // });
         const functionDeclaration = sourceProject.addFunction({
             name: fnName,
         });
@@ -222,11 +236,11 @@ export class GController {
 
         return functionDeclaration;
     }
-    private genImports() {
+    private genImports(url?: string) {
         // import 导入
         const importDeclaration = this.sourceProject?.addImportDeclaration({
             defaultImport: 'request',
-            moduleSpecifier: '@/utils/request',
+            moduleSpecifier: url ?? '@/utils/request',
         });
     }
     private isParam(param: Parameter | Reference): param is Parameter {

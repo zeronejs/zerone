@@ -83,7 +83,7 @@ export class GInterface {
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
             const typeNameInterface = this.sourceFile.getInterface(typeName);
             // import 导入
-            let importDeclaration = this.sourceFile.getImportDeclaration('@/api/interface');
+            let importDeclaration = this.sourceFile.getImportDeclaration('../../interface');
             if (importDeclaration) {
                 const names = importDeclaration.getNamedImports().map(it => it.getName());
                 if (!names.includes(typeName) && !typeNameInterface) {
@@ -91,7 +91,7 @@ export class GInterface {
                 }
             } else if (!typeNameInterface) {
                 importDeclaration = this.sourceFile.addImportDeclaration({
-                    moduleSpecifier: '@/api/interface',
+                    moduleSpecifier: '../../interface',
                 });
                 importDeclaration.addNamedImport(typeName);
             }

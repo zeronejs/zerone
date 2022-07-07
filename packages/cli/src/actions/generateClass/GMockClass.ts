@@ -14,75 +14,47 @@ export class GMockClass {
     }
 
     private genObjectType(prefix = '') {
-        let varDeclaration = this.sourceFile.getVariableDeclaration('myNumber');
+        let varDeclaration = this.sourceFile.getVariableDeclaration(this.keyName);
         if (!varDeclaration) {
             const variableStatement = this.sourceFile.addVariableStatement({
                 declarationKind: VariableDeclarationKind.Const, // defaults to "let"
-                declarations: [{ name: 'myNumber', initializer: '{}' }],
+                declarations: [{ name: this.keyName, initializer: '{}' }],
             });
-            varDeclaration = this.sourceFile.getVariableDeclarationOrThrow('myNumber');
+            varDeclaration = this.sourceFile.getVariableDeclarationOrThrow(this.keyName);
         }
         const objectLiteralExpression = varDeclaration.getInitializerIfKindOrThrow(
             SyntaxKind.ObjectLiteralExpression
         );
-        const propertyAssignment = objectLiteralExpression.addPropertyAssignment({
-            name: "'propertyAssignment|5'",
-            initializer: '5',
-        });
-        let classDeclaration = this.sourceFile.getClass(this.keyName);
-        if (!classDeclaration) {
-            classDeclaration = this.sourceFile.addClass({
-                name: this.keyName, // defaults to "let"
-            });
-        }
-        // 如果有属性说明已添加过
-        if (classDeclaration.getProperties().length) {
-            return;
-        }
-        classDeclaration.setIsExported(true);
+        // const propertyAssignment = objectLiteralExpression.addPropertyAssignment({
+        //     name: "'propertyAssignment|5'",
+        //     initializer: '5',
+        // });
         const properties = this.schema.properties;
         const additionalProperties = this.schema.additionalProperties;
         const requireds = this.schema.required ?? [];
         if (!properties && !additionalProperties) {
-            // return classDeclaration.addIndexSignature({
-            //     keyName: 'key', // defaults to key
-            //     keyType: 'string', // defaults to string
-            //     returnType: 'any',
-            // });
             return;
         }
-        // this.ctor = classDeclaration.addConstructor({
-        //     /* options like parameters may go here */
-        // });
+
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
                 const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                const obj = this.getTsMockCtrlData(properties[key], key, prefix) + '`';
                 // 普通属性
                 return {
                     key,
-                    name: inputKey,
-                    type: this.getTsType(properties[key], key, prefix),
-                    hasQuestionToken: !requireds.includes(key),
+                    ...this.getTsMockCtrlData(properties[key], key, prefix),
                 };
             });
 
-            const propertiesDeclaration = classDeclaration.addProperties(addPropertiesInput);
-            addPropertiesInput.forEach((it, index) => {
-                const desc = properties[it.key].description;
-                if (desc) {
-                    propertiesDeclaration[index].addJsDoc(desc);
-                }
-            });
+            const propertiesDeclaration = objectLiteralExpression.addPropertyAssignments(addPropertiesInput);
         }
-        // if (additionalProperties) {
-        //     interfaceDeclaration.addIndexSignature({
-        //         keyName: 'key', // defaults to key
-        //         keyType: 'string', // defaults to string
-        //         returnType: 'any',
-        //     });
-        // }
     }
-    getTsMockCtrlData(subSchema: SwaggerSchema, subKeyName: string, prefix = '') {
+    getTsMockCtrlData(
+        subSchema: SwaggerSchema,
+        subKeyName: string,
+        prefix = ''
+    ): { name: string; initializer: string } {
         if (subSchema.$ref) {
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
             const typeNameInterface = this.sourceFile.getInterface(typeName);
@@ -99,50 +71,61 @@ export class GMockClass {
                 });
                 importDeclaration.addNamedImport(typeName);
             }
-            return typeName;
+            return { name: subKeyName, initializer: `'${typeName}'` };
         }
+        // todo
+        return { name: '', initializer: '' };
+        // switch (subSchema.type) {
+        //     case 'string':
+        //         if (subSchema.enum && subSchema.enum.length) {
+        //             return {
+        //                 name: subKeyName,
+        //                 initializer: `[${subSchema.enum.map(it => `'${it}'`).join(',')}]`,
+        //             };
+        //         }
+        //         return { name: subKeyName, initializer: `'@sentence(1, 2)'` };
 
-        switch (subSchema.type) {
-            case 'string':
-                if (subSchema.enum && subSchema.enum.length) {
-                    return `[${subSchema.enum.map(it => `'${it}'`).join(',')}]`;
-                }
-                return '@sentence(1, 2)';
-            case 'number':
-                if (subSchema.enum && subSchema.enum.length) {
-                    return `[${subSchema.enum.join(',')}]`;
-                }
-                return '@integer(300, 5000)';
-            case 'integer':
-                return '@integer(300, 5000)';
-            case 'boolean':
-                return '@boolean()';
-            case 'array':
-                if (subSchema.items) {
-                    if (Array.isArray(subSchema.items)) {
-                        return subSchema.items
-                            .map(it => this.getTsType(it, subKeyName, prefix))
-                            .map(it => `'${it}'`)
-                            .join(' | ');
-                    }
-                    return this.getTsType(subSchema.items, subKeyName, prefix) + '[]';
-                }
-                return 'unknown[]';
-            case 'object':
-                if (subSchema.properties || subSchema.additionalProperties) {
-                    // if (subSchema.properties) {
-                    const keyName = this.keyName + upperFirst(subKeyName);
-                    new GMockClass(subSchema, this.sourceFile, keyName).genTsType(prefix);
-                    return keyName;
-                }
-                return 'Record<string, any>';
+        //     case 'number':
+        //         if (subSchema.enum && subSchema.enum.length) {
+        //             return {
+        //                 name: subKeyName,
+        //                 initializer: `[${subSchema.enum.join(',')}]`,
+        //             };
+        //         }
+        //         return { name: subKeyName, initializer: `'@integer(300, 5000)'` };
+        //     case 'integer':
+        //         return { name: subKeyName, initializer: `'@integer(300, 5000)'` };
+        //     case 'boolean':
+        //         return { name: subKeyName, initializer: `'@boolean()'` };
+        //     case 'array':
+        //         if (subSchema.items) {
+        //             if (Array.isArray(subSchema.items)) {
+        //                 return {
+        //                     name: `'${subKeyName}|10'`,
+        //                     initializer: subSchema.items
+        //                         .map(it => this.getTsMockCtrlData(it, subKeyName, prefix))
+        //                         .map(it => `'${it}'`)
+        //                         .join(' | '),
+        //                 };
+        //             }
+        //             return this.getTsMockCtrlData(subSchema.items, subKeyName, prefix) + '[]';
+        //         }
+        //         return 'unknown[]';
+        //     case 'object':
+        //         if (subSchema.properties || subSchema.additionalProperties) {
+        //             // if (subSchema.properties) {
+        //             const keyName = this.keyName + upperFirst(subKeyName);
+        //             new GMockClass(subSchema, this.sourceFile, keyName).genTsType(prefix);
+        //             return keyName;
+        //         }
+        //         return 'Record<string, any>';
 
-            case 'file':
-                return 'File';
+        //     case 'file':
+        //         return 'File';
 
-            default:
-                return 'unknown';
-        }
+        //     default:
+        //         return 'unknown';
+        // }
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
