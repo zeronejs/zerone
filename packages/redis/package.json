@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/redis",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Zerone redis",
   "engines": {
     "node": ">=12.0.0"
