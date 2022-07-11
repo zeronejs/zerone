@@ -25,7 +25,7 @@ export class {{BaseName}}Service {
         });
     }
     async findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
-        const entity = await this.{{baseName}}Repository.findOne({{primaryColumnsProperty.name}});
+        const entity = await this.{{baseName}}Repository.findOneBy({ {{primaryColumnsProperty.name}} });
 
         if (!entity) throw new BadRequestException('数据不存在');
         return entity;

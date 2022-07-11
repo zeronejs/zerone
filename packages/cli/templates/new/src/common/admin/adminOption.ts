@@ -1,8 +1,8 @@
 import { AdminModuleFactory, CustomLoader } from '@adminjs/nestjs';
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 export const createAdminOption = (): AdminModuleFactory & CustomLoader => ({
-    useFactory: (connection: Connection) => ({
+    useFactory: (connection: DataSource) => ({
         adminJsOptions: {
             rootPath: '/admin',
             databases: [connection],
@@ -34,5 +34,5 @@ export const createAdminOption = (): AdminModuleFactory & CustomLoader => ({
             saveUninitialized: true,
         },
     }),
-    inject: [Connection],
+    inject: [DataSource],
 });
