@@ -31,10 +31,7 @@ export class GController {
         if (operation.deprecated) {
             return;
         }
-        const tagsItem = operation.tags?.[0];
-        if (!tagsItem) {
-            return;
-        }
+        const tagsItem = operation.tags?.[0] ?? 'default';
         // includeTags
         if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
             return;
