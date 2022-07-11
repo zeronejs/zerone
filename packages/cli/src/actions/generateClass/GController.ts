@@ -121,87 +121,86 @@ export class GController {
                 // 仅处理 query path
                 return ['query', 'path'].includes(param.in);
             }) as Parameter[];
-            if (!parameters.length) {
-                return;
-            }
-            const paramsTypeName = upperFirst(fnName) + 'Params';
-            functionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
-            const interfaceDeclaration = sourceProject.addInterface({ name: paramsTypeName });
-            // query参数处理
-            if (parameters.some(param => param.in === 'query')) {
-                functionDeclaration.setBodyText(writer => {
-                    // writer.writeLine(`const searchParams = new URLSearchParams('');`);
-                    writer.writeLine(`const paramsInput = {`);
-                    parameters.map(param => {
-                        if (param.in !== 'query') {
-                            return;
-                        }
-                        if (!(param as any).schema) {
-                            throw new Error(this.pathKey + ',请确保此接口参数有类型');
-                        }
-                        if (param.name.includes('-') || param.name.includes('.')) {
-                            const paramSchema = (param as any).schema;
-                            if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
-                                return writer.writeLine(`...params['${param.name}'],`);
+            if (parameters.length) {
+                const paramsTypeName = upperFirst(fnName) + 'Params';
+                functionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
+                const interfaceDeclaration = sourceProject.addInterface({ name: paramsTypeName });
+                // query参数处理
+                if (parameters.some(param => param.in === 'query')) {
+                    functionDeclaration.setBodyText(writer => {
+                        // writer.writeLine(`const searchParams = new URLSearchParams('');`);
+                        writer.writeLine(`const paramsInput = {`);
+                        parameters.map(param => {
+                            if (param.in !== 'query') {
+                                return;
                             }
-                            writer.writeLine(`'${param.name}':params['${param.name}'],`);
-                        } else {
-                            const paramSchema = (param as any).schema;
-                            if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
-                                return writer.writeLine(`...params.${param.name},`);
+                            if (!(param as any).schema) {
+                                throw new Error(this.pathKey + ',请确保此接口参数有类型');
                             }
-                            writer.writeLine(`${param.name}:params.${param.name},`);
+                            if (param.name.includes('-') || param.name.includes('.')) {
+                                const paramSchema = (param as any).schema;
+                                if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
+                                    return writer.writeLine(`...params['${param.name}'],`);
+                                }
+                                writer.writeLine(`'${param.name}':params['${param.name}'],`);
+                            } else {
+                                const paramSchema = (param as any).schema;
+                                if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
+                                    return writer.writeLine(`...params.${param.name},`);
+                                }
+                                writer.writeLine(`${param.name}:params.${param.name},`);
+                            }
+                        });
+                        writer.writeLine(`};`);
+                        const hasDataMethods = [
+                            'post',
+                            'put',
+                            'patch',
+                            'postForm',
+                            'putForm',
+                            'patchForm',
+                        ].includes(this.methodKey);
+                        let inputContent = '';
+                        if (requestBodySchema && hasDataMethods) {
+                            inputContent = 'input,';
+                        } else if (hasDataMethods) {
+                            inputContent = 'null,';
                         }
+                        writer.writeLine(
+                            `return request.${
+                                this.methodKey
+                            }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
+                                this.pathKey
+                            )}\`, ${inputContent} {`
+                        );
+                        writer.writeLine(`params: paramsInput,`);
+                        if (requestBodySchema && !hasDataMethods) {
+                            writer.writeLine(`data: input,`);
+                        }
+                        writer.writeLine(`});`);
+
+                        return writer;
                     });
-                    writer.writeLine(`};`);
-                    const hasDataMethods = [
-                        'post',
-                        'put',
-                        'patch',
-                        'postForm',
-                        'putForm',
-                        'patchForm',
-                    ].includes(this.methodKey);
-                    let inputContent = '';
-                    if (requestBodySchema && hasDataMethods) {
-                        inputContent = 'input,';
-                    } else if (hasDataMethods) {
-                        inputContent = 'null,';
-                    }
-                    writer.writeLine(
-                        `return request.${
-                            this.methodKey
-                        }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
-                            this.pathKey
-                        )}\`, ${inputContent} {`
-                    );
-                    writer.writeLine(`params: paramsInput,`);
-                    if (requestBodySchema && !hasDataMethods) {
-                        writer.writeLine(`data: input,`);
-                    }
-                    writer.writeLine(`});`);
+                }
 
-                    return writer;
+                parameters.map(param => {
+                    const paramType = new GInterface(
+                        (param as any).schema,
+                        sourceProject,
+                        paramsTypeName + upperFirst(param.name)
+                    ).getTsType((param as any).schema, '', prefix);
+                    const paramName =
+                        param.name.includes('-') || param.name.includes('.') ? `'${param.name}'` : param.name;
+                    const propertyDeclaration = interfaceDeclaration.addProperty({
+                        name: paramName,
+                        type: paramType,
+                        hasQuestionToken: !param.required,
+                    });
+                    if (param.description) {
+                        propertyDeclaration.addJsDoc(param.description);
+                    }
                 });
             }
-
-            parameters.map(param => {
-                const paramType = new GInterface(
-                    (param as any).schema,
-                    sourceProject,
-                    paramsTypeName + upperFirst(param.name)
-                ).getTsType((param as any).schema, '', prefix);
-                const paramName =
-                    param.name.includes('-') || param.name.includes('.') ? `'${param.name}'` : param.name;
-                const propertyDeclaration = interfaceDeclaration.addProperty({
-                    name: paramName,
-                    type: paramType,
-                    hasQuestionToken: !param.required,
-                });
-                if (param.description) {
-                    propertyDeclaration.addJsDoc(param.description);
-                }
-            });
         }
         // requestBody类型生成
         if (requestBodySchema) {

@@ -1,5 +1,5 @@
 {
-    "docsUrl": "http://172.16.1.13:8080/medicalbd-diseaseStorehouse/v3/api-docs",
+    "docsUrl": "http://127.0.0.1:5000/docs-json",
     "includeTags": [],
     "excludeTags": [],
     "axiosInstanceUrl": "axios"
