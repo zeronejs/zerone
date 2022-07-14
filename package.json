@@ -43,7 +43,7 @@
     "rxjs": "^7.5.6",
     "sqlite3": "^5.0.8",
     "ts-jest": "^28.0.5",
-    "ts-node": "^10.8.2",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.0.0",
     "typeorm": "^0.3.7",
     "typescript": "^4.7.4"
