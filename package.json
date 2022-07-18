@@ -51,7 +51,7 @@
   "dependencies": {
     "@nestjs/common": "^9.0.3",
     "@nestjs/core": "^9.0.3",
-    "@nestjs/testing": "^9.0.3",
+    "@nestjs/testing": "^9.0.4",
     "@nestjs/typeorm": "^9.0.0",
     "@zeronejs/ast-ts": "workspace:*",
     "@zeronejs/utils": "workspace:*"
