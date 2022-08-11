@@ -1,5 +1,5 @@
 import pinyin from 'pinyin';
-import { upperFirst } from 'lodash';
+import { camelCase, upperFirst } from 'lodash';
 
 // 我们针对的是ts interface，所以首字母大写
 export const chineseToPinyin = (str: string) => {
@@ -12,7 +12,8 @@ export const escapeVar = (varName: string) => {
     if (/[0-9]/.test(name[0])) {
         name = 'n' + name;
     }
-    return name;
+    // 全驼峰
+    return upperFirst(camelCase(name));
 };
 
 export const createModelFileName = (ref: string) => {
