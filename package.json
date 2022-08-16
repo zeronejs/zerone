@@ -49,7 +49,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@nestjs/common": "^9.0.9",
+    "@nestjs/common": "^9.0.11",
     "@nestjs/core": "^9.0.11",
     "@nestjs/testing": "^9.0.11",
     "@nestjs/typeorm": "^9.0.1",
