@@ -78,10 +78,16 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     indexSourceProject.addExportDeclarations(
         schemas.map(key => ({ moduleSpecifier: `./apiTypes/${escapeVar(upperFirst(config.prefix) + key)}` }))
     );
+    // 生成 Primitive
+    const PrimitiveDeclaration = indexSourceProject.addTypeAlias({
+        name: 'Primitive',
+        type: 'undefined | null | boolean | string | number | symbol',
+    });
+    PrimitiveDeclaration.setIsExported(true);
     // 生成 DeepRequired
     const typeAliasDeclaration = indexSourceProject.addTypeAlias({
         name: 'DeepRequired',
-        type: 'T extends Record<string, any> ? { [K in keyof T]-?: DeepRequired<T[K]> } : Required<T>',
+        type: 'T extends Primitive ? T : keyof T extends never ? T : { [K in keyof T]-?: DeepRequired<T[K]> }',
     });
     typeAliasDeclaration.addTypeParameter('T');
     typeAliasDeclaration.setIsExported(true);
