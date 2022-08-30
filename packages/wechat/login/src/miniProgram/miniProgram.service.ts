@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { WXBizDataCrypt } from '@zeronejs/utils';
+import { WXBizDataCrypt } from '../utils';
 import {
     WechatLoginMiniProgramServiceWxLogin,
     WechatLoginMiniProgramServiceGetSessionKey,

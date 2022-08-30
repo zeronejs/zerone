@@ -1,2 +1,2 @@
-export * from './WXBizDataCrypt';
 export * from './verifyServerToken';
+export * from './WXBizDataCrypt';
