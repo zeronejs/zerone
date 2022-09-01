@@ -27,27 +27,39 @@ export function isSymbol(value: any): value is symbol {
 export function isDate(value: any): value is Date {
     return isObjectLike(value) && getTag(value) === '[object Date]';
 }
-// 整数
+/**
+ * 整数
+ */
 export function isInteger(val: any): val is number {
     return isNumber(val) && val % 1 === 0;
 }
-// 小数
+/**
+ * 小数
+ */
 export function isDecimal(val: any): val is number {
     return isNumber(val) && val % 1 !== 0;
 }
-// 负数
+/**
+ * 负数
+ */
 export function isNegative(val: any): val is number {
     return isNumber(val) && val < 0;
 }
-// 正数
+/**
+ * 正数
+ */
 export function isPositive(val: any): val is number {
     return isNumber(val) && val > 0;
 }
-// 奇数
+/**
+ * 奇数
+ */
 export function isOdd(val: any): val is number {
     return isNumber(val) && val % 2 !== 0;
 }
-// 偶数
+/**
+ * 偶数
+ */
 export function isEven(val: any): val is number {
     return isNumber(val) && val % 2 === 0;
 }

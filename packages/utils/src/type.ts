@@ -6,51 +6,53 @@ export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T exte
 export type PickMethodsKey<T> = {
     [K in keyof T]: T[K] extends (...args: any) => any ? K : never;
 }[keyof T];
-
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/8-medium-readonly-2/README.zh-CN.md
+ * https://github.com/type-challenges/type-challenges/blob/main/questions/00008-medium-readonly-2/README.zh-CN.md
  */
 export type PickReadonly<T, K extends keyof T = keyof T> = {
     readonly [key in K]: T[key];
 } & Omit<T, K>;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/62-medium-type-lookup/README.zh-CN.md
+ * https://github.com/type-challenges/type-challenges/blob/main/questions/00062-medium-type-lookup/README.zh-CN.md
  */
 export type LookUp<U, T> = U extends { type: T } ? U : never;
 
 type Space = ' ' | '\n' | '\t';
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/106-medium-trimleft/README.zh-CN.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/00106-medium-trimleft/README.zh-CN.md
  */
 export type TrimLeft<S extends string> = S extends `${Space}${infer Other}` ? TrimLeft<Other> : S;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/108-medium-trim/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/00108-medium-trim/README.md
  */
 export type Trim<S extends string> = S extends `${Space}${infer T}` | `${infer T}${Space}` ? Trim<T> : S;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/4803-medium-trim-right/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/04803-medium-trim-right/README.md
  */
 export type TrimRight<S extends string> = S extends `${infer L}${Space}` ? TrimRight<L> : S;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/599-medium-merge/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/00599-medium-merge/README.md
+ * type F = {a:string} S= {b:number} ====>  {a:string,b:number}
  */
 export type Merge<F, S> = {
     [Key in keyof F | keyof S]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key] : never;
 };
-
+/**
+ * 把一堆类型 如：Partial<Pick<User, "name">> & Omit<User, "name">   合并成简单的 {name?:string;age:number}
+ */
 export type MergeType<T> = {
     [K in keyof T]: T[K];
 };
 
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/2757-medium-partialbykeys/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/02757-medium-partialbykeys/README.md
  */
 export type PartialByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K>> = MergeType<
     Partial<Pick<T, P>> & Omit<T, P>
 >;
 
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/2759-medium-requiredbykeys/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/02759-medium-requiredbykeys/README.md
  */
 export type RequiredByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, K>> = MergeType<
     Required<Pick<T, P>> & Omit<T, P>
@@ -61,13 +63,13 @@ export type RequiredByKeys<T, K = keyof T, P extends keyof T = Extract<keyof T, 
  */
 export type Tuple2Union<T extends any[]> = T extends Array<infer K> ? K : never;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/55-hard-union-to-intersection/README.zh-CN.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/00055-hard-union-to-intersection/README.zh-CN.md
  */
 export type UnionToIntersection<U> = (U extends any ? (arg: U) => any : never) extends (arg: infer I) => void
     ? I
     : never;
 /**
- * https://github.com/type-challenges/type-challenges/blob/master/questions/399-hard-tuple-filter/README.md
+ * https://github.com/type-challenges/type-challenges/blob/master/questions/00399-hard-tuple-filter/README.md
  */
 export type TupleFilterOut<T extends any[], F> = T extends [infer First, ...infer R]
     ? [First] extends [F]
@@ -95,3 +97,11 @@ type UnionToTuple<U, Last = LastInUnion<U>> = [U] extends [never]
 interface Type<T> extends Function {
     new (...args: any[]): T;
 }
+
+export type Primitive = undefined | null | boolean | string | number | symbol;
+// 深度 Required
+export type DeepRequired<T> = T extends Primitive
+    ? T
+    : keyof T extends never
+    ? T
+    : { [K in keyof T]-?: DeepRequired<T[K]> };
