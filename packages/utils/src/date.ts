@@ -66,7 +66,7 @@ export const dateFormat = (date: Date | number | string, fmt: string) => {
  * @param time 时间戳
  * @param fmt 格式化规则 'YYYY-mm-dd HH:MM:SS'
  */
-export function formatTime(time: number, fmt = 'YYYY-mm-dd HH:MM:SS') {
+export function beautifyTime(time: number, fmt = 'YYYY-mm-dd HH:MM:SS') {
     if (('' + time).length === 10) {
         time = time * 1000;
     } else {
