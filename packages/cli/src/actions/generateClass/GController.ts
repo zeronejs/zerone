@@ -64,7 +64,7 @@ export class GController {
         const sourceProject = this.sourceProject;
         // 获取返回值类型
         const schema = this.getSuccessResponseSchema();
-        let resType = 'unknown';
+        let resType = 'any';
         if (schema) {
             resType = new GInterface(schema, sourceProject, upperFirst(fnName) + 'Result').getTsType(
                 schema,
