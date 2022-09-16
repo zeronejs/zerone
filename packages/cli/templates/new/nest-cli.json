@@ -2,8 +2,15 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [
-      "**/*.json"
-    ]
+      "plugins": [
+          {
+              "name": "@nestjs/swagger",
+              "options": {
+                  "classValidatorShim": false,
+                  "introspectComments": true
+              }
+          }
+      ],
+      "assets": ["**/*.json"]
   }
 }

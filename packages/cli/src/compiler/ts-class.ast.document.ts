@@ -70,6 +70,7 @@ export function generateAstDocumentation(fileName: string): DocEntry {
         'CreateDateColumn',
         'UpdateDateColumn',
         'VersionColumn',
+        'JoinColumn',
     ];
     const primaryColumns = ['PrimaryGeneratedColumn', 'PrimaryColumn'];
     let primaryColumnsProperty: PrimaryColumnsProperty = {
