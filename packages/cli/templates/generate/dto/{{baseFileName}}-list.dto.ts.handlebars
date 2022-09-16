@@ -1,5 +1,4 @@
 import { Limit } from '@common/utils/constants';
-import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 {{#each dotImports}}
@@ -11,10 +10,6 @@ class {{BaseName}}ListWhereDto {
     /**
      * {{documentation}}
      */
-    @ApiProperty({
-        description: '{{documentation}}',
-        required: false,
-    })
     @IsOptional()
     {{name}}?: {{{type.value}}};
     {{/unless}}
@@ -22,7 +17,6 @@ class {{BaseName}}ListWhereDto {
 }
 
 export class {{BaseName}}ListDto {
-    @ApiProperty()
     @ValidateNested()
     @IsOptional()
     // 这里不加Type不会验证

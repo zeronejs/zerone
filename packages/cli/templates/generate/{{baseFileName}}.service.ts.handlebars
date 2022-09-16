@@ -16,13 +16,18 @@ export class {{BaseName}}Service {
     }
     async list(dto: {{BaseName}}ListDto) {
         const { page = 0, psize = 20 } = dto.limit || {};
-
-        return this.{{baseName}}Repository.find({
-            where: dto.where,
-            order: { createdAt: 'DESC' },
-            skip: page * psize,
-            take: psize,
-        });
+        const [data, total] = await Promise.all([
+            this.{{baseName}}Repository.find({
+                where: dto.where,
+                order: { createdAt: 'DESC' },
+                skip: page * psize,
+                take: psize,
+            }),
+            this.{{baseName}}Repository.count({
+                where: dto.where,
+            }),
+        ]);
+        return { data, total };
     }
     async findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
         const entity = await this.{{baseName}}Repository.findOneBy({ {{primaryColumnsProperty.name}} });

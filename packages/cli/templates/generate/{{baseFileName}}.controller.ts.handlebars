@@ -3,9 +3,13 @@ import { ApiBearerAuth, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@n
 import { Limit } from '@common/utils/constants';
 import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
 import { {{BaseName}}Service } from './{{baseFileName}}.service';
+import { {{className}} } from './entities/{{baseFileName}}.entity';
+import { RDto, RListDto } from '@common/Result.dto';
+import { ApiROfResponse, ApiRPrimitiveOfResponse } from '@common/ApiROfResponse';
 
 @ApiTags('{{baseName}}')
 @ApiBearerAuth()
+@ApiExtraModels({{className}})
 @ApiHeader({
     name: 'Authorization',
     description: 'Custom token',
@@ -17,25 +21,31 @@ export class {{BaseName}}Controller {
      * 新增{{documentation}}
      */
     @ApiOperation({ summary: '新增{{documentation}}' })
+    @ApiROfResponse({{className}})
     @Post('/{{baseName}}/create')
-    create(@Body() create{{BaseName}}Dto: {{BaseName}}CreateDto) {
-        return this.{{baseName}}Service.create(create{{BaseName}}Dto);
+    async create(@Body() create{{BaseName}}Dto: {{BaseName}}CreateDto) {
+        const data = await this.{{baseName}}Service.create(create{{BaseName}}Dto);
+        return new RDto({ data });
     }
     /**
      * {{documentation}}列表（query）
      */
     @ApiOperation({ summary: '{{documentation}}列表（query）' })
+    @ApiROfResponse({{className}}, 'array')
     @Post('/{{baseName}}/list')
-    queryList(@Body() dto: {{BaseName}}ListDto) {
-        return this.{{baseName}}Service.list(dto);
+    async queryList(@Body() dto: {{BaseName}}ListDto) {
+        const { data, total } = await this.{{baseName}}Service.list(dto);
+        return new RListDto({ data, total });
     }
     /**
      * {{documentation}}列表
      */
     @ApiOperation({ summary: '{{documentation}}列表' })
+    @ApiROfResponse({{className}}, 'array')
     @Get('/{{baseName}}/list')
-    list(@Query() limit: Limit) {
-        return this.{{baseName}}Service.list({ limit });
+    async list(@Query() limit: Limit) {
+        const { data, total } = await this.{{baseName}}Service.list({ limit });
+        return new RListDto({ data, total });
     }
     // @Get('/{{baseName}}')
     // findAll() {
@@ -44,30 +54,31 @@ export class {{BaseName}}Controller {
     /**
      * {{documentation}}详情
      */
-    @Get('/{{baseName}}/details/:{{primaryColumnsProperty.name}}')
     @ApiOperation({ summary: '某个{{documentation}}信息' })
-    @ApiResponse({
-        status: 200,
-        // description: 'The found record',
-        // type: Get{{BaseName}}InfoResult,
-    })
-    details(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
-        return this.{{baseName}}Service.findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}});
+    @ApiROfResponse({{className}})
+    @Get('/{{baseName}}/details/:{{primaryColumnsProperty.name}}')
+    async details(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        const data = await this.{{baseName}}Service.findBy{{primaryColumnsProperty.Name}}({{primaryColumnsProperty.name}});
+        return new RDto({ data });
     }
     /**
      * 修改{{documentation}}
      */
-    @Patch('/{{baseName}}/update/:{{primaryColumnsProperty.name}}')
     @ApiOperation({ summary: '修改{{documentation}}信息' })
-    update(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}, @Body() update{{BaseName}}Dto: {{BaseName}}UpdateDto) {
-        return this.{{baseName}}Service.update({{primaryColumnsProperty.name}}, update{{BaseName}}Dto);
+    @ApiRPrimitiveOfResponse()
+    @Patch('/{{baseName}}/update/:{{primaryColumnsProperty.name}}')
+    async update(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}, @Body() update{{BaseName}}Dto: {{BaseName}}UpdateDto) {
+        await this.{{baseName}}Service.update({{primaryColumnsProperty.name}}, update{{BaseName}}Dto);
+        return new RDto();
     }
     /**
      * 删除{{documentation}}
      */
     @ApiOperation({ summary: '删除{{documentation}}' })
+    @ApiRPrimitiveOfResponse()
     @Delete('/{{baseName}}/remove/:{{primaryColumnsProperty.name}}')
-    remove(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
-        return this.{{baseName}}Service.delete({{primaryColumnsProperty.name}});
+    async remove(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
+        await this.{{baseName}}Service.delete({{primaryColumnsProperty.name}});
+        return new RDto();
     }
 }
