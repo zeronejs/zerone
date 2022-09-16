@@ -8,6 +8,8 @@ import AdminJS from 'adminjs';
 import { AdminModule } from '@adminjs/nestjs';
 import { validate } from 'class-validator';
 import { createAdminOption } from '@common/admin/adminOption';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from '@common/filters/httpException.filter';
 
 Resource.validate = validate;
 AdminJS.registerAdapter({ Database, Resource });
@@ -24,6 +26,12 @@ AdminJS.registerAdapter({ Database, Resource });
         ConfigModule.forRoot(),
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
+    ],
 })
 export class AppModule {}
