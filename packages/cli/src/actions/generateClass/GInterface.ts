@@ -161,7 +161,9 @@ export class GInterface {
                     new GInterface(subSchema, this.sourceFile, keyName).genTsType(prefix);
                     return keyName;
                 }
-                return 'Record<string, any>';
+                // 泛型会变成object  所以用any
+                // return 'Record<string, any>';
+                return 'any';
 
             case 'file':
                 return 'File';
