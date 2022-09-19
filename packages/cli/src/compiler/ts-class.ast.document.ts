@@ -71,9 +71,9 @@ export function generateAstDocumentation(fileName: string): DocEntry {
         'UpdateDateColumn',
         'VersionColumn',
         'JoinColumn',
-        // 'OneToMany',
-        // 'ManyToOne',
-        // 'ManyToMany'
+        'OneToMany',
+        'ManyToOne',
+        'ManyToMany',
     ];
     const primaryColumns = ['PrimaryGeneratedColumn', 'PrimaryColumn'];
     let primaryColumnsProperty: PrimaryColumnsProperty = {
