@@ -1,3 +1,4 @@
+import { RDto, RListDto } from '@common/Result.dto';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -13,7 +14,9 @@ async function bootstrap() {
         .setVersion('1.0')
         .addTag('cats')
         .build();
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+        extraModels: [RDto, RListDto],
+    });
     SwaggerModule.setup('docs', app, document);
     app.useGlobalPipes(
         new ValidationPipe({
