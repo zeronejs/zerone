@@ -12,7 +12,7 @@ export class GInterface {
         this.keyName = keyName;
     }
 
-    private genObjectType(prefix = '') {
+    private genObjectType(prefix = '', extendsName?: string) {
         let interfaceDeclaration = this.sourceFile.getInterface(this.keyName);
         if (!interfaceDeclaration) {
             interfaceDeclaration = this.sourceFile.addInterface({
@@ -21,18 +21,23 @@ export class GInterface {
         }
         // 如果有属性说明已添加过
         if (interfaceDeclaration.getProperties().length) {
-            return;
+            return interfaceDeclaration;
         }
         interfaceDeclaration.setIsExported(true);
+        if (extendsName) {
+            interfaceDeclaration.addExtends(extendsName);
+        }
+
         const properties = this.schema.properties;
         const additionalProperties = this.schema.additionalProperties;
         const requireds = this.schema.required ?? [];
-        if (!properties && !additionalProperties) {
-            return interfaceDeclaration.addIndexSignature({
+        if (!properties && !additionalProperties && !extendsName) {
+            interfaceDeclaration.addIndexSignature({
                 keyName: 'key', // defaults to key
                 keyType: 'string', // defaults to string
                 returnType: 'any',
             });
+            return interfaceDeclaration;
         }
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
@@ -77,6 +82,7 @@ export class GInterface {
             // });
             // const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
         }
+        return interfaceDeclaration;
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
@@ -97,6 +103,30 @@ export class GInterface {
             }
 
             return typeName;
+        } else if (subSchema.allOf && subSchema.allOf.length) {
+            const keyName = subSchema.title ? subSchema.title : this.keyName + upperFirst(subKeyName);
+            if (subSchema.allOf.length === 1) {
+                return this.getTsType(subSchema.allOf[0], this.keyName, '');
+            }
+            const moduleInterface = new GInterface(subSchema.allOf[0], this.sourceFile, keyName).genTsType(
+                '',
+                this.getTsType(subSchema.allOf[0], subKeyName, prefix)
+            );
+
+            for (let index = 1; index < subSchema.allOf.length; index++) {
+                const item = subSchema.allOf[index];
+                for (const key in item.properties) {
+                    const value = item.properties[key];
+                    const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                    // 普通属性
+                    moduleInterface?.addProperty({
+                        // key,
+                        name: inputKey,
+                        type: this.getTsType(value, key, prefix),
+                    });
+                }
+            }
+            return keyName;
         }
 
         switch (subSchema.type) {
@@ -140,7 +170,7 @@ export class GInterface {
                 return 'unknown';
         }
     }
-    genTsType(prefix = '') {
+    genTsType(prefix = '', extendsName?: string) {
         // if (!this.schema) {
         //     return this.genUnknownType();
         // }
@@ -165,8 +195,8 @@ export class GInterface {
         //     return this.genNumberType();
         // }
 
-        if (this.schema.type === 'object') {
-            return this.genObjectType(prefix);
+        if (this.schema.type === 'object' || this.schema.properties || this.schema.$ref) {
+            return this.genObjectType(prefix, extendsName);
         }
 
         // if (this.schema.type === 'array') {
