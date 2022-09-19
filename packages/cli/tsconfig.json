@@ -3,5 +3,8 @@
   "include": [
     "src",
     "__tests__"
+  ],
+  "exclude": [
+    "src/scripts/generate"
   ]
 }

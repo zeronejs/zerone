@@ -23,27 +23,23 @@ export class GenTableEntity extends BaseEntity {
      * 表名称
      */
     @Column({ unique: true })
-    
     entityName: string;
 
     /**
      * 表描述
      */
     @Column()
-    
     desc: string;
     /**
      * 备注
      */
     @Column({ nullable: true })
-    
     remark?: string;
 
     /**
      * 创建时间
      */
     @CreateDateColumn()
-    
     createdAt: Date;
     /**
      * 修改时间
@@ -53,6 +49,5 @@ export class GenTableEntity extends BaseEntity {
 
     @OneToMany(() => GenColumnsEntity, column => column.table)
     @ApiProperty({ type: () => Array<GenColumnsEntity> })
-
     columns: GenColumnsEntity[];
 }
