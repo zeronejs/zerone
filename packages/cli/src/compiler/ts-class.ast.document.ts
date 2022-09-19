@@ -71,6 +71,9 @@ export function generateAstDocumentation(fileName: string): DocEntry {
         'UpdateDateColumn',
         'VersionColumn',
         'JoinColumn',
+        // 'OneToMany',
+        // 'ManyToOne',
+        // 'ManyToMany'
     ];
     const primaryColumns = ['PrimaryGeneratedColumn', 'PrimaryColumn'];
     let primaryColumnsProperty: PrimaryColumnsProperty = {
@@ -148,7 +151,11 @@ export function generateAstDocumentation(fileName: string): DocEntry {
                         }';`
                     );
                 } else if (elmStrings.length !== 0) {
-                    dotImports.push(`import { ${elmStrings.join(', ').trim()} } from '${importItem.from}';`);
+                    const importItemFrom =
+                        importItem.from.startsWith('./') || importItem.from.startsWith('../')
+                            ? join('../entities', importItem.from)
+                            : importItem.from;
+                    dotImports.push(`import { ${elmStrings.join(', ').trim()} } from '${importItemFrom}';`);
                 } else if (defalutInputString) {
                     dotImports.push(`import ${defalutInputString} from '${importItem.from}';`);
                 }
