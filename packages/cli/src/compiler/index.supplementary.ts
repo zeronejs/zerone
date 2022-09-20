@@ -11,6 +11,7 @@ export function indexSupplementary(fileUrl: string, docEntry: DocEntry) {
         `./${docEntry.baseFileName}-create.dto`,
         `./${docEntry.baseFileName}-list.dto`,
         `./${docEntry.baseFileName}-update.dto`,
+        `./${docEntry.baseFileName}-all.dto`,
     ].filter(it => !froms.includes(it));
     if (dtoFormNames.length === 0) {
         return false;

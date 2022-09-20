@@ -11,7 +11,7 @@ export class {{BaseName}}Service {
         return this.{{baseName}}Repository.save(entity);
     }
 
-    findAll(dto: {{BaseName}}ListDto) {
+    findAll(dto: {{BaseName}}AllDto) {
         return this.{{baseName}}Repository.find({
             where: dto.where,
             order: { createdAt: 'DESC' },
