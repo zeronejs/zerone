@@ -30,12 +30,12 @@ export const getAgeByBirthday = (birthday: Date) => {
  * 格式化时间对象
  * ****注意
  * 1： new Date()时   内部参数不能有-
- * @example dateFormat(new Date(),'YYYY-mm-dd HH-MM-SS') => '2021-07-03 11-14-00'
- * @param {*} date Date对象实例
- * @param {*} fmt 格式化规则
+ * @example dateFormat(new Date(),'YYYY-mm-dd HH:MM:SS') => '2021-07-03 11:14:00'
+ * @param date Date对象实例
+ * @param fmt 格式化规则
  * @returns 格式化后的字符串
  */
-export const dateFormat = (date: Date | number | string, fmt: string) => {
+export const dateFormat = (date: Date | number | string, fmt = 'YYYY-mm-dd HH:MM:SS') => {
     if (!isDate(date)) {
         date = new Date(date);
     }
