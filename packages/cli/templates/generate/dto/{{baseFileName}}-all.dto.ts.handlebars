@@ -1,0 +1,24 @@
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+{{#each dotImports}}
+{{{this}}}
+{{/each}}
+class {{BaseName}}AllWhereDto {
+	{{#each properties}}
+    {{#unless isSpecialColumn }}
+    /**
+     * {{documentation}}
+     */
+    @IsOptional()
+    {{name}}?: {{{type.value}}};
+    {{/unless}}
+	{{/each}}
+}
+
+export class {{BaseName}}AllDto {
+    @ValidateNested()
+    @IsOptional()
+    // 这里不加Type不会验证
+    @Type(() => {{BaseName}}AllWhereDto)
+    where?: {{BaseName}}AllWhereDto;
+}

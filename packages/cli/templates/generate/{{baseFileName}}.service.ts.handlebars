@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
+import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}AllDto, {{BaseName}}UpdateDto } from './dto';
 import { {{className}} } from './entities/{{baseFileName}}.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -11,16 +11,19 @@ export class {{BaseName}}Service {
         return this.{{baseName}}Repository.save(entity);
     }
 
-    findAll() {
-        return `This action returns all {{baseName}}`;
+    findAll(dto: {{BaseName}}ListDto) {
+        return this.{{baseName}}Repository.find({
+            where: dto.where,
+            order: { createdAt: 'DESC' },
+        });
     }
     async list(dto: {{BaseName}}ListDto) {
-        const { page = 0, psize = 20 } = dto.limit || {};
+        const { page = 1, psize = 20 } = dto.limit || {};
         const [data, total] = await Promise.all([
             this.{{baseName}}Repository.find({
                 where: dto.where,
                 order: { createdAt: 'DESC' },
-                skip: page * psize,
+                skip: (page - 1) * psize,
                 take: psize,
             }),
             this.{{baseName}}Repository.count({

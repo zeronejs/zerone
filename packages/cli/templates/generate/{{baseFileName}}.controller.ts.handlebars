@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Param, Delete, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiExtraModels, ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExtraModels, ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Limit } from '@common/utils/constants';
-import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}UpdateDto } from './dto';
+import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}AllDto, {{BaseName}}UpdateDto } from './dto';
 import { {{BaseName}}Service } from './{{baseFileName}}.service';
 import { {{className}} } from './entities/{{baseFileName}}.entity';
 import { RDto, RListDto } from '@common/Result.dto';
@@ -47,10 +47,16 @@ export class {{BaseName}}Controller {
         const { data, total } = await this.{{baseName}}Service.list({ limit });
         return new RListDto({ data, total });
     }
-    // @Get('/{{baseName}}')
-    // findAll() {
-    //     return this.{{baseName}}Service.findAll();
-    // }
+    /**
+     * {{documentation}}列表-全部
+     */
+    @ApiOperation({ summary: '{{documentation}}列表-全部' })
+    @ApiROfResponse({{className}}, 'array')
+    @Get('/{{baseName}}/all')
+    async findAll(@Body() dto: {{BaseName}}AllDto) {
+        const data = await this.{{baseName}}Service.findAll(dto);
+        return new RListDto({ data, total: data.length });
+    }
     /**
      * {{documentation}}详情
      */

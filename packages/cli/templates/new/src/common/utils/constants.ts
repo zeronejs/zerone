@@ -7,7 +7,7 @@ export const PublicUrl = join(__dirname, '..', '..', '../public');
 export class Limit {
     @ApiProperty({
         description: '页码',
-        default: 0,
+        default: 1,
     })
     @IsOptional()
     @IsNumberOrNumberString({
