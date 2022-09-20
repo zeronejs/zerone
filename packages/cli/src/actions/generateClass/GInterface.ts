@@ -104,7 +104,8 @@ export class GInterface {
 
             return typeName;
         } else if (subSchema.allOf && subSchema.allOf.length) {
-            const keyName = subSchema.title ? subSchema.title : this.keyName + upperFirst(subKeyName);
+            // const keyName = subSchema.title ? subSchema.title : this.keyName + upperFirst(subKeyName);
+            const keyName = this.keyName + upperFirst(subKeyName);
             if (subSchema.allOf.length === 1) {
                 return this.getTsType(subSchema.allOf[0], this.keyName, '');
             }

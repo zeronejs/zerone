@@ -2,7 +2,7 @@ import { RDto, RListDto } from '@common/Result.dto';
 import { applyDecorators, Type } from '@nestjs/common';
 import { ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
 import { SchemaObject, ReferenceObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-
+import { upperFirst } from 'lodash';
 export const ApiROfResponse = <TModel extends Type<any>>(
     model: TModel,
     type: 'object' | 'array' = 'object',
@@ -42,15 +42,15 @@ export const ApiROfResponse = <TModel extends Type<any>>(
         })
     );
 };
-type Primitive = 'undefined' | 'null' | 'boolean' | 'string' | 'number' | 'symbol';
+type Primitive = 'boolean' | 'string' | 'number';
 /**
  * 原始类型
  */
-export const ApiRPrimitiveOfResponse = (type: Primitive = 'undefined', Template: Type<any> = RDto) => {
+export const ApiRPrimitiveOfResponse = (type: Primitive = 'string', Template: Type<any> = RDto) => {
     return applyDecorators(
         ApiOkResponse({
             schema: {
-                title: `${Template.name}Of${type}`,
+                title: `${Template.name}Of${upperFirst(type)}`,
                 allOf: [
                     { $ref: getSchemaPath(Template) },
                     {
