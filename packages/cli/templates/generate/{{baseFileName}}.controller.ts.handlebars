@@ -53,7 +53,7 @@ export class {{BaseName}}Controller {
     @ApiOperation({ summary: '{{documentation}}列表-全部' })
     @ApiROfResponse({{className}}, 'array')
     @Get('/{{baseName}}/all')
-    async findAll(@Body() dto: {{BaseName}}AllDto) {
+    async findAll(@Query() dto: {{BaseName}}AllDto) {
         const data = await this.{{baseName}}Service.findAll(dto);
         return new RListDto({ data, total: data.length });
     }
