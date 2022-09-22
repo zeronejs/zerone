@@ -11,7 +11,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         // const request = ctx.getRequest<Request>();
         let status: number;
-        let excRes: string | object;
+        let excRes: string | Record<string, any>;
         if (exception instanceof HttpException) {
             status = exception.getStatus();
             excRes = exception.getResponse();
@@ -27,7 +27,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
         if (isString(excRes)) {
             resDto = new RDto({ code: status, data: null, msg: excRes });
         } else {
-            resDto = new RDto({ code: status, data: null, ...excRes });
+            const RdtoMsg = {
+                ...excRes,
+            };
+            if (excRes.message) {
+                RdtoMsg.msg = Array.isArray(excRes.message) ? excRes.message.join(',') : excRes.message;
+            }
+            resDto = new RDto({
+                code: status,
+                data: null,
+                ...RdtoMsg,
+            });
         }
         response.status(200).json(resDto);
     }

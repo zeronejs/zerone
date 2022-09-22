@@ -45,4 +45,7 @@ export class {{BaseName}}Service {
     async delete({{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
         return this.{{baseName}}Repository.delete({ {{primaryColumnsProperty.name}} });
     }
+    async deletes(ids: number | number[]) {
+        return this.{{baseName}}Repository.delete(ids);
+    }
 }

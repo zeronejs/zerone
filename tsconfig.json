@@ -78,6 +78,7 @@
     "**/test/**",
     "**/dist/**",
     "**/node_modules/**",
+    "**/cli/src/scripts/**",
   ],
   "include": [
     "packages",

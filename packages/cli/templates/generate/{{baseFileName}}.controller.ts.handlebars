@@ -5,6 +5,7 @@ import { {{BaseName}}CreateDto, {{BaseName}}ListDto, {{BaseName}}AllDto, {{BaseN
 import { {{BaseName}}Service } from './{{baseFileName}}.service';
 import { {{className}} } from './entities/{{baseFileName}}.entity';
 import { RDto, RListDto } from '@common/Result.dto';
+import { BodyIdsDto } from '@common/BodyIds.dto';
 import { ApiROfResponse, ApiRPrimitiveOfResponse } from '@common/ApiROfResponse';
 
 @ApiTags('{{baseName}}')
@@ -85,6 +86,16 @@ export class {{BaseName}}Controller {
     @Delete('/{{baseName}}/remove/:{{primaryColumnsProperty.name}}')
     async remove(@Param('{{primaryColumnsProperty.name}}') {{primaryColumnsProperty.name}}: {{primaryColumnsProperty.type.value}}) {
         await this.{{baseName}}Service.delete({{primaryColumnsProperty.name}});
+        return new RDto();
+    }
+    /**
+     * 删除多个{{documentation}}
+     */
+    @ApiOperation({ summary: '删除多个{{documentation}}' })
+    @ApiRPrimitiveOfResponse()
+    @Post('/{{baseName}}/removes')
+    async removes(@Body() dto: BodyIdsDto) {
+        await this.{{baseName}}Service.deletes(dto.ids);
         return new RDto();
     }
 }
