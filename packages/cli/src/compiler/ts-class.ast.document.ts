@@ -91,14 +91,18 @@ export function generateAstDocumentation(fileName: string): DocEntry {
         const columnDecorator = property.decorators.find(it => it.name === 'Column');
 
         if (columnDecorator) {
-            isOptional = columnDecorator.expression?.args?.[0]?.nullable === 'true';
-            defaultValue = columnDecorator.expression?.args?.[0]?.default;
+            const args = columnDecorator?.args;
+            if (!isOptional) {
+                isOptional = Boolean(args?.some(it => it.nullable === 'true'));
+            }
+            defaultValue = args?.find(it => it.default)?.default;
         }
         const resProperty = { ...property, isSpecialColumn, isOptional, defaultValue };
         // 寻找主键字段
         if (
             property.decorators.some(it => it.name && primaryColumns.includes(it.name)) ||
-            columnDecorator?.expression?.args?.[0].primary === 'true'
+            columnDecorator?.args?.some(it => it.primary === 'true')
+            // columnDecorator?.args?.[0]?.primary === 'true'
         ) {
             primaryColumnsProperty = {
                 ...resProperty,
