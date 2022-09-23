@@ -3,7 +3,7 @@ import { camelCase, upperFirst } from 'lodash';
 import { join } from 'path';
 import { Operation, Schema, Parameter, Reference } from 'swagger-schema-official';
 import { Project, SourceFile } from 'ts-morph';
-import { parseSwaggerPathTemplate } from '../../utils/generateUtil';
+import { parseSwaggerPathTemplate, parseSwaggerPathTemplateToFnName } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
 
@@ -40,8 +40,7 @@ export class GController {
         if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
             return;
         }
-        const key = camelCase(methodKey + pathKey);
-
+        const key = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
         const sourceFilePath = join(controllerUrl, tagsItem, `${key}.ts`);
         await remove(sourceFilePath);
         await ensureFile(sourceFilePath);

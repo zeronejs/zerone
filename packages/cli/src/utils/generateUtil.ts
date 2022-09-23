@@ -55,6 +55,7 @@ export function matchAll(reg: RegExp, str: string) {
 
 /**
  * 将swagger路径模板解析成字符串
+ * 用于请求路径
  * @param pathTemplate swagger里面路径模板，类似于 /abc/{param}
  */
 export function parseSwaggerPathTemplate(pathTemplate: string) {
@@ -67,6 +68,24 @@ export function parseSwaggerPathTemplate(pathTemplate: string) {
     let resPath = pathTemplate;
     matches.map(matchItem => {
         resPath = resPath.replace(matchItem[0], `\${params.${matchItem[1]}}`);
+    });
+    return resPath;
+}
+/**
+ * 将swagger路径模板解析成字符串
+ * 用于生成方法名
+ * @param pathTemplate swagger里面路径模板，类似于 /abc/{param}
+ */
+export function parseSwaggerPathTemplateToFnName(pathTemplate: string) {
+    pathTemplate = trimQuery(pathTemplate);
+    const reg = /{(.+?)}/g;
+    const matches = matchAll(reg, pathTemplate);
+    if (!matches.length) {
+        return pathTemplate;
+    }
+    let resPath = pathTemplate;
+    matches.map(matchItem => {
+        resPath = resPath.replace(matchItem[0], `By${matchItem[0]}`);
     });
     return resPath;
 }
