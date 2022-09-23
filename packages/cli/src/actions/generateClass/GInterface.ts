@@ -170,6 +170,9 @@ export class GInterface {
                 return 'File';
 
             default:
+                if (subSchema.type) {
+                    return subSchema.type;
+                }
                 return 'unknown';
         }
     }
