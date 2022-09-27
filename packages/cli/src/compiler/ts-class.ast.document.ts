@@ -8,6 +8,7 @@ import {
     InterfaceInterpret,
     ClassPropertyDeclarationDoc,
 } from '@zeronejs/ast-ts';
+import { isString } from '@zeronejs/utils';
 import { basename, join } from 'path';
 export interface DocEntry {
     fileName: string;
@@ -174,7 +175,12 @@ export function generateAstDocumentation(fileName: string): DocEntry {
 
         const curUseTypeNames = curTypeNames.filter(curTypeName => typeReferences.includes(curTypeName));
         const defaultValueReferences = properties
-            .map(it => it.defaultValue?.split('.')[0] ?? '')
+            .map(it => {
+                if (isString(it.defaultValue)) {
+                    return it.defaultValue?.split('.')[0] ?? '';
+                }
+                return it.defaultValue ?? '';
+            })
             .filter(it => it);
 
         const curVarNames = [

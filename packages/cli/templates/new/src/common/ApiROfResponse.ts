@@ -42,22 +42,33 @@ export const ApiROfResponse = <TModel extends Type<any>>(
         })
     );
 };
-type Primitive = 'boolean' | 'string' | 'number';
+type Primitive = 'boolean' | 'string' | 'number' | 'Buffer';
 /**
  * 原始类型
  */
-export const ApiRPrimitiveOfResponse = (type: Primitive = 'string', Template: Type<any> = RDto) => {
+export const ApiRPrimitiveOfResponse = (
+    model: Primitive = 'string',
+    type: 'primitive' | 'array' = 'primitive',
+    Template: Type<any> = RDto
+) => {
+    if (type === 'array' && Template === RDto) {
+        Template = RListDto;
+    }
     return applyDecorators(
         ApiOkResponse({
             schema: {
-                title: `${Template.name}Of${upperFirst(type)}`,
+                title: `${Template.name}Of${upperFirst(model)}`,
                 allOf: [
                     { $ref: getSchemaPath(Template) },
                     {
                         properties: {
-                            data: {
-                                type,
-                            },
+                            data:
+                                type === 'primitive'
+                                    ? { type: model }
+                                    : {
+                                          type,
+                                          items: { type: model },
+                                      },
                         },
                     },
                 ],

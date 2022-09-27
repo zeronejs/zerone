@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
     Entity,
     Column,
@@ -17,7 +16,6 @@ export enum ColumnsType {
     boolean = 'boolean',
     Date = 'Date',
 }
-
 /**
  * 代码生成字段表
  */
@@ -29,12 +27,12 @@ export class GenColumnsEntity extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
-    
+
     /**
      * 字段名称
      */
     @Column()
-    entityName: string;
+    name: string;
     /**
      * 字段描述
      */
@@ -48,11 +46,29 @@ export class GenColumnsEntity extends BaseEntity {
         enum: ColumnsType,
     })
     tsType: ColumnsType;
+
+    /**
+     * 是否枚举类型
+     */
+    @Column({
+        default: false,
+    })
+    isEnum: boolean;
+    /**
+     * 枚举类型的值
+     */
+    @Column({
+        default: [],
+        array: true,
+    })
+    enumValues?: string[];
     /**
      * 插入
      */
-    @Column()
-    isInsert: string;
+    @Column({
+        default: false,
+    })
+    isInsert: boolean;
     /**
      * 编辑
      */
@@ -97,7 +113,6 @@ export class GenColumnsEntity extends BaseEntity {
      */
     @ManyToOne(() => GenTableEntity, table => table.columns)
     @JoinColumn({ name: 'tableId' })
-    @ApiProperty({ type: () => GenTableEntity })
     table: GenTableEntity;
     /**
      * 表id
