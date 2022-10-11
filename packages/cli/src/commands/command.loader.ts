@@ -8,6 +8,7 @@ import {
     NewAction,
     GenerateAstAction,
     GenerateApiAction,
+    GenerateNodeAction,
     // StartAction,
     // UpdateAction,
 } from '../actions';
@@ -28,7 +29,9 @@ export class CommandLoader {
         new InfoCommand(new InfoAction()).load(program);
         // new UpdateCommand(new UpdateAction()).load(program);
         // new AddCommand(new AddAction()).load(program);
-        new GenerateCommand(new GenerateAstAction()).load(program);
+        new GenerateCommand(new GenerateNodeAction()).load(program);
+        // new GenerateCommand(new GenerateAstAction()).load(program);
+
         new GenerateApiCommand(new GenerateApiAction()).load(program);
 
         this.handleInvalidCommand(program);
