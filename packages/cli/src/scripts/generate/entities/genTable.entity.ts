@@ -9,6 +9,7 @@ import {
     OneToMany,
 } from 'typeorm';
 import { GenColumnsEntity } from './genColumns.entity';
+import { timestamptz } from "./transformer";
 /**
  * 代码生成信息表
  */
@@ -36,11 +37,14 @@ export class GenTableEntity extends BaseEntity {
     @Column({ nullable: true })
     remark?: string;
 
-    /**
-     * 创建时间
-     */
-    @CreateDateColumn()
-    createdAt: Date;
+	/**
+	 * 创建日期
+	 */
+     @CreateDateColumn({
+        type: 'timestamptz',
+        transformer: timestamptz
+    })
+    createAt?: string;
     /**
      * 修改时间
      */
