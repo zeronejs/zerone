@@ -1,0 +1,46 @@
+{
+  "name": "create-zerone",
+  "version": "0.0.4",
+  "description": "Zerone Cli",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "zerone build -d",
+    "publish:npm": "pnpm build && pnpm publish dist/ --no-git-checks"
+  },
+  "bin": {
+    "create-zerone": "src/index.js"
+  },
+  "main": "src/index.js",
+  "keywords": [
+    "zerone",
+    "cli",
+    "zeronejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronejs/zerone.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeronejs/zerone/issues"
+  },
+  "homepage": "https://zerone.top/",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cross-spawn": "^7.0.3",
+    "kolorist": "^1.6.0",
+    "minimist": "^1.2.7",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
+    "@types/minimist": "^1.2.2",
+    "@types/prompts": "^2.4.1"
+  }
+}

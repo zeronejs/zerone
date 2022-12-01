@@ -155,6 +155,24 @@ importers:
       '@types/pinyin': 2.10.0
       '@types/swagger-schema-official': 2.0.22
 
+  packages/create-zerone:
+    specifiers:
+      '@types/cross-spawn': ^6.0.2
+      '@types/minimist': ^1.2.2
+      '@types/prompts': ^2.4.1
+      cross-spawn: ^7.0.3
+      kolorist: ^1.6.0
+      minimist: ^1.2.7
+      prompts: ^2.4.2
+    devDependencies:
+      '@types/cross-spawn': 6.0.2
+      '@types/minimist': 1.2.2
+      '@types/prompts': 2.4.1
+      cross-spawn: 7.0.3
+      kolorist: 1.6.0
+      minimist: 1.2.7
+      prompts: 2.4.2
+
   packages/redis:
     specifiers:
       ioredis: ^5.1.0
@@ -1113,6 +1131,12 @@ packages:
       '@types/node': 18.11.9
     dev: true
 
+  /@types/cross-spawn/6.0.2:
+    resolution: {integrity: sha512-KuwNhp3eza+Rhu8IFI5HUXRP0LIhqH5cAjubUvGXXthh4YYBuP2ntwEX+Cz8GJoZUHlKo247wPWOfA9LYEq4cw==}
+    dependencies:
+      '@types/node': 18.11.9
+    dev: true
+
   /@types/expect/1.20.4:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
     dev: true
@@ -1242,6 +1266,10 @@ packages:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
 
+  /@types/minimist/1.2.2:
+    resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
+    dev: true
+
   /@types/node-emoji/1.8.1:
     resolution: {integrity: sha512-0fRfA90FWm6KJfw6P9QGyo0HDTCmthZ7cWaBQndITlaWLTZ6njRyKwrwpzpg+n6kBXBIGKeUHEQuBx7bphGJkA==}
     dev: true
@@ -1306,6 +1334,12 @@ packages:
 
   /@types/prettier/2.4.4:
     resolution: {integrity: sha512-ReVR2rLTV1kvtlWFyuot+d1pkpG2Fw/XKE3PDAdj57rbM97ttSp9JZ2UsP+2EHTylra9cUf6JA7tGwW1INzUrA==}
+    dev: true
+
+  /@types/prompts/2.4.1:
+    resolution: {integrity: sha512-1Mqzhzi9W5KlooNE4o0JwSXGUDeQXKldbGn9NO4tpxwZbHXYd+WcKpCksG2lbhH7U9I9LigfsdVsP2QAY0lNPA==}
+    dependencies:
+      '@types/node': 18.11.9
     dev: true
 
   /@types/qs/6.9.7:
@@ -3531,7 +3565,7 @@ packages:
     engines: {node: '>=0.4.7'}
     hasBin: true
     dependencies:
-      minimist: 1.2.5
+      minimist: 1.2.7
       neo-async: 2.6.2
       source-map: 0.6.1
       wordwrap: 1.0.0
@@ -4557,7 +4591,7 @@ packages:
     resolution: {integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==}
     hasBin: true
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.7
     dev: true
 
   /json5/2.2.1:
@@ -4638,6 +4672,10 @@ packages:
   /kleur/3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
+    dev: true
+
+  /kolorist/1.6.0:
+    resolution: {integrity: sha512-dLkz37Ab97HWMx9KTes3Tbi3D1ln9fCAy2zr2YVExJasDRPGRaKcoE4fycWNtnCAJfjFqe0cnY+f8KT2JePEXQ==}
     dev: true
 
   /leven/3.1.0:
@@ -4898,12 +4936,8 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
 
-  /minimist/1.2.5:
-    resolution: {integrity: sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==}
-    dev: false
-
-  /minimist/1.2.6:
-    resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
+  /minimist/1.2.7:
+    resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
 
   /minipass-collect/1.0.2:
     resolution: {integrity: sha512-6T6lH0H8OG9kITm/Jm6tdooIbogG9e0tLgpY6mphXSm/A9u8Nq1ryBG+Qspiub9LjWlBPsPS3tWQ/Botq4FdxA==}
@@ -4961,7 +4995,7 @@ packages:
     resolution: {integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==}
     hasBin: true
     dependencies:
-      minimist: 1.2.6
+      minimist: 1.2.7
     dev: false
 
   /mkdirp/1.0.4:
@@ -5256,7 +5290,7 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
     dependencies:
-      minimist: 1.2.5
+      minimist: 1.2.7
     dev: false
 
   /p-cancelable/0.4.1:
@@ -6453,7 +6487,7 @@ packages:
     dependencies:
       '@types/json5': 0.0.29
       json5: 1.0.1
-      minimist: 1.2.6
+      minimist: 1.2.7
       strip-bom: 3.0.0
     dev: true
 
@@ -6462,7 +6496,7 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       json5: 2.2.1
-      minimist: 1.2.6
+      minimist: 1.2.7
       strip-bom: 3.0.0
     dev: true
 
