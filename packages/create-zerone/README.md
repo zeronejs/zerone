@@ -1,6 +1,6 @@
-# @zeronejs/cli
+# create-zerone
 
-![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/cli)
+![npm (scoped)](https://img.shields.io/npm/v/create-zerone)
  
 ## Documentation
 

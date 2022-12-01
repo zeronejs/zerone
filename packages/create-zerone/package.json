@@ -1,7 +1,7 @@
 {
   "name": "create-zerone",
-  "version": "0.0.4",
-  "description": "Zerone Cli",
+  "version": "0.0.5",
+  "description": "Create Zerone",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -19,7 +19,6 @@
   "main": "src/index.js",
   "keywords": [
     "zerone",
-    "cli",
     "zeronejs"
   ],
   "repository": {
