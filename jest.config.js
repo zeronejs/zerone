@@ -5,15 +5,19 @@
 // const { compilerOptions } = require('./tsconfig');
 
 module.exports = {
-	preset: 'ts-jest',
-	testEnvironment: 'node',
-	// moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
-	moduleNameMapper: {
-		'^@zeronejs/ast-(.*)$': '<rootDir>/packages/ast/$1/src',
-		'^@zeronejs/(.*)$': '<rootDir>/packages/$1/src',
-	},
-	testMatch: ['<rootDir>/packages/**/*.(test|spec).ts'],
-	modulePathIgnorePatterns: ['<rootDir>/packages/.*/dist', '<rootDir>/dist'],
-	// 不算入覆盖率的文件夹
-	coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', 'dist'],
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
+    moduleNameMapper: {
+        '^@zeronejs/ast-(.*)$': '<rootDir>/packages/ast/$1/src',
+        '^@zeronejs/(.*)$': '<rootDir>/packages/$1/src',
+    },
+    testMatch: ['<rootDir>/packages/**/*.(test|spec).ts'],
+    modulePathIgnorePatterns: [
+        '<rootDir>/packages/.*/dist',
+        '<rootDir>/dist',
+        '<rootDir>/packages/.*/templates',
+    ],
+    // 不算入覆盖率的文件夹
+    coveragePathIgnorePatterns: ['/node_modules/', '/__tests__/', 'dist', '/templates/'],
 };
