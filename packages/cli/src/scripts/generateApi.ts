@@ -1,5 +1,7 @@
 import { execSync } from 'child_process';
 
-execSync('ts-node  ../bin.ts api', { cwd: __dirname });
+// const value = execSync('ts-node  ../bin.ts api -d -p ./generate/entities', { cwd: __dirname });
+const value = execSync('ts-node  ../bin.ts api -d', { cwd: __dirname });
+// console.log(value.toString());
 // consola 打印信息不会显示
 debugger;

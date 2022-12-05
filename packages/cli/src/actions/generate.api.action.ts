@@ -11,6 +11,7 @@ import { GInterface } from './generateClass/GInterface';
 import { GMockClass } from './generateClass/GMockClass';
 import { escapeVar } from '../utils/generateUtil';
 import { upperFirst } from 'lodash';
+import { isString } from '@zeronejs/utils';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -21,7 +22,12 @@ export interface GenerateApiActionConfig {
 export class GenerateApiAction extends AbstractAction {
     public async handle(options: Input[]) {
         const now = Date.now();
-        const root = process.cwd();
+        let root = process.cwd();
+        const pathOption = options.find(it => it.name === 'path')?.value;
+        const deleteOption = options.find(it => it.name === 'delete')?.value;
+        if (isString(pathOption)) {
+            root = join(root, pathOption);
+        }
         if (!(await pathExists(join(root, 'swagger.config.json')))) {
             return console.info(chalk.red('swagger.config.json 文件不存在！！'));
         }
@@ -39,6 +45,10 @@ export class GenerateApiAction extends AbstractAction {
         console.info(chalk.green(`链接读取成功`));
         const paths = data.paths as { [pathName: string]: Path };
         console.info(chalk.gray('生成文件中...'));
+        if (deleteOption === true) {
+            // 删除已生成的Controller和interface
+            await Promise.all([remove(join(root, 'controller')), remove(join(root, 'interface'))]);
+        }
         // 生成类型文件
         await GInterfaceHandle(data.components.schemas as Schema, root, config);
         // 生成Controller
