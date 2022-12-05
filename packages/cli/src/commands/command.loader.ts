@@ -9,7 +9,7 @@ import {
     // GenerateAstAction,
     GenerateApiAction,
     GenerateNodeAction,
-    GenerateFeAction,
+    // GenerateFeAction,
     // StartAction,
     // UpdateAction,
 } from '../actions';
@@ -20,7 +20,7 @@ import { GenerateCommand } from './generate.command';
 import { GenerateApiCommand } from './generate.api.command';
 import { InfoCommand } from './info.command';
 import { NewCommand } from './new.command';
-import { GenerateFeCommand } from './generate.fe.command';
+// import { GenerateFeCommand } from './generate.fe.command';
 // import { StartCommand } from './start.command';
 // import { UpdateCommand } from './update.command';
 export class CommandLoader {
@@ -35,7 +35,7 @@ export class CommandLoader {
         // new GenerateCommand(new GenerateAstAction()).load(program);
 
         new GenerateApiCommand(new GenerateApiAction()).load(program);
-        new GenerateFeCommand(new GenerateFeAction()).load(program);
+        // new GenerateFeCommand(new GenerateFeAction()).load(program);
 
         this.handleInvalidCommand(program);
     }

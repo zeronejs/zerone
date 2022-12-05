@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { copy, ensureDir, existsSync } from 'fs-extra';
 import * as inquirer from 'inquirer';
-import { download } from 'obtain-git-repo';
+// import { download } from 'obtain-git-repo';
 import ora from 'ora';
 import { join } from 'path';
 import { EMOJIS } from '../ui';
@@ -85,23 +85,24 @@ export class GenerateFeAction extends AbstractAction {
             text: `Installation in progress... ${EMOJIS.COFFEE}`,
         });
         spinner.start();
-        download(
-            'direct:https://github.com/zzh948498/vue-admin-template.git#main',
-            dirname,
-            { clone: true },
-            function (err) {
-                if (err) {
-                    console.log(`output->err`, err);
-                    spinner.warn('下载失败');
-                } else {
-                    spinner.succeed('项目创建成功，请依次执行以下命令');
-                    console.log(chalk.white(`cd ${dirname}`));
-                    console.log(chalk.white('pnpm i'));
-                    console.log(chalk.white('pnpm dev'));
-                    return;
-                }
-            }
-        );
+        // // todo
+        //     download(
+        //         'direct:https://github.com/zzh948498/vue-admin-template.git#main',
+        //         dirname,
+        //         { clone: true },
+        //         function (err) {
+        //             if (err) {
+        //                 console.log(`output->err`, err);
+        //                 spinner.warn('下载失败');
+        //             } else {
+        //                 spinner.succeed('项目创建成功，请依次执行以下命令');
+        //                 console.log(chalk.white(`cd ${dirname}`));
+        //                 console.log(chalk.white('pnpm i'));
+        //                 console.log(chalk.white('pnpm dev'));
+        //                 return;
+        //             }
+        //         }
+        //     );
     }
     private async createMoudle(dirname: string) {
         const dirIsExists = existsSync(dirname);
