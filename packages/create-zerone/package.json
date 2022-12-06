@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "update:temps": "ts-node ./src/scripts/upTemps.ts",
     "build": "zerone build -d",
     "publish:npm": "pnpm build && pnpm publish dist/ --no-git-checks"
   },
