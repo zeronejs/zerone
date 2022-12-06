@@ -6,12 +6,18 @@ const templatesPath = join(__dirname, '../../templates');
 // 临时文件夹地址
 const tempPath = join(__dirname, '../../temp');
 const bootstrap = async () => {
+    // 更新列表
     const downList = [
         {
             url: 'direct:https://codeload.github.com/zzh948498/vue-admin-template/zip/main',
             dirName: 'vue-admin-ts',
         },
+        {
+            url: 'direct:https://codeload.github.com/zzh948498/zerone-nestjs-templates/zip/main',
+            dirName: 'nestjs',
+        },
     ];
+
     try {
         await Promise.all(downList.map(it => downloadGit(it.url, it.dirName)));
     } catch (error) {
