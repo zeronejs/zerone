@@ -10,7 +10,7 @@ export function loginApi(data: LoginApiInput) {
         url: '/mocks/user/login',
         method: 'get',
         params: data,
-    });
+    }).then(data => data.data);
 }
 
 export function getInfo(token: string) {
@@ -18,7 +18,7 @@ export function getInfo(token: string) {
         url: '/mocks/user/info',
         method: 'get',
         params: { token },
-    });
+    }).then(data => data.data);
 }
 
 export function logout(token: string) {
@@ -26,5 +26,5 @@ export function logout(token: string) {
         url: '/mocks/user/logout',
         method: 'get',
         params: { token },
-    });
+    }).then(data => data.data);
 }

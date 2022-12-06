@@ -98,7 +98,7 @@ watch(
                 />
             </el-form-item>
 
-            <el-form-item prop="password" class="mb-3">
+            <el-form-item prop="password" class="mb-3 relative">
                 <span class="svg-container">
                     <svg-icon icon-class="password" />
                 </span>
@@ -242,7 +242,7 @@ $light_gray: #eee;
     .show-pwd {
         position: absolute;
         right: 10px;
-        top: 10px;
+        top: 16px;
         font-size: 16px;
         color: $dark_gray;
         cursor: pointer;
