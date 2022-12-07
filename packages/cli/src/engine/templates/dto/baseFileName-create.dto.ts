@@ -23,8 +23,7 @@ export class ${docEntry.BaseName}CreateDto {${docEntry.properties
     @IsNotEmpty({
         message: '${it.documentation}不能为空',
     })
-    ${it.name}: ${it.type.value};
-                `;
+    ${it.name}: ${it.type.value};`;
             }
             return str;
         }).join('')}
