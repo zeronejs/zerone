@@ -9,17 +9,16 @@ import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 ${docEntry.dotImports.join(`
 `)}
-export class ${docEntry.BaseName}ListWhereDto {
-    ${docEntry.properties
+export class ${docEntry.BaseName}ListWhereDto {${docEntry.properties
         ?.filter(it => !it.isSpecialColumn)
         .map(it => {
             return `
     /**
-     * ${docEntry.documentation}
+     * ${it.documentation}
      */
     @IsOptional()
     ${it.name}?: ${it.type.value};`;
-        })}
+        }).join('')}
 }
 export class ${docEntry.BaseName}ListDto {
     @ValidateNested()

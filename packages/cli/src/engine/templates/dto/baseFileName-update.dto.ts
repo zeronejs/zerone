@@ -7,17 +7,16 @@ export class DtoUpdateStringTemplates extends AbstractStringTemplates {
         return `import { IsOptional } from 'class-validator';
 ${docEntry.dotImports.join(`
 `)}
-export class ${docEntry.BaseName}UpdateDto {
-    ${docEntry.properties
+export class ${docEntry.BaseName}UpdateDto {${docEntry.properties
         ?.filter(it => !it.isSpecialColumn)
         .map(it => {
             return `
     /**
-     * ${docEntry.documentation}
+     * ${it.documentation}
      */
     @IsOptional()
     ${it.name}?: ${it.type.value};`;
-        })}
+        }).join('')}
 }
             
 `;

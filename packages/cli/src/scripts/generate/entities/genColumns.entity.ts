@@ -16,6 +16,17 @@ export enum ColumnsType {
     boolean = 'boolean',
     Date = 'Date',
 }
+export enum ColumnsHTMLType {
+    input = 'input',
+    textarea = 'textarea',
+    select = 'select',
+    radio = 'radio',
+    checkbox = 'checkbox',
+    datetime = 'datetime',
+    imageUpload = 'imageUpload',
+    fileUpload = 'fileUpload',
+    editor = 'editor',
+}
 /**
  * 代码生成字段表
  */
@@ -57,10 +68,7 @@ export class GenColumnsEntity extends BaseEntity {
     /**
      * 枚举类型的值
      */
-    @Column({
-        default: [],
-        array: true,
-    })
+    @Column('simple-array')
     enumValues?: string[];
     /**
      * 插入
@@ -97,6 +105,14 @@ export class GenColumnsEntity extends BaseEntity {
         default: false,
     })
     required: boolean;
+    /**
+     * html类型
+     */
+    @Column({
+        type: 'enum',
+        enum: ColumnsHTMLType,
+    })
+    htmlType: ColumnsHTMLType;
 
     /**
      * 创建时间

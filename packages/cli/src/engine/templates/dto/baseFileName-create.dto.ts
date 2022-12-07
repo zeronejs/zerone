@@ -7,13 +7,12 @@ export class DtoCreateStringTemplates extends AbstractStringTemplates {
         return `import { IsNotEmpty, IsOptional } from 'class-validator';
 ${docEntry.dotImports.join(`
 `)}
-export class ${docEntry.BaseName}CreateDto {
-    ${docEntry.properties
+export class ${docEntry.BaseName}CreateDto {${docEntry.properties
         ?.filter(it => !it.isSpecialColumn)
         .map(it => {
             let str = `
     /**
-     * ${docEntry.documentation}
+     * ${it.documentation}
      */`;
             if (it.isOptional) {
                 str += `
@@ -28,7 +27,7 @@ export class ${docEntry.BaseName}CreateDto {
                 `;
             }
             return str;
-        })}
+        }).join('')}
 }
             
 `;
