@@ -21,7 +21,7 @@ export class ${docEntry.BaseName}CreateDto {${docEntry.properties
             } else {
                 str += `
     @IsNotEmpty({
-        message: '${docEntry.documentation}不能为空',
+        message: '${it.documentation}不能为空',
     })
     ${it.name}: ${it.type.value};
                 `;
