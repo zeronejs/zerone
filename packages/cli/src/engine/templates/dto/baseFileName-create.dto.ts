@@ -27,6 +27,7 @@ export class ${docEntry.BaseName}CreateDto {
     ${it.name}: ${it.type.value};
                 `;
             }
+            return str;
         })}
 }
             
