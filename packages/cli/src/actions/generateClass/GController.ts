@@ -55,6 +55,7 @@ export class GController {
             placeOpenBraceOnNewLineForFunctions: false,
         });
         await sourceProject.save();
+        return { key, tagsItem };
     }
     private genApiFn(fnName: string, prefix = '') {
         if (!this.sourceProject) {
