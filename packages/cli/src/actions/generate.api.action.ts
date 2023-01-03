@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { Input } from '../commands';
 import { AbstractAction } from './abstract.action';
-import { ensureFile, pathExists, readJson, remove } from 'fs-extra';
+import { ensureFile, pathExists, readJson, remove, move } from 'fs-extra';
 import { join } from 'path';
 import { Path, Operation, Schema } from 'swagger-schema-official';
 import { Project } from 'ts-morph';
@@ -25,6 +25,7 @@ export class GenerateApiAction extends AbstractAction {
         let root = process.cwd();
         const pathOption = options.find(it => it.name === 'path')?.value;
         const deleteOption = options.find(it => it.name === 'delete')?.value;
+        const javascriptOption = options.find(it => it.name === 'javascript')?.value;
         if (isString(pathOption)) {
             root = join(root, pathOption);
         }
@@ -32,6 +33,12 @@ export class GenerateApiAction extends AbstractAction {
             return console.info(chalk.red('swagger.config.json 文件不存在！！'));
         }
         const config: GenerateApiActionConfig = await readJson(join(root, 'swagger.config.json'));
+        config.axiosInstanceUrl = config.axiosInstanceUrl ?? '@/utils/request';
+        // js 用axios生成类型
+        const originAxiosInstanceUrl = config.axiosInstanceUrl;
+        if (javascriptOption === true) {
+            config.axiosInstanceUrl = 'axios';
+        }
         if (!config.docsUrl) {
             return console.info(chalk.red('docsUrl 未指定文档路径！'));
         }
@@ -55,7 +62,14 @@ export class GenerateApiAction extends AbstractAction {
         await GControllerHandle(paths, root, config);
         // 生成mock类型文件
         // await GMockClassHandle(data.components.schemas as Schema, root, config);
+        if (javascriptOption === true) {
+            let axiosInstanceUrl: string | undefined;
+            if (originAxiosInstanceUrl !== 'axios') {
+                axiosInstanceUrl = originAxiosInstanceUrl;
+            }
 
+            await GJavascript(root, axiosInstanceUrl);
+        }
         console.info(chalk.green(`生成文件完成`));
         console.info(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
     }
@@ -221,3 +235,40 @@ const GControllerHandle = async (
 //         }
 //     }
 // };
+
+const GJavascript = async (root: string, axiosInstanceUrl?: string) => {
+    const project = new Project({
+        compilerOptions: {
+            target: 99,
+            declaration: true,
+            outDir: join(root, 'dist'),
+            moduleResolution: 2,
+        },
+        // include: ['controller', 'interface'],
+    });
+    project.addSourceFilesAtPaths(root + '/controller/**/*{.d.ts,.ts}');
+    project.addSourceFilesAtPaths(root + '/interface/**/*{.d.ts,.ts}');
+    if (axiosInstanceUrl !== undefined) {
+        const result = project.emitToMemory();
+        // output the emitted files to the console
+        for (const file of result.getFiles()) {
+            if (file.filePath.startsWith(join(root, 'dist', 'controller')) && file.filePath.endsWith('.js')) {
+                file.text = file.text.replace(
+                    `import request from "axios";`,
+                    `import request from "${axiosInstanceUrl}";`
+                );
+            }
+        }
+        // or finally save this result to the underlying file system (or use `saveFilesSync()`)
+        await result.saveFiles();
+    } else {
+        await project.emit(); // async
+    }
+
+    await Promise.all([remove(join(root, 'controller')), remove(join(root, 'interface'))]);
+    await Promise.all([
+        move(join(root, 'dist', 'controller'), join(root, 'controller'), { overwrite: true }),
+        move(join(root, 'dist', 'interface'), join(root, 'interface'), { overwrite: true }),
+    ]);
+    await remove(join(root, 'dist'));
+};

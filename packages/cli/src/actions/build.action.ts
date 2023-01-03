@@ -15,6 +15,7 @@ export class BuildAction extends AbstractAction {
             let root = process.cwd();
             const pathOption = inputOptions.find(it => it.name === 'path')?.value;
             const watch = Boolean(inputOptions.find(it => it.name === 'watch')?.value);
+            const configPathOption = inputOptions.find(it => it.name === 'configPath')?.value as string;
             if (isString(pathOption)) {
                 root = join(root, pathOption);
             }
@@ -31,12 +32,14 @@ export class BuildAction extends AbstractAction {
             if (isBoolean(deleteOption)) {
                 options.delete = deleteOption;
             }
-            const configPath = ts.findConfigFile(
-                // /*searchPath*/ './',
-                /*searchPath*/ options.src,
-                ts.sys.fileExists,
-                'tsconfig.json'
-            );
+            const configPath =
+                configPathOption ||
+                ts.findConfigFile(
+                    // /*searchPath*/ './',
+                    /*searchPath*/ options.src,
+                    ts.sys.fileExists,
+                    'tsconfig.json'
+                );
             if (!configPath) {
                 throw new Error("Could not find a valid 'tsconfig.json'.");
             }
