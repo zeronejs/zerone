@@ -36,6 +36,9 @@ export const getAgeByBirthday = (birthday: Date) => {
  * @returns 格式化后的字符串
  */
 export const dateFormat = (date: Date | number | string, fmt = 'YYYY-mm-dd HH:MM:SS') => {
+    if (!date) {
+        return '';
+    }
     if (!isDate(date)) {
         date = new Date(date);
     }
