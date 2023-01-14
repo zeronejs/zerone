@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth';
 
 // create an axios instance
 const service = axios.create({
-    baseURL: import.meta.env.VUE_APP_BASE_API, // url = base url + request url
+    baseURL: import.meta.env.VITE_APP_BASE_API, // url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests
     timeout: 5000, // request timeout
 });
@@ -21,6 +21,7 @@ service.interceptors.request.use(
             // please modify it according to the actual situation
             if (config.headers) {
                 config.headers['X-Token'] = getToken() ?? '';
+                config.headers.Authorization = `Bearer ${getToken() ?? ''}`;
             }
         }
         return config;
@@ -48,37 +49,36 @@ service.interceptors.response.use(
         const res = response.data;
 
         // if the custom code is not 20000, it is judged as an error.
-        if (res.code !== 20000) {
+        if (res.code !== 200 || (res.code === 200 && res.status !== 0)) {
             ElMessage({
                 message: res.message || 'Error',
                 type: 'error',
                 duration: 5 * 1000,
             });
 
-            // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-            if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-                // to re-login
-                ElMessageBox.confirm(
-                    'You have been logged out, you can cancel to stay on this page, or log in again',
-                    'Confirm logout',
-                    {
-                        confirmButtonText: 'Re-Login',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning',
-                    }
-                ).then(() => {
-                    const userStore = useUserStore();
-                    userStore.resetToken().then(() => {
-                        location.reload();
-                    });
-                });
-            }
             return Promise.reject(new Error(res.message || 'Error'));
         } else {
             return response;
         }
     },
     error => {
+        if (error?.response?.status === 401) {
+            // to re-login
+            ElMessageBox.confirm(
+                'You have been logged out, you can cancel to stay on this page, or log in again',
+                'Confirm logout',
+                {
+                    confirmButtonText: 'Re-Login',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                }
+            ).then(() => {
+                const userStore = useUserStore();
+                userStore.resetToken().then(() => {
+                    location.reload();
+                });
+            });
+        }
         console.log('err' + error); // for debug
         ElMessage({
             message: error.message,

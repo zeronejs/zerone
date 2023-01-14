@@ -6,9 +6,13 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig } from 'vite';
 import path from 'path';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+const pathSrc = path.resolve(__dirname, 'src');
+
 export default ({ command }) => {
     const prodMock = true;
     return defineConfig({
@@ -48,12 +52,32 @@ export default ({ command }) => {
                 // options are passed on to @vue/babel-plugin-jsx
             }),
             AutoImport({
-                resolvers: [ElementPlusResolver()],
+                imports: ['vue'],
+                resolvers: [
+                    ElementPlusResolver(),
+                    // Auto import icon components
+                    // 自动导入图标组件
+                    IconsResolver({
+                        prefix: 'Icon',
+                    }),
+                ],
+                dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
             }),
             Components({
-                // dts: true, // enabled by default if `typescript` is installed
-                resolvers: [ElementPlusResolver()],
-                dts: "src/components.d.ts",
+                resolvers: [
+                    // Auto register icon components
+                    // 自动注册图标组件
+                    IconsResolver({
+                        enabledCollections: ['ep'],
+                    }),
+                    // Auto register Element Plus components
+                    // 自动导入 Element Plus 组件
+                    ElementPlusResolver(),
+                ],
+                dts: path.resolve(pathSrc, 'components.d.ts'),
+            }),
+            Icons({
+                autoInstall: true,
             }),
             // 添加下面插件
             createSvgIconsPlugin({

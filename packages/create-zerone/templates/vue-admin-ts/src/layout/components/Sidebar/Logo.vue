@@ -10,7 +10,7 @@ const title = ref('Vue Admin Template');
 const logo = ref('https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png');
 </script>
 <template>
-    <div class="sidebar-logo-container" :class="{ collapse: collapse }">
+    <div class="sidebar-logo-container" :class="{ sidebarCollapse: collapse }">
         <transition name="sidebarLogoFade">
             <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
                 <img v-if="logo" :src="logo" class="sidebar-logo" />
@@ -67,7 +67,7 @@ const logo = ref('https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef525
         }
     }
 
-    &.collapse {
+    &.sidebarCollapse {
         .sidebar-logo {
             margin-right: 0px;
         }

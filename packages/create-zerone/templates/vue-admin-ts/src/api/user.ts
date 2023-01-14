@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request from 'axios';
 import { hex_md5 as hexMd5 } from 'react-native-md5';
 export interface LoginApiInput {
     username: string;

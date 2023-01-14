@@ -156,11 +156,13 @@ $cursor: #fff;
         height: 49px;
         width: 85%;
         .el-input__wrapper {
+            width: 100%;
             background: $bg;
             box-shadow: none;
             border: none;
             height: 49px;
             input {
+                width: 100%;
                 background: $bg;
                 border: 0px;
                 -webkit-appearance: none;
