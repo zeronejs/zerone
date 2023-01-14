@@ -104,16 +104,5 @@ export default ({ command }) => {
                 '@': path.resolve(__dirname, './src'),
             },
         },
-        build: {
-            rollupOptions: {
-                output: {
-                    manualChunks(id) {
-                        if (id.includes('element-plus/theme')) {
-                            return 'ele';
-                        }
-                    },
-                },
-            },
-        },
     });
 };

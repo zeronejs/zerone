@@ -49,7 +49,12 @@ const handleLogin = () => {
     loginFormRef.value?.validate(async valid => {
         if (valid) {
             loading.value = true;
-            await userStore.login(loginForm);
+            try {
+                await userStore.login(loginForm);
+            } catch (e) {
+                loading.value = false;
+                return;
+            }
             loading.value = false;
             // catch todo
             router.push({ path: redirect.value || '/' });
