@@ -1,0 +1,41 @@
+{
+    "server": {
+        "branch": "master",
+        "args": ["pnpm build:server"],
+        "outDir": "dist"
+    },
+    "pre": {
+        "branch": "master",
+        "args": ["pnpm build:server"],
+        "outDir": "dist",
+        "Bucket": "healthy-zoneyet",
+        "targetDir": "test",
+        "zone": "Zone_z1",
+        "cdn": {
+            "refreshUrls": [
+                "https://healthy.zoneyet.com/test/pc.html",
+                "https://healthy.zoneyet.com/test/index.html"
+            ],
+            "refreshDirs": []
+        },
+        "address": "https://healthy.zoneyet.com/test/index.html"
+    },
+    "prod": {
+        "branch": "master",
+        "args": ["pnpm build:server"],
+        "outDir": "dist",
+        "Bucket": "healthy-zoneyet",
+        "targetDir": "measure",
+        "zone": "Zone_z1",
+        "cdn": {
+            "refreshUrls": [
+                "https://healthy.zoneyet.com/measure/pc.html",
+                "https://healthy.zoneyet.com/measure/index.html"
+            ],
+            "refreshDirs": []
+        },
+        "address": "https://healthy.zoneyet.com/measure/index.html"
+    },
+    
+    "type": "zoneyet-ai"
+}

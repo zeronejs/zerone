@@ -75,6 +75,18 @@ const FRAMEWORKS: Framework[] = [
         ],
     },
     {
+        name: 'html',
+        display: 'Html',
+        color: yellow,
+        variants: [
+            {
+                name: 'html-parcel-ts',
+                display: 'parcel-ts',
+                color: blue,
+            },
+        ],
+    },
+    {
         name: 'nestjs',
         display: 'Nestjs',
         color: cyan,

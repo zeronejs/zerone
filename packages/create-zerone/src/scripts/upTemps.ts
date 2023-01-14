@@ -13,6 +13,10 @@ const bootstrap = async () => {
             dirName: 'vue-admin-ts',
         },
         {
+            url: 'direct:https://codeload.github.com/zzh948498/parcel-html-template/zip/main',
+            dirName: 'html-parcel-ts',
+        },
+        {
             url: 'direct:https://codeload.github.com/zzh948498/zerone-nestjs-templates/zip/main',
             dirName: 'nestjs',
         },
