@@ -1,15 +1,14 @@
-import Cookies from 'js-cookie';
-
+import { vueLocalStorage } from './vueLocalStroge';
 const TokenKey = 'vue_admin_template_token';
 
 export function getToken() {
-    return Cookies.get(TokenKey);
+    return vueLocalStorage.getItem(TokenKey);
 }
 
 export function setToken(token: string) {
-    return Cookies.set(TokenKey, token);
+    return vueLocalStorage.setItem(TokenKey, token);
 }
 
 export function removeToken() {
-    return Cookies.remove(TokenKey);
+    return vueLocalStorage.removeItem(TokenKey);
 }

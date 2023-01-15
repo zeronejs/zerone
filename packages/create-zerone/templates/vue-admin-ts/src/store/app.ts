@@ -1,8 +1,8 @@
-import Cookies from 'js-cookie';
 import { defineStore } from 'pinia';
+import { vueLocalStorage } from '@/utils/vueLocalStroge';
 const state = {
     sidebar: {
-        opened: Boolean(Cookies.get('sidebarStatus')),
+        opened: Boolean(vueLocalStorage.getItem('sidebarStatus')),
         withoutAnimation: false,
     },
     device: 'desktop',
@@ -20,13 +20,13 @@ export const useAppStore = defineStore({
             this.sidebar.opened = !this.sidebar.opened;
             this.sidebar.withoutAnimation = false;
             if (this.sidebar.opened) {
-                Cookies.set('sidebarStatus', '1');
+                vueLocalStorage.setItem('sidebarStatus', true);
             } else {
-                Cookies.set('sidebarStatus', '0');
+                vueLocalStorage.setItem('sidebarStatus', false);
             }
         },
         closeSideBar({ withoutAnimation }: { withoutAnimation: AppState['sidebar']['withoutAnimation'] }) {
-            Cookies.set('sidebarStatus', '0');
+            vueLocalStorage.setItem('sidebarStatus', false);
             this.sidebar.opened = false;
             this.sidebar.withoutAnimation = withoutAnimation;
         },
