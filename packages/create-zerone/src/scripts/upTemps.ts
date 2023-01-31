@@ -1,6 +1,6 @@
 import { download } from 'obtain-git-repo';
 import { join } from 'path';
-import { remove, copy } from 'fs-extra';
+import { remove, copy, pathExists } from 'fs-extra';
 // 模板文件夹地址
 const templatesPath = join(__dirname, '../../templates');
 // 临时文件夹地址
@@ -29,6 +29,12 @@ const bootstrap = async () => {
     }
     await Promise.all(downList.map(it => remove(join(templatesPath, it.dirName))));
     await copy(join(tempPath, 'templates'), templatesPath);
+    for (const item of downList) {
+        const gitignore = join(tempPath, 'templates', item.dirName, '.gitignore');
+        if (await pathExists(gitignore)) {
+            copy(gitignore, join(templatesPath, item.dirName, '_gitignore'));
+        }
+    }
     await remove(tempPath);
 };
 const downloadGit = async (gitUrl: string, dirName: string) => {
