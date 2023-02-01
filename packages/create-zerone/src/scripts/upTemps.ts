@@ -29,10 +29,16 @@ const bootstrap = async () => {
     }
     await Promise.all(downList.map(it => remove(join(templatesPath, it.dirName))));
     await copy(join(tempPath, 'templates'), templatesPath);
+    const renameFiles = [
+        { name: '.gitignore', rename: '_gitignore' },
+        { name: '.npmrc', rename: '_npmrc' },
+    ];
     for (const item of downList) {
-        const gitignore = join(tempPath, 'templates', item.dirName, '.gitignore');
-        if (await pathExists(gitignore)) {
-            copy(gitignore, join(templatesPath, item.dirName, '_gitignore'));
+        for (const renameFile of renameFiles) {
+            const gitignore = join(tempPath, 'templates', item.dirName, renameFile.name);
+            if (await pathExists(gitignore)) {
+                copy(gitignore, join(templatesPath, item.dirName, renameFile.rename));
+            }
         }
     }
     await remove(tempPath);

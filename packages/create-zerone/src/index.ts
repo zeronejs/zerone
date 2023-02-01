@@ -182,6 +182,7 @@ const TEMPLATES = FRAMEWORKS.map(f => (f.variants && f.variants.map(v => v.name)
 
 const renameFiles: Record<string, string | undefined> = {
     _gitignore: '.gitignore',
+    _npmrc: '.npmrc',
 };
 
 const defaultTargetDir = 'zerone-project';
