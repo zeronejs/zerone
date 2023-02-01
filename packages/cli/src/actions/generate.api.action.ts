@@ -8,7 +8,6 @@ import { Project } from 'ts-morph';
 import axios from 'axios';
 import { GController } from './generateClass/GController';
 import { GInterface } from './generateClass/GInterface';
-import { GMockClass } from './generateClass/GMockClass';
 import { escapeVar } from '../utils/generateUtil';
 import { groupBy, upperFirst } from 'lodash';
 import { isString } from '@zeronejs/utils';
@@ -179,62 +178,6 @@ const GControllerHandle = async (
     );
     await indexSourceProject.save();
 };
-// // todo  生成mock
-// const GMockClassHandle = async (inputSchemas: Schema, root: string, config: GenerateApiActionConfig) => {
-//     // 类型可能重复  暂时先用一个文件
-//     const schemas = Object.keys(inputSchemas);
-//     const indexUrl = join(root, 'mocks', 'index.ts');
-//     await remove(indexUrl);
-//     await ensureFile(indexUrl);
-//     const indexProject = new Project();
-//     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
-//     for (let key of schemas) {
-//         const element: Schema = Reflect.get(inputSchemas, key);
-//         key = escapeVar(upperFirst(config.prefix) + key);
-//         const typeFileUrl = join(root, 'mocks', 'apiMocks', key + '.ts');
-//         await remove(typeFileUrl);
-//         await ensureFile(typeFileUrl);
-//         const project = new Project();
-//         const sourceProject = project.addSourceFileAtPath(typeFileUrl);
-//         try {
-//             new GMockClass(element, sourceProject, key).genTsType(config.prefix);
-//             await sourceProject.save();
-//         } catch (error) {
-//             console.log({ error });
-//         }
-//     }
-
-//     indexSourceProject.addExportDeclarations(
-//         schemas.map(key => ({ moduleSpecifier: `./apiMocks/${escapeVar(upperFirst(config.prefix) + key)}` }))
-//     );
-//     await indexSourceProject.save();
-// };
-// // 生成Controller
-// const GMockHandle = async (
-//     paths: { [pathName: string]: Path },
-//     root: string,
-//     config: GenerateApiActionConfig
-// ) => {
-//     for (const pathKey of Object.keys(paths)) {
-//         for (const methodKey of Object.keys(paths[pathKey])) {
-//             // 仅支持这些method
-//             if (!supportMethodKeys.includes(methodKey)) {
-//                 console.log('method不支持：', pathKey);
-//                 continue;
-//             }
-//             const operation: Operation = (paths[pathKey] as any)[methodKey];
-//             try {
-//                 await new GController(
-//                     operation,
-//                     methodKey,
-//                     config.prefix ? `/mocks/${config.prefix}${pathKey}` : pathKey
-//                 ).genController(join(root, 'mocks'), config);
-//             } catch (err) {
-//                 console.log({ err });
-//             }
-//         }
-//     }
-// };
 
 const GJavascript = async (root: string, axiosInstanceUrl?: string) => {
     const project = new Project({
