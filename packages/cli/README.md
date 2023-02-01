@@ -4,7 +4,7 @@
  
 ## Documentation
 
-visit [zerone.top](https://zerone.top).
+visit [zerone.top](https://zerone.top/guide/cli.html).
 
 ## License
 
