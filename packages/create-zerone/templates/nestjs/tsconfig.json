@@ -12,6 +12,10 @@
     "baseUrl": ".",
     "incremental": true,
     "skipLibCheck": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
     "paths": {
       "@common/*": ["src/common/*"],
       "@api/*": ["src/api/*"],
