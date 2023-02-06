@@ -1,5 +1,6 @@
 import { BodyIdsDto } from '@common/BodyIds.dto';
 import { RDto, RListDto } from '@common/Result.dto';
+import { getIPAdresses } from '@common/utils';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -25,15 +26,23 @@ async function bootstrap() {
             whitelist: true,
         })
     );
-    await app.listen(
-        process.env.SERVICE_PORT ?? 5000,
-        process.env.SERVICE_HOSTNAME ?? '0.0.0.0',
-        async () => {
-            const url = await app.getUrl();
-            console.log(`⭐️ Application Starting on: ${url}`);
-            console.log(`⭐️ Swagger API Starting on: ${url}/docs`);
-            console.log(`⭐️ Admin view  Starting on: ${url}/admin`);
+    const port = process.env.SERVICE_PORT ?? 5000;
+    const host = process.env.SERVICE_HOSTNAME ?? '0.0.0.0';
+    await app.listen(port, host, async () => {
+        const url = await app.getUrl();
+        const ipAdresses = getIPAdresses();
+        console.log(` > Local:`);
+        console.log(`           ⭐️ Application Starting on: ${url}`);
+        console.log(`           ⭐️ Swagger API Starting on: ${url}/docs`);
+        console.log(`           ⭐️ Admin view  Starting on: ${url}/admin`);
+        if (ipAdresses.length) {
+            console.log(` > Network:`);
         }
-    );
+        for (const ipAdress of ipAdresses) {
+            console.log(`           ⭐️ Application Starting on: http://${ipAdress}:${port}`);
+            console.log(`           ⭐️ Swagger API Starting on: http://${ipAdress}:${port}/docs`);
+            console.log(`           ⭐️ Admin view  Starting on: http://${ipAdress}:${port}/admin`);
+        }
+    });
 }
 bootstrap();
