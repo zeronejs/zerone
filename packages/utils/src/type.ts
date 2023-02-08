@@ -91,6 +91,15 @@ type LastInUnion<U> = UnionToIntersection<U extends unknown ? (x: U) => 0 : neve
 type UnionToTuple<U, Last = LastInUnion<U>> = [U] extends [never]
     ? []
     : [...UnionToTuple<Exclude<U, Last>>, Last];
+
+export type NonReadonly<T> = {
+    -readonly [P in keyof T]: T[P];
+};
+/**
+ * type Arr = ['1', '2', '3']
+ * type Test = TupleToUnion<Arr> // expected to be '1' | '2' | '3'
+ */
+export type TupleToUnion<T extends any[]> = T extends Array<infer K> ? K : never;
 /**
  * class
  */
