@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.json",
+    "include": ["src", "index.ts",],
+    "compilerOptions": {
+        "target": "ES2018",
+        "rootDir": "./",
+        "outDir": "./dist/mjs/" /* Redirect output structure to the directory. */,
+        "module": "ESNext",
+        "lib": ["ESNext", "DOM"],
+        "moduleResolution":"node"
+    }
+}
