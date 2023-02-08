@@ -16,8 +16,12 @@ export class BuildAction extends AbstractAction {
             const pathOption = inputOptions.find(it => it.name === 'path')?.value;
             const watch = Boolean(inputOptions.find(it => it.name === 'watch')?.value);
             const configPathOption = inputOptions.find(it => it.name === 'configPath')?.value as string;
+            let configPathUrl: string | undefined;
             if (isString(pathOption)) {
                 root = join(root, pathOption);
+            }
+            if (isString(configPathOption)) {
+                configPathUrl = join(root, configPathOption);
             }
             const options = {
                 tsconfig: join(root, 'tsconfig.json'),
@@ -33,7 +37,7 @@ export class BuildAction extends AbstractAction {
                 options.delete = deleteOption;
             }
             const configPath =
-                configPathOption ||
+                configPathUrl ||
                 ts.findConfigFile(
                     // /*searchPath*/ './',
                     /*searchPath*/ options.src,

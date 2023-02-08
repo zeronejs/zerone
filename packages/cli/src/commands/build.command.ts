@@ -8,6 +8,7 @@ export class BuildCommand extends AbstractCommand {
             .command('build')
             // .alias('b')
             .option('-p, --path <path>', 'Specify the path of the folder where "tsconfig.json" is located.')
+            .option('-configPath, --configPath <path>', '')
             .option('-d, --delete', 'Delete files specified by "outDir".')
             .option('--watch', 'Enforce watch files generation.', true)
             .option('--no-watch', 'Disable watch files generation.')
@@ -18,6 +19,7 @@ export class BuildCommand extends AbstractCommand {
                 options.push({ name: 'path', value: command.path });
                 options.push({ name: 'delete', value: command.delete });
                 options.push({ name: 'watch', value: command.watch });
+                options.push({ name: 'configPath', value: command.configPath });
 
                 await this.action.handle(options);
             });
