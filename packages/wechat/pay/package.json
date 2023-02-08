@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/wechat-pay",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Zerone Wechat Pay",
   "engines": {
     "node": ">=12.0.0"
@@ -26,7 +26,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@zeronejs/utils": "workspace:^1.1.6",
+    "@zeronejs/utils": "workspace:^2.0.0",
     "jsrsasign": "^10.5.1"
   },
   "devDependencies": {
