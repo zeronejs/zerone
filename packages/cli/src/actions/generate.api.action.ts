@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { Input } from '../commands';
 import { AbstractAction } from './abstract.action';
 import { ensureFile, pathExists, readJson, remove, move } from 'fs-extra';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { Path, Operation, Schema } from 'swagger-schema-official';
 import { Project } from 'ts-morph';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import { GInterface } from './generateClass/GInterface';
 import { escapeVar } from '../utils/generateUtil';
 import { groupBy, upperFirst } from 'lodash';
 import { isString } from '@zeronejs/utils';
+import url from 'node:url';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -42,9 +43,24 @@ export class GenerateApiAction extends AbstractAction {
             return console.info(chalk.red('docsUrl 未指定文档路径！'));
         }
         console.info(chalk.gray('读取json链接中...'));
-        const { data } = await axios.get(config.docsUrl).catch(err => {
-            throw console.info(chalk.red('json链接读取失败 ！！！'));
-        });
+        const parsedUrl = url.parse(config.docsUrl);
+        let data: any;
+        // http文档地址
+        if (parsedUrl.protocol && parsedUrl.host) {
+            const res = await axios.get(config.docsUrl).catch(err => {
+                throw console.info(chalk.red('json链接读取失败 ！！！'));
+            });
+            data = res.data;
+        } else {
+            // 本地json地址
+            try {
+                data = await readJson(resolve(root, config.docsUrl));
+            } catch (e) {
+                console.log(e);
+                return console.info(chalk.red('json链接读取失败！！！'));
+            }
+        }
+
         if (!data || !data.paths) {
             return console.info(chalk.red('json链接读取失败！！！'));
         }
