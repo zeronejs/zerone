@@ -16,7 +16,7 @@ specifiers:
   '@vue/vue3-jest': ^28.1.0
   '@vueuse/core': ^9.10.0
   '@zeronejs/cli': ^2.6.0
-  '@zeronejs/utils': ^1.4.2
+  '@zeronejs/utils': ^2.0.0
   autoprefixer: ^10.4.13
   axios: ^1.2.2
   core-js: ^3.27.1
@@ -57,7 +57,7 @@ dependencies:
   '@element-plus/icons-vue': 2.0.10_vue@3.2.45
   '@vueuse/core': 9.10.0_vue@3.2.45
   '@zeronejs/cli': 2.6.0
-  '@zeronejs/utils': 1.4.2
+  '@zeronejs/utils': 2.0.0
   axios: 1.2.2
   core-js: 3.27.1
   date-fns: 2.29.3
@@ -2597,6 +2597,11 @@ packages:
 
   /@zeronejs/utils/1.4.2:
     resolution: {integrity: sha512-t1DI2qpJODF3DQnKrdNVXQCFYSpFwomqIwHRKbcm/nx7EnBlop5lXd202bo6b+DagnQcLDqAT94Q6BgiRHwznQ==}
+    engines: {node: '>=12.0.0'}
+    dev: false
+
+  /@zeronejs/utils/2.0.0:
+    resolution: {integrity: sha512-+bzMaVKd2rM5AX743jbgih5fHcldVBXvuj2Pt1RkKW3JtQ0b4AAVyQ/arUFZDzm67dFL39K2RLuCmWKpjnyYzg==}
     engines: {node: '>=12.0.0'}
     dev: false
 

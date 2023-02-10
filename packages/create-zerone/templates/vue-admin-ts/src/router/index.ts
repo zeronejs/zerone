@@ -31,6 +31,7 @@ declare module 'vue-router' {
         title?: string;
         icon?: string;
         elSvgIcon?: string;
+        activeMenu?: string;
     }
 }
 export const constantRoutes: RouteRecordRaw[] = [

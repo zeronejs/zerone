@@ -20,7 +20,7 @@
     "@element-plus/icons-vue": "^2.0.10",
     "@vueuse/core": "^9.10.0",
     "@zeronejs/cli": "^2.6.0",
-    "@zeronejs/utils": "^1.4.2",
+    "@zeronejs/utils": "^2.0.0",
     "axios": "^1.2.2",
     "core-js": "^3.27.1",
     "date-fns": "^2.29.3",
