@@ -14,14 +14,14 @@ export class LogAction extends AbstractAction {
             const user = execSync('git config user.name').toString().trim();
             const email = execSync('git config user.email').toString().trim();
             if (!sinceOption) {
-                sinceOption = dateFormat(new Date(), 'YYYY-mm-dd');
+                sinceOption = dateFormat(new Date(), 'YYYY-mm-dd') + ' 00:00:00';
             }
             // const res = execSync(
             //     `git log --author=${user} --pretty=format:"SHA-1:%h - 创建人:%an 时间:%ad 提交信息:%s" --date=format:"%y-%m-%d %H:%M:%S" --since=3.weeks`
             // );
             const res = execSync(
-                `git log --author=${email} --all --no-merges  --pretty=format:"%s"  --since=${sinceOption} ${
-                    untilOption ? '--since=' + untilOption : ''
+                `git log --author=${email} --all --no-merges  --pretty=format:"%s"  --since="${sinceOption}" ${
+                    untilOption ? '--since="' + untilOption + '"' : ''
                 }`,
                 { cwd: root }
             );
