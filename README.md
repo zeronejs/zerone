@@ -1,6 +1,6 @@
 # zerone
 
-![GitHub Workflow Status](https://github.com/zeronejs/zerone/actions/workflows/node.js.yml/badge.svg)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zeronejs/zerone/node.js.yml)
 ![GitHub](https://img.shields.io/github/license/zeronejs/zerone)
 [![Node.js CI](https://github.com/zeronejs/zerone/actions/workflows/node.js.yml/badge.svg)](https://github.com/zeronejs/zerone/actions/workflows/node.js.yml)
 
