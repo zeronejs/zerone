@@ -50,6 +50,7 @@ export const dateFormat = (date: Date | number | string, fmt = 'YYYY-mm-dd HH:MM
         'H+': date.getHours().toString(), // 时
         'M+': date.getMinutes().toString(), // 分
         'S+': date.getSeconds().toString(), // 秒
+        's+': date.getMilliseconds().toString(), // 毫秒
         // 有其他格式化字符需求可以继续添加，必须转化成字符串
     };
     for (const k in opt) {
