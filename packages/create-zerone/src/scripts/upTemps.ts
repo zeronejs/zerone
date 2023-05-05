@@ -20,6 +20,10 @@ const bootstrap = async () => {
             url: 'direct:https://codeload.github.com/zzh948498/zerone-nestjs-templates/zip/main',
             dirName: 'nestjs',
         },
+        {
+            url: 'direct:https://codeload.github.com/zzh948498/vue3-ts-tailwind-template/zip/main',
+            dirName: 'vue-tailwind-ts',
+        },
     ];
 
     try {
@@ -37,7 +41,7 @@ const bootstrap = async () => {
         for (const renameFile of renameFiles) {
             const gitignore = join(tempPath, 'templates', item.dirName, renameFile.name);
             if (await pathExists(gitignore)) {
-                copy(gitignore, join(templatesPath, item.dirName, renameFile.rename));
+                await copy(gitignore, join(templatesPath, item.dirName, renameFile.rename));
             }
         }
     }

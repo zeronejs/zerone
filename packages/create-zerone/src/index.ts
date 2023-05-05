@@ -58,6 +58,11 @@ const FRAMEWORKS: Framework[] = [
             //     color: yellow,
             // },
             {
+                name: 'vue-tailwind-ts',
+                display: 'tailwind-ts',
+                color: green,
+            },
+            {
                 name: 'vue-admin-ts',
                 display: 'admin-ts',
                 color: blue,
