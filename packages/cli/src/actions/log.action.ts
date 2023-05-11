@@ -21,7 +21,7 @@ export class LogAction extends AbstractAction {
             // );
             const res = execSync(
                 `git log --author=${email} --all --no-merges  --pretty=format:"%s"  --since="${sinceOption}" ${
-                    untilOption ? '--since="' + untilOption + '"' : ''
+                    untilOption ? '--until="' + untilOption + '"' : ''
                 }`,
                 { cwd: root }
             );
