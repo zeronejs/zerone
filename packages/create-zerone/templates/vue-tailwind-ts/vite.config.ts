@@ -6,7 +6,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-// import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 const pathSrc = path.resolve(__dirname, 'src');
 
 // https://vitejs.dev/config/
@@ -58,20 +58,32 @@ export default defineConfig(({ mode, command }) => {
       Icons({
         autoInstall: true,
       }),
-      // createSvgIconsPlugin({
-      //   iconDirs: [path.resolve(process.cwd(), 'src/assets/icons/svg')],
-      //   symbolId: 'icon-[dir]-[name]',
-      //   svgoOptions: isBuild,
-      // }),
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons/svg')],
+        symbolId: 'icon-[dir]-[name]',
+        svgoOptions: isBuild,
+      }),
     ],
     server: {
       host: '0.0.0.0',
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         '/shop-api': {
-          target: 'http://www.shopadmin.com',
+          target: 'http://192.168.4.125:10086/gstore/',
           changeOrigin: true,
           rewrite: p => p.replace(/^\/shop-api/, ''),
+        },
+      },
+    },
+    preview: {
+      host: '0.0.0.0',
+      port: 6061,
+      proxy: {
+        // https://cn.vitejs.dev/config/#server-proxy
+        '/test-api': {
+          target: 'http://192.168.4.125:10086/gstore/',
+          changeOrigin: true,
+          rewrite: p => p.replace(/^\/test-api/, ''),
         },
       },
     },

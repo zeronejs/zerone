@@ -1,9 +1,15 @@
 <template>
-  <main>
+  <main class="text-center">
     <!-- tailwindcss -->
     <h1 class="text-3xl font-bold underline">Hello world!</h1>
-    <!-- icon -->
-    <el-icon><CirclePlus /></el-icon>
+    <!-- svg icon -->
+    <div>
+      svg icon <el-icon><SvgIcon icon-class="jump" /></el-icon>
+    </div>
+    <!-- element icon -->
+    <div>
+      element icon <el-icon><CirclePlus /></el-icon>
+    </div>
     <!-- element-plus -->
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="date" label="Date" width="180" />
