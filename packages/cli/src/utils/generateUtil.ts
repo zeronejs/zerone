@@ -1,6 +1,17 @@
 import pinyin from 'pinyin';
 import { camelCase, upperFirst } from 'lodash';
+export function hasChinese(str: string) {
+    const reg = /[\u4e00-\u9fa5]/g; // 中文字符的 Unicode 范围
+    return reg.test(str);
+}
 
+// swagger中tags的中文换成拼音
+export const tagsChineseToPinyin = (str: string) => {
+    if (!hasChinese(str)) {
+        return str;
+    }
+    return chineseToPinyin(str);
+};
 // 我们针对的是ts interface，所以首字母大写
 export const chineseToPinyin = (str: string) => {
     const arr: string[][] = pinyin(str, { style: pinyin.STYLE_NORMAL });

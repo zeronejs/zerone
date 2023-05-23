@@ -3,7 +3,11 @@ import { camelCase, upperFirst } from 'lodash';
 import { join } from 'path';
 import { Operation, Schema, Parameter, Reference } from 'swagger-schema-official';
 import { Project, SourceFile } from 'ts-morph';
-import { parseSwaggerPathTemplate, parseSwaggerPathTemplateToFnName } from '../../utils/generateUtil';
+import {
+    tagsChineseToPinyin,
+    parseSwaggerPathTemplate,
+    parseSwaggerPathTemplateToFnName,
+} from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
 
@@ -41,9 +45,9 @@ export class GController {
         if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
             return;
         }
-        this.tagsItem = tagsItem;
+        this.tagsItem = tagsChineseToPinyin(tagsItem);
         const key = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
-        const sourceFilePath = join(controllerUrl, tagsItem, `${key}.ts`);
+        const sourceFilePath = join(controllerUrl, this.tagsItem, `${key}.ts`);
         await remove(sourceFilePath);
         await ensureFile(sourceFilePath);
         const project = new Project();
@@ -57,7 +61,7 @@ export class GController {
             placeOpenBraceOnNewLineForFunctions: false,
         });
         await sourceProject.save();
-        return { key, tagsItem };
+        return { key, tagsItem: this.tagsItem };
     }
     private genApiFn(fnName: string, prefix = '') {
         if (!this.sourceProject) {
