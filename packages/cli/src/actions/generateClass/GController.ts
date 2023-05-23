@@ -13,7 +13,8 @@ export class GController {
     private methodKey: string;
     // 请求路由
     private pathKey: string;
-
+    // tags名称
+    private tagsItem = 'default';
     private sourceProject?: SourceFile;
     constructor(operation: Operation, methodKey: string, pathKey: string) {
         this.operation = operation;
@@ -40,6 +41,7 @@ export class GController {
         if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
             return;
         }
+        this.tagsItem = tagsItem;
         const key = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
         const sourceFilePath = join(controllerUrl, tagsItem, `${key}.ts`);
         await remove(sourceFilePath);
@@ -80,8 +82,14 @@ export class GController {
             //     });
             // }
         }
+        let interfacePre = '';
+        // 获取当前tags嵌套深度
+        if (this.tagsItem.includes('/')) {
+            const count = (this.tagsItem.match(/\//g) || []).length;
+            interfacePre = Array(count).fill('../').join('');
+        }
         const DeepRequiredKey = 'DeepRequired';
-        let importDeclaration = sourceProject.getImportDeclaration('../../interface');
+        let importDeclaration = sourceProject.getImportDeclaration(interfacePre + '../../interface');
         if (importDeclaration) {
             const names = importDeclaration.getNamedImports().map(it => it.getName());
             if (!names.includes(DeepRequiredKey)) {
@@ -89,7 +97,7 @@ export class GController {
             }
         } else {
             importDeclaration = sourceProject.addImportDeclaration({
-                moduleSpecifier: '../../interface',
+                moduleSpecifier: interfacePre + '../../interface',
             });
             importDeclaration.addNamedImport(DeepRequiredKey);
         }
@@ -134,7 +142,11 @@ export class GController {
                             if (!(param as any).schema) {
                                 throw new Error(this.pathKey + ',请确保此接口参数有类型');
                             }
-                            if (param.name.includes('-') || param.name.includes('.')) {
+                            if (
+                                param.name.includes('[') ||
+                                param.name.includes('-') ||
+                                param.name.includes('.')
+                            ) {
                                 const paramSchema = (param as any).schema;
                                 if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
                                     return writer.writeLine(`...params['${param.name}'],`);
@@ -187,7 +199,9 @@ export class GController {
                         paramsTypeName + upperFirst(param.name)
                     ).getTsType((param as any).schema, '', prefix);
                     const paramName =
-                        param.name.includes('-') || param.name.includes('.') ? `'${param.name}'` : param.name;
+                        param.name.includes('[') || param.name.includes('-') || param.name.includes('.')
+                            ? `'${param.name}'`
+                            : param.name;
                     const propertyDeclaration = interfaceDeclaration.addProperty({
                         name: paramName,
                         type: paramType,

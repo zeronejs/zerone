@@ -13,6 +13,9 @@ export class GInterface {
     }
 
     private genObjectType(prefix = '', extendsName?: string) {
+        if (!this.keyName) {
+            return;
+        }
         let interfaceDeclaration = this.sourceFile.getInterface(this.keyName);
         if (!interfaceDeclaration) {
             interfaceDeclaration = this.sourceFile.addInterface({
@@ -41,7 +44,8 @@ export class GInterface {
         }
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
-                const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                const inputKey =
+                    key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
                 // 普通属性
                 return {
                     key,
@@ -66,7 +70,7 @@ export class GInterface {
                 returnType: 'any',
             });
             // const addPropertiesInput = Object.keys(additionalProperties).map(key => {
-            //     const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+            //     const inputKey = key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
             //     interfaceDeclaration.addIndexSignature({
             //         keyName: 'key', // defaults to key
             //         keyType: 'string', // defaults to string
@@ -118,7 +122,8 @@ export class GInterface {
                 const item = subSchema.allOf[index];
                 for (const key in item.properties) {
                     const value = item.properties[key];
-                    const inputKey = key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                    const inputKey =
+                        key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
                     // 普通属性
                     moduleInterface?.addProperty({
                         // key,
@@ -134,6 +139,9 @@ export class GInterface {
             case 'string':
                 if (subSchema.enum && subSchema.enum.length) {
                     return subSchema.enum.map(it => `'${it}'`).join(' | ');
+                }
+                if (subSchema.format === 'binary') {
+                    return 'File';
                 }
                 return 'string';
             case 'number':
@@ -170,6 +178,9 @@ export class GInterface {
                 return 'File';
 
             default:
+                if (Array.isArray(subSchema.type)) {
+                    return 'any';
+                }
                 if (subSchema.type) {
                     return subSchema.type;
                 }

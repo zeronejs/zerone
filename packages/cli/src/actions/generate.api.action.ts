@@ -101,6 +101,9 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     for (let key of schemas) {
         const element: Schema = Reflect.get(inputSchemas, key);
         key = escapeVar(upperFirst(config.prefix) + key);
+        if (!key) {
+            continue;
+        }
         const typeFileUrl = join(root, 'interface', 'apiTypes', key + '.ts');
         await remove(typeFileUrl);
         await ensureFile(typeFileUrl);
@@ -115,7 +118,15 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     }
 
     indexSourceProject.addExportDeclarations(
-        schemas.map(key => ({ moduleSpecifier: `./apiTypes/${escapeVar(upperFirst(config.prefix) + key)}` }))
+        schemas
+            .map(key => {
+                const inputKey = escapeVar(upperFirst(config.prefix) + key);
+                if (!inputKey) {
+                    return { moduleSpecifier: '' };
+                }
+                return { moduleSpecifier: `./apiTypes/${inputKey}` };
+            })
+            .filter(it => it.moduleSpecifier)
     );
     // 生成 Primitive
     const PrimitiveDeclaration = indexSourceProject.addTypeAlias({
