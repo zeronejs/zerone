@@ -1,5 +1,6 @@
 import { ensureFile, remove } from 'fs-extra';
 import { camelCase, upperFirst } from 'lodash';
+import url from 'url';
 import { join } from 'path';
 import { Operation, Schema, Parameter, Reference } from 'swagger-schema-official';
 import { Project, SourceFile } from 'ts-morph';
@@ -114,11 +115,17 @@ export class GController {
             name: fnName,
         });
         const requestBodySchema = this.getRequestBodySchema();
+        // 请求路径
+        const requestUrl = parseSwaggerPathTemplate(this.pathKey);
         functionDeclaration.setBodyText(
-            `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
-                this.pathKey
-            )}\`${requestBodySchema ? ',input' : ''});`
+            `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${requestUrl}\`${
+                requestBodySchema ? ',input' : ''
+            });`
         );
+        const parsedUrl = url.parse(requestUrl, true);
+        // 在链接中已存在的query
+        const existedQueryKeys = Object.keys(parsedUrl.query);
+
         functionDeclaration.setIsExported(true);
         // 处理链接上的参数
         if (this.operation.parameters && this.operation.parameters.length) {
@@ -141,6 +148,9 @@ export class GController {
                         writer.writeLine(`const paramsInput = {`);
                         parameters.map(param => {
                             if (param.in !== 'query') {
+                                return;
+                            }
+                            if (existedQueryKeys.includes(param.name)) {
                                 return;
                             }
                             if (!(param as any).schema) {
@@ -197,6 +207,9 @@ export class GController {
                 }
 
                 parameters.map(param => {
+                    if (param.in === 'query' && existedQueryKeys.includes(param.name)) {
+                        return;
+                    }
                     const paramType = new GInterface(
                         (param as any).schema,
                         sourceProject,
