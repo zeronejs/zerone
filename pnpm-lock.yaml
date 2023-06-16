@@ -166,8 +166,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       fs-extra:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.1.1
+        version: 11.1.1
       handlebars:
         specifier: ^4.7.7
         version: 4.7.7
@@ -197,8 +197,8 @@ importers:
         version: 4.5.5
     devDependencies:
       '@types/fs-extra':
-        specifier: ^9.0.13
-        version: 9.0.13
+        specifier: ^11.0.1
+        version: 11.0.1
       '@types/gulp':
         specifier: ^4.0.9
         version: 4.0.9
@@ -243,8 +243,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       '@types/fs-extra':
-        specifier: ^9.0.13
-        version: 9.0.13
+        specifier: ^11.0.1
+        version: 11.0.1
       '@types/minimist':
         specifier: ^1.2.2
         version: 1.2.2
@@ -252,8 +252,8 @@ importers:
         specifier: ^2.4.4
         version: 2.4.4
       fs-extra:
-        specifier: ^10.0.0
-        version: 10.0.0
+        specifier: ^11.1.1
+        version: 11.1.1
       obtain-git-repo:
         specifier: ^1.0.2
         version: 1.0.2
@@ -1323,9 +1323,10 @@ packages:
       '@types/serve-static': 1.15.1
     dev: true
 
-  /@types/fs-extra@9.0.13:
-    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+  /@types/fs-extra@11.0.1:
+    resolution: {integrity: sha512-MxObHvNl4A69ofaTRU8DFqvgzzv8s9yRtaPPm5gud9HDNvpB3GPQFvNuTWAI59B9huVGV5jXYJwbCsmBsOGYWA==}
     dependencies:
+      '@types/jsonfile': 6.1.1
       '@types/node': 20.3.1
     dev: true
 
@@ -1393,6 +1394,12 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/jsonfile@6.1.1:
+    resolution: {integrity: sha512-GSgiRCVeapDN+3pqA35IkQwasaCh/0YFH5dEF6S88iDvEn901DjOeH3/QPY+XYP1DFzDZPvIvfeEgk+7br5png==}
+    dependencies:
+      '@types/node': 20.3.1
     dev: true
 
   /@types/jsonwebtoken@8.5.8:
@@ -3535,11 +3542,11 @@ packages:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
     dev: true
 
-  /fs-extra@10.0.0:
-    resolution: {integrity: sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==}
-    engines: {node: '>=12'}
+  /fs-extra@11.1.1:
+    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
+    engines: {node: '>=14.14'}
     dependencies:
-      graceful-fs: 4.2.9
+      graceful-fs: 4.2.11
       jsonfile: 6.1.0
       universalify: 2.0.0
 
@@ -3809,9 +3816,6 @@ packages:
 
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-
-  /graceful-fs@4.2.9:
-    resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
 
   /grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
@@ -4842,7 +4846,7 @@ packages:
     dev: true
 
   /jsonfile@4.0.0:
-    resolution: {integrity: sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=}
+    resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: false
