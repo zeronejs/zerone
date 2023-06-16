@@ -25,7 +25,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@nestjs/jwt": "^9.0.0",
+    "@nestjs/jwt": "^10.1.0",
     "@nestjs/passport": "^9.0.0",
     "bcrypt": "^5.1.0",
     "passport": "^0.6.0",
