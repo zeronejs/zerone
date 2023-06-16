@@ -33,7 +33,7 @@
     "react-native-md5": "^1.0.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "workbox-window": "^6.5.4"
+    "workbox-window": "^7.0.0"
   },
   "devDependencies": {
     "@types/jest": "^28.1.8",
