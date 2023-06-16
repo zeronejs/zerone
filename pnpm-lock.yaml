@@ -249,8 +249,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       '@types/prompts':
-        specifier: ^2.4.1
-        version: 2.4.1
+        specifier: ^2.4.4
+        version: 2.4.4
       fs-extra:
         specifier: ^10.0.0
         version: 10.0.0
@@ -1493,10 +1493,11 @@ packages:
     resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
     dev: true
 
-  /@types/prompts@2.4.1:
-    resolution: {integrity: sha512-1Mqzhzi9W5KlooNE4o0JwSXGUDeQXKldbGn9NO4tpxwZbHXYd+WcKpCksG2lbhH7U9I9LigfsdVsP2QAY0lNPA==}
+  /@types/prompts@2.4.4:
+    resolution: {integrity: sha512-p5N9uoTH76lLvSAaYSZtBCdEXzpOOufsRjnhjVSrZGXikVGHX9+cc9ERtHRV4hvBKHyZb1bg4K+56Bd2TqUn4A==}
     dependencies:
       '@types/node': 20.3.1
+      kleur: 3.0.3
     dev: true
 
   /@types/qs@6.9.7:
