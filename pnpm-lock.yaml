@@ -14,8 +14,8 @@ importers:
         specifier: ^9.4.3
         version: 9.4.3(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)
       '@nestjs/typeorm':
-        specifier: ^9.0.1
-        version: 9.0.1(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.16)
+        specifier: ^10.0.0
+        version: 10.0.0(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.16)
       '@zeronejs/ast-ts':
         specifier: workspace:*
         version: link:packages/ast/ts
@@ -1116,6 +1116,23 @@ packages:
       '@nestjs/common': 9.4.3(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nestjs/core': 9.4.3(@nestjs/common@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       tslib: 2.5.3
+    dev: false
+
+  /@nestjs/typeorm@10.0.0(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.16):
+    resolution: {integrity: sha512-WQU4HCDTz4UavsFzvGUKDHqi0MO5K47yFoPXdmh+Z/hCNO7SHCMmV9jLiLukM8n5nKUqJ3jDqiljkWBcZPdCtA==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0 || ^10.0.0
+      reflect-metadata: ^0.1.13
+      rxjs: ^7.2.0
+      typeorm: ^0.3.0
+    dependencies:
+      '@nestjs/common': 9.4.3(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 9.4.3(@nestjs/common@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.1
+      typeorm: 0.3.16(sqlite3@5.1.6)(ts-node@10.9.1)
+      uuid: 9.0.0
     dev: false
 
   /@nestjs/typeorm@9.0.1(@nestjs/common@9.4.3)(@nestjs/core@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.1)(typeorm@0.3.16):
