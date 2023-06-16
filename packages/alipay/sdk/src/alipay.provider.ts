@@ -8,7 +8,7 @@ export const createInstanceProvider = (): Provider => ({
     provide: ALIPAY_INSTANCES,
     useFactory: (options: AlipayModuleOptions | AlipayModuleOptions[]): AlipayModuleInstances => {
         const instances = new Map<string, AlipaySdk>();
-        let defaultKey = randomUUID();
+        let defaultKey: string = randomUUID();
         if (Array.isArray(options)) {
             for (const option of options) {
                 const key = option.name || defaultKey;
