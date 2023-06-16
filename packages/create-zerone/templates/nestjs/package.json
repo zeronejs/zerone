@@ -31,7 +31,7 @@
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.1",
     "@nestjs/mapped-types": "*",
-    "@nestjs/platform-express": "^9.0.1",
+    "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^6.0.1",
     "@nestjs/typeorm": "^9.0.0",
     "@zeronejs/utils": "^1.4.0",
