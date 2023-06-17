@@ -10,7 +10,7 @@ const ignorePatterns = [
     'src/api/**/controller/**/*.ts',
     'src/api/**/interface/**/*.ts',
 ];
-export default defineConfig({
+module.exports = defineConfig({
     env: {
         es6: true,
         browser: true,
