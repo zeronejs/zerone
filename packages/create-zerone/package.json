@@ -34,16 +34,16 @@
   "license": "MIT",
   "dependencies": {
     "cross-spawn": "^7.0.3",
-    "kolorist": "^1.6.0",
-    "minimist": "^1.2.7",
+    "kolorist": "^1.8.0",
+    "minimist": "^1.2.8",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
-    "@types/fs-extra": "^9.0.13",
+    "@types/fs-extra": "^11.0.1",
     "@types/minimist": "^1.2.2",
-    "@types/prompts": "^2.4.1",
-    "fs-extra": "^10.0.0",
+    "@types/prompts": "^2.4.4",
+    "fs-extra": "^11.1.1",
     "obtain-git-repo": "^1.0.2"
   }
 }
