@@ -1,5 +1,5 @@
+// import Cookie from 'js-cookie';
 import { useAppStore } from '@/stores/app';
-import Cookie from 'js-cookie';
 
 // 响应拦截器中 401时 展示登录弹窗
 export const res401Interceptors = () => {

@@ -1,9 +1,10 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { ElMessage } from 'element-plus';
-const LOGIN_URL = 'https://gsso.giikin.com/admin/login/index.html?_system=18';
-const baseUrl = import.meta.env.VITE_BASE_SHOP_API;
 import Cookies from 'js-cookie';
 import { res401Interceptors } from './interceptors';
+import type { AxiosError } from 'axios';
+// const LOGIN_URL = 'https://gsso.giikin.com/admin/login/index.html?_system=18';
+const baseUrl = import.meta.env.VITE_BASE_SHOP_API;
 
 // const tokenStr = Cookies.get('userToken');
 // let userToken: undefined | Record<string, any>;
@@ -55,13 +56,13 @@ service.interceptors.request.use(
     return config;
   },
   error => {
-    console.log(error); // for debug
+    console.error(error); // for debug
     return Promise.reject(error);
   }
 );
 // 添加响应拦截器
 service.interceptors.response.use(
-  function (response) {
+  response => {
     if (response.config.url?.includes('/adreport')) return response;
     // 对响应数据做点什么
     const res = response.data;
@@ -82,7 +83,7 @@ service.interceptors.response.use(
     }
     return response;
   },
-  function (err: AxiosError) {
+  (err: AxiosError) => {
     // Vue.prototype.$hideLoading();
     if (err?.response?.status === 401 && !err.message.includes('timeout')) {
       // Cookies.remove('userToken');

@@ -28,7 +28,7 @@ app.use(ElementPlus, {
   locale: zhCn,
 });
 app.use(createPinia());
-app.component('svg-icon', SvgIcon);
+app.component('SvgIcon', SvgIcon);
 app.component('RightToolbar', RightToolbar);
 app.component('Pagination', Pagination);
 app.use(router);

@@ -7,24 +7,19 @@
       <el-tooltip class="item" effect="dark" content="刷新" placement="top">
         <el-button circle :icon="Refresh" @click="refresh()" />
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
+      <el-tooltip v-if="columns" class="item" effect="dark" content="显隐列" placement="top">
         <el-button circle :icon="Menu" @click="showColumn()" />
       </el-tooltip>
     </el-row>
-    <el-dialog :title="title" v-model="open" append-to-body>
-      <el-transfer
-        :titles="['显示', '隐藏']"
-        v-model="value"
-        :data="columns"
-        @change="dataChange"
-      ></el-transfer>
+    <el-dialog v-model="open" :title="title" append-to-body>
+      <el-transfer v-model="value" :titles="['显示', '隐藏']" :data="columns" @change="dataChange" />
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Search, Refresh, Menu } from '@element-plus/icons-vue';
+import { Menu, Refresh, Search } from '@element-plus/icons-vue';
 
 const props = defineProps({
   showSearch: {
@@ -57,7 +52,7 @@ function refresh() {
 
 // 右侧列表元素变化
 function dataChange(data: any) {
-  for (let item in props.columns) {
+  for (const item in props.columns) {
     const key = props.columns[item as any].key;
     // eslint-disable-next-line vue/no-mutating-props
     props.columns[item as any].visible = !data.includes(key);
@@ -70,9 +65,9 @@ function showColumn() {
 }
 
 // 显隐列初始默认隐藏列
-for (let item in props.columns) {
+for (const item in props.columns) {
   if (props.columns[item as any].visible === false) {
-    value.value.push(parseInt(item));
+    value.value.push(Number.parseInt(item));
   }
 }
 </script>

@@ -20,3 +20,4 @@ components.d.ts
 auto-imports.d
 auto-imports.d.ts
 pnpm-debug.log
+.eslintcache

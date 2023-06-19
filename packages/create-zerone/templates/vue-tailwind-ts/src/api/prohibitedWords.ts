@@ -19,7 +19,7 @@ export const getPlatform = () => {
  * http://127.0.0.1:8000/v1/tools/ban/getBanWords
  */
 export const getBanWords = (data: any) => {
-  return service.get('/v1/tools/ban/getBanWords', {params:data });
+  return service.get('/v1/tools/ban/getBanWords', { params: data });
 };
 
 /**
@@ -35,5 +35,5 @@ export const addBanWords = (data: any) => {
  * /tools/ban/delBanWords
  */
 export const delBanWords = (ids: any) => {
-  return service.get('/v1/tools/ban/delBanWords', {params:ids});
+  return service.get('/v1/tools/ban/delBanWords', { params: ids });
 };

@@ -1,11 +1,11 @@
 <template>
   <el-dialog v-model="appStore.showLogin" width="80%" append-to-body>
-    <iframe v-if="appStore.showLogin" class="w-full h-[600px]" :src="loginUrl"></iframe>
+    <iframe v-if="appStore.showLogin" class="h-[600px] w-full" :src="loginUrl" />
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { useAppStore } from '@/stores/app';
 import Cookies from 'js-cookie';
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 const loginUrl = ref('');
@@ -14,8 +14,8 @@ const login = () => {
   const protocol = window.location.protocol;
   const host = window.location.host;
   const myPath = window.location.pathname;
-  loginUrl.value = url + protocol + '//' + host + myPath;
-  console.log(loginUrl.value);
+  loginUrl.value = `${url + protocol}//${host}${myPath}`;
+  // console.log(loginUrl.value);
 };
 watch(
   () => appStore.showLogin,
@@ -30,7 +30,7 @@ onMounted(() => {
     login();
   }
   // iframe事件监听
-  window.addEventListener('message', function (e) {
+  window.addEventListener('message', e => {
     // 刷新登陆状态
     if (e.data.type == 'giikin-Logged') {
       if (!import.meta.env.PROD && e.data?.data?.token) {

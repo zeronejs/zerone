@@ -10,6 +10,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 const pathSrc = path.resolve(__dirname, 'src');
 
 // https://vitejs.dev/config/
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ mode, command }) => {
   const isBuild = command === 'build';
   return {

@@ -1,9 +1,9 @@
 <template>
   <div :class="{ hidden: hidden }" class="pagination-container">
     <el-pagination
-      :background="background"
       v-model:current-page="currentPage"
       v-model:page-size="pageSize"
+      :background="background"
       :layout="layout"
       :page-sizes="pageSizes"
       :pager-count="pagerCount"
@@ -15,8 +15,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import type { PropType } from 'vue';
 import { scrollTo } from '@/utils/scroll-to';
-import { computed, PropType } from 'vue';
 
 const props = defineProps({
   total: {
