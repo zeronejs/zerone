@@ -47,7 +47,7 @@
     "rimraf": "^5.0.1",
     "rxjs": "^7.5.5",
     "sqlite3": "^5.0.8",
-    "swagger-ui-express": "^4.4.0",
+    "swagger-ui-express": "^4.6.3",
     "tslib": "^2.5.3",
     "typeorm": "^0.3.7"
   },
