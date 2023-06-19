@@ -165,8 +165,13 @@ module.exports = defineConfig({
         ],
 
         // prettier
-        'prettier/prettier': 'error',
-
+        // 'prettier/prettier': 'error',
+        'prettier/prettier': [
+            'error',
+            {
+                endOfLine: 'auto', //不让prettier检测文件每行结束的格式
+            },
+        ],
         // import
         'import/first': 'error',
         'import/no-duplicates': 'error',
