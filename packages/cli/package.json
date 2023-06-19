@@ -35,7 +35,7 @@
   "dependencies": {
     "@zeronejs/ast-ts": "workspace:^1.0.0-beta.8",
     "@zeronejs/utils": "workspace:^2.0.0",
-    "axios": "^0.27.2",
+    "axios": "^1.4.0",
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
     "consola": "^3.1.0",
