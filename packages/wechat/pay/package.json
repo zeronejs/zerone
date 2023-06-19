@@ -27,9 +27,9 @@
   "license": "MIT",
   "dependencies": {
     "@zeronejs/utils": "workspace:^2.0.0",
-    "jsrsasign": "^10.5.1"
+    "jsrsasign": "^10.8.6"
   },
   "devDependencies": {
-    "@types/jsrsasign": "^8.0.13"
+    "@types/jsrsasign": "^10.5.8"
   }
 }
