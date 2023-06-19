@@ -23,7 +23,7 @@
     "@zeronejs/utils": "^2.0.0",
     "axios": "^1.4.0",
     "core-js": "^3.27.1",
-    "date-fns": "^2.29.3",
+    "date-fns": "^2.30.0",
     "element-plus": "^2.2.28",
     "normalize.css": "^8.0.1",
     "nprogress": "0.2.0",
