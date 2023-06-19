@@ -142,8 +142,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6
       '@types/passport-local':
-        specifier: ^1.0.34
-        version: 1.0.34
+        specifier: ^1.0.35
+        version: 1.0.35
 
   packages/cli:
     dependencies:
@@ -1508,8 +1508,8 @@ packages:
       '@types/passport-strategy': 0.2.35
     dev: true
 
-  /@types/passport-local@1.0.34:
-    resolution: {integrity: sha512-PSc07UdYx+jhadySxxIYWuv6sAnY5e+gesn/5lkPKfBeGuIYn9OPR+AAEDq73VRUh6NBTpvE/iPE62rzZUslog==}
+  /@types/passport-local@1.0.35:
+    resolution: {integrity: sha512-K4eLTJ8R0yYW8TvCqkjB0pTKoqfUSdl5PfZdidTjV2ETV3604fQxtY6BHKjQWAx50WUS0lqzBvKv3LoI1ZBPeA==}
     dependencies:
       '@types/express': 4.17.17
       '@types/passport': 1.0.7
