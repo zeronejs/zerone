@@ -66,7 +66,7 @@
     "unplugin-icons": "^0.15.1",
     "unplugin-vue-components": "^0.22.12",
     "vite": "^4.0.4",
-    "vite-plugin-mock": "^2.9.6",
+    "vite-plugin-mock": "^3.0.0",
     "vite-plugin-pwa": "^0.12.8",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue-router-mock": "^0.1.9"
