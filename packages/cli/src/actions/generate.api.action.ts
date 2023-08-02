@@ -12,6 +12,7 @@ import { escapeVar } from '../utils/generateUtil';
 import { groupBy, upperFirst } from 'lodash';
 import { isString } from '@zeronejs/utils';
 import url from 'node:url';
+import { normalize } from 'node:path';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -222,7 +223,10 @@ const GJavascript = async (root: string, axiosInstanceUrl?: string) => {
         const result = project.emitToMemory();
         // output the emitted files to the console
         for (const file of result.getFiles()) {
-            if (file.filePath.startsWith(join(root, 'dist', 'controller')) && file.filePath.endsWith('.js')) {
+            if (
+                normalize(file.filePath).startsWith(join(root, 'dist', 'controller')) &&
+                file.filePath.endsWith('.js')
+            ) {
                 file.text = file.text.replace(
                     `import request from "axios";`,
                     `import request from "${axiosInstanceUrl}";`
