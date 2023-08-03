@@ -22,6 +22,7 @@ module.exports = defineConfig({
         'eslint:recommended',
         'plugin:import/recommended',
         // 'plugin:eslint-comments/recommended',
+        'plugin:jsonc/recommended-with-jsonc',
         'plugin:vue/base',
         'plugin:vue/vue3-essential',
         'plugin:vue/vue3-strongly-recommended',
@@ -166,7 +167,7 @@ module.exports = defineConfig({
         ],
 
         // prettier
-        // 'prettier/prettier': 'error',
+        'prettier/prettier': 'error',
         // 'prettier/prettier': [
         //     'error',
         //     {
