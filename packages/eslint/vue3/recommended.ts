@@ -150,6 +150,7 @@ module.exports = defineConfig({
         'vue/prefer-import-from-vue': 'off',
         'vue/no-v-text-v-html-on-component': 'off',
         'vue/v-on-event-hyphenation': 0, // @绑定事件名称规范
+        'vue/attribute-hyphenation': 0, // 属性名称规范
         'vue/prop-name-casing': 0, // prop名驼峰
         'vue/html-self-closing': [
             'error',
