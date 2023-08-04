@@ -1,6 +1,6 @@
 {
   "name": "create-zerone",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Create Zerone",
   "engines": {
     "node": ">=14.0.0"
