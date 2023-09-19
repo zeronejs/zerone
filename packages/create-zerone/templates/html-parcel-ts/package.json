@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "parcel": "^2.8.2",
-    "postcss": "^8.4.21",
+    "postcss": "^8.4.30",
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.4",
     "rimraf": "^3.0.2",
