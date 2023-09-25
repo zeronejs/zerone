@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-jwt": "^3.0.10",
     "@types/passport-local": "^1.0.35"
   },
   "peerDependencies": {
