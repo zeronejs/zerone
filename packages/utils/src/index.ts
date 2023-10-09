@@ -6,3 +6,4 @@ export * from './date';
 export * from './is';
 export * from './randomString';
 export * from './type';
+export * from './md5';
