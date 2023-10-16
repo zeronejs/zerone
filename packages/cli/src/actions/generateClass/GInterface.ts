@@ -1,7 +1,7 @@
 import { upperFirst } from 'lodash';
 import { Schema as SwaggerSchema } from 'swagger-schema-official';
 import { SourceFile } from 'ts-morph';
-import { getRefTypeName } from '../../utils/generateUtil';
+import { getRefTypeName, isNumberStart } from '../../utils/generateUtil';
 export class GInterface {
     private schema: SwaggerSchema;
     private sourceFile: SourceFile;
@@ -45,7 +45,9 @@ export class GInterface {
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
                 const inputKey =
-                    key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                    key.includes('[') || key.includes('-') || key.includes('.') || isNumberStart(key)
+                        ? `'${key}'`
+                        : key;
                 // 普通属性
                 return {
                     key,
@@ -54,7 +56,6 @@ export class GInterface {
                     hasQuestionToken: !requireds.includes(key),
                 };
             });
-
             const propertiesDeclaration = interfaceDeclaration.addProperties(addPropertiesInput);
             addPropertiesInput.forEach((it, index) => {
                 const desc = properties[it.key].description;
@@ -70,7 +71,7 @@ export class GInterface {
                 returnType: 'any',
             });
             // const addPropertiesInput = Object.keys(additionalProperties).map(key => {
-            //     const inputKey = key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
+            //     const inputKey = key.includes('[') || key.includes('-') || key.includes('.') || isNumberStart(key) ? `'${key}'` : key;
             //     interfaceDeclaration.addIndexSignature({
             //         keyName: 'key', // defaults to key
             //         keyType: 'string', // defaults to string
@@ -123,7 +124,9 @@ export class GInterface {
                 for (const key in item.properties) {
                     const value = item.properties[key];
                     const inputKey =
-                        key.includes('[') || key.includes('-') || key.includes('.') ? `'${key}'` : key;
+                        key.includes('[') || key.includes('-') || key.includes('.') || isNumberStart(key)
+                            ? `'${key}'`
+                            : key;
                     // 普通属性
                     moduleInterface?.addProperty({
                         // key,
@@ -166,7 +169,12 @@ export class GInterface {
                 return 'unknown[]';
             case 'object':
                 if (subSchema.properties || subSchema.additionalProperties) {
-                    const keyName = this.keyName + upperFirst(subKeyName);
+                    let keyName = this.keyName + upperFirst(subKeyName);
+                    if (keyName.includes('-')) {
+                        // 横杠换成三个下划线  避免重复
+                        keyName = keyName.replaceAll('-', '___');
+                    }
+
                     new GInterface(subSchema, this.sourceFile, keyName).genTsType(prefix);
                     return keyName;
                 }

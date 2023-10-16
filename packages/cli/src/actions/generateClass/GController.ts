@@ -8,6 +8,7 @@ import {
     tagsChineseToPinyin,
     parseSwaggerPathTemplate,
     parseSwaggerPathTemplateToFnName,
+    isNumberStart,
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
@@ -159,7 +160,8 @@ export class GController {
                             if (
                                 param.name.includes('[') ||
                                 param.name.includes('-') ||
-                                param.name.includes('.')
+                                param.name.includes('.') ||
+                                isNumberStart(param.name)
                             ) {
                                 const paramSchema = (param as any).schema;
                                 if (paramSchema && (paramSchema.$ref || paramSchema.type === 'object')) {
@@ -216,7 +218,10 @@ export class GController {
                         paramsTypeName + upperFirst(param.name)
                     ).getTsType((param as any).schema, '', prefix);
                     const paramName =
-                        param.name.includes('[') || param.name.includes('-') || param.name.includes('.')
+                        param.name.includes('[') ||
+                        param.name.includes('-') ||
+                        param.name.includes('.') ||
+                        isNumberStart(param.name)
                             ? `'${param.name}'`
                             : param.name;
                     const propertyDeclaration = interfaceDeclaration.addProperty({
