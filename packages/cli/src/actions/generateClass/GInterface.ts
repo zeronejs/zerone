@@ -90,7 +90,7 @@ export class GInterface {
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
-            const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
+            const typeName = upperFirst(prefix) + ' type ' + getRefTypeName(subSchema.$ref);
             const typeNameInterface = this.sourceFile.getInterface(typeName);
             // import 导入
             let importDeclaration = this.sourceFile.getImportDeclaration('../../interface');
