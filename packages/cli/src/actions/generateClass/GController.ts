@@ -99,13 +99,19 @@ export class GController {
         if (importDeclaration) {
             const names = importDeclaration.getNamedImports().map(it => it.getName());
             if (!names.includes(DeepRequiredKey)) {
-                importDeclaration.addNamedImport(DeepRequiredKey);
+                importDeclaration.addNamedImport({
+                    name: DeepRequiredKey,
+                    isTypeOnly: true
+                });
             }
         } else {
             importDeclaration = sourceProject.addImportDeclaration({
                 moduleSpecifier: interfacePre + '../../interface',
             });
-            importDeclaration.addNamedImport(DeepRequiredKey);
+            importDeclaration.addNamedImport({
+                name: DeepRequiredKey,
+                isTypeOnly: true
+            });
         }
 
         // sourceProject.addImportDeclaration({
