@@ -100,3 +100,11 @@ export function parseSwaggerPathTemplateToFnName(pathTemplate: string) {
     });
     return resPath;
 }
+/**
+ * 字符串是否是数字开头
+ * @param str
+ * @returns
+ */
+export function isNumberStart(str: string) {
+    return /^\d/.test(str);
+}
