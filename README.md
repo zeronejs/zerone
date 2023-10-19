@@ -6,17 +6,17 @@
 
 ## Ecosystem
 
-| Project                           | Status                                                                          | Description                |
-| --------------------------------- | ------------------------------------------------------------------------------- | -------------------------- |
-| @zeronejs/cli                     | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/cli)                     | 命令行工具                 |
-| @zeronejs/alipay-sdk              | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/alipay-sdk)              | 支付宝 sdk                 |
-| @zeronejs/ast-ts                  | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts)                  | 读取解释 AST（抽象语法树） |
-| @zeronejs/role-easy               | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/role-easy)               | 简单的角色授权             |
-| @zeronejs/auth                    | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/auth)                    | 身份验证                   |
-| @zeronejs/redis                   | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/redis)                   | 高速缓存                   |
-| @zeronejs/utils                   | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/utils)                   | 通用工具                   |
-| @zeronejs/eslint-vue3-recommended | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/eslint-vue3-recommended) | vue3 eslint                |
-| create-zerone                     | ![npm (scoped)](https://img.shields.io/npm/v/create-zerone)                     | zerone 模板                |
+| Project                      | Status                                                                     | Description                |
+| ---------------------------- | -------------------------------------------------------------------------- | -------------------------- |
+| @zeronejs/cli                | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/cli)                | 命令行工具                 |
+| @zeronejs/alipay-sdk         | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/alipay-sdk)         | 支付宝 sdk                 |
+| @zeronejs/ast-ts             | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts)             | 读取解释 AST（抽象语法树） |
+| @zeronejs/role-easy          | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/role-easy)          | 简单的角色授权             |
+| @zeronejs/auth               | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/auth)               | 身份验证                   |
+| @zeronejs/redis              | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/redis)              | 高速缓存                   |
+| @zeronejs/utils              | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/utils)              | 通用工具                   |
+| @zeronejs/eslint-config-vue3 | ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/eslint-config-vue3) | vue3 eslint                |
+| create-zerone                | ![npm (scoped)](https://img.shields.io/npm/v/create-zerone)                | zerone 模板                |
 
 ## Documentation
 
