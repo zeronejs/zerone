@@ -10,11 +10,11 @@ let crxApp = document.querySelector('#CRX-container');
 
 // 创建id为CRX-container的div
 if (!crxApp) {
-  const crxApp = document.createElement('div');
+  crxApp = document.createElement('div');
   crxApp.id = 'CRX-container';
   // 将刚创建的div插入body最后
-  document.body.appendChild(crxApp);
 }
+document.body.appendChild(crxApp);
 
 // 创建Vue APP
 const app = createApp(Content);
@@ -22,15 +22,14 @@ const app = createApp(Content);
 app.use(ElementPlus, {
   locale: zhCn,
 });
-// setTimeout(() => {
 app.mount('#CRX-container');
-// }, 10);
 // 将Vue APP插入刚创建的div
-console.log('content');
 // 向目标页面驻入js
 try {
-  let insertScript = document.createElement('script');
+  const insertScript = document.createElement('script');
   insertScript.setAttribute('type', 'text/javascript');
   insertScript.src = window.chrome.runtime.getURL('insert.js');
   document.body.appendChild(insertScript);
-} catch (err) {}
+} catch (err) {
+  console.error(err);
+}

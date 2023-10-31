@@ -1,6 +1,6 @@
+import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import path from 'path';
 import { CRX_CONTENT_OUTDIR } from './globalConfig';
 
 // https://vitejs.dev/config/

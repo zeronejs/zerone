@@ -17,8 +17,8 @@ const onExit = () => {
 <template>
   <div class="M-nav">
     <el-tabs v-model="path" class="top-nav" stretch>
-      <el-tab-pane label="Home" name="/home"></el-tab-pane>
-      <el-tab-pane label="Account" name="/account"></el-tab-pane>
+      <el-tab-pane label="Home" name="/home" />
+      <el-tab-pane label="Account" name="/account" />
     </el-tabs>
     <el-button type="primary" class="btn-exit" @click="onExit">退出</el-button>
   </div>

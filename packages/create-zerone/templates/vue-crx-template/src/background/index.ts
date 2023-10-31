@@ -1,11 +1,11 @@
 // import { apiRequest } from '@/api'
 // manifest.json的Permissions配置需添加declarativeContent权限
-chrome.runtime.onInstalled.addListener(function () {
+chrome.runtime.onInstalled.addListener(() => {
   // 默认先禁止Page Action。如果不加这一句，则无法生效下面的规则
   chrome.action.disable();
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     // 设置规则
-    let rule = {
+    const rule = {
       // 运行插件运行的页面URL规则
       conditions: [
         new chrome.declarativeContent.PageStateMatcher({
@@ -30,8 +30,8 @@ chrome.runtime.onInstalled.addListener(function () {
   });
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // 接收来自content script的消息，requset里不允许传递function和file类型的参数
-  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {});
+  chrome.tabs.query({ currentWindow: true, active: true }, tabs => {});
   return true;
 });

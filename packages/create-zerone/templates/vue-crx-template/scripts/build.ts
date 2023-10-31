@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { CRX_OUTDIR, CRX_CONTENT_OUTDIR, CRX_BACKGROUND_OUTDIR } from './globalConfig';
+import { CRX_BACKGROUND_OUTDIR, CRX_CONTENT_OUTDIR, CRX_OUTDIR } from './globalConfig';
 
 // 拷贝目录文件
 const copyDirectory = (srcDir: string, destDir: string) => {

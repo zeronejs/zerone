@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 // 接受父组件传递的方法
-const emit = defineEmits(['onClose']);
+const emit = defineEmits<{
+  (e: 'onClose'): void;
+}>();
 // 接收父组件传递的参数
-const props = defineProps(['visible']);
+const props = defineProps<{
+  visible: boolean;
+}>();
 
 // 输入框中的内容
 const text = ref('');
@@ -25,7 +29,7 @@ const submit = () => {};
 </script>
 
 <template>
-  <el-dialog v-model="isVisible" v-if="isVisible" title="CRX对话框" width="600">
+  <el-dialog v-if="isVisible" v-model="isVisible" title="CRX对话框" width="600">
     <div class="main-content-con">
       <div class="item-con">
         <el-input v-model="text" placeholder="" />
