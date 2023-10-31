@@ -24,6 +24,10 @@ const bootstrap = async () => {
             url: 'direct:https://codeload.github.com/zzh948498/vue3-ts-tailwind-template/zip/main',
             dirName: 'vue-tailwind-ts',
         },
+        {
+            url: 'direct:https://codeload.github.com/zzh948498/vue3-crx-template/zip/main',
+            dirName: 'vue-crx-template',
+        },
     ];
 
     try {

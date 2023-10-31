@@ -52,11 +52,6 @@ const FRAMEWORKS: Framework[] = [
         display: 'Vue',
         color: green,
         variants: [
-            // {
-            //     name: 'vue',
-            //     display: 'JavaScript',
-            //     color: yellow,
-            // },
             {
                 name: 'vue-tailwind-ts',
                 display: 'tailwind-ts',
@@ -66,6 +61,11 @@ const FRAMEWORKS: Framework[] = [
                 name: 'vue-admin-ts',
                 display: 'admin-ts',
                 color: blue,
+            },
+            {
+                name: 'vue-crx-template',
+                display: 'vue-crx-template',
+                color: yellow,
             },
             // {
             //     name: 'custom-create-vue',

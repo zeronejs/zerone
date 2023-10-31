@@ -1,0 +1,21 @@
+<svg
+  t="1681116165285"
+  class="icon"
+  viewBox="0 0 1024 1024"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  p-id="2950"
+  width="64"
+  height="64"
+>
+  <path
+    d="M832 128H640v64h147.2L358.4 614.4l51.2 51.2L832 236.8V384h64V128z"
+    fill="#2C2C2C"
+    p-id="2951"
+  ></path>
+  <path
+    d="M768 832H192V256h320v-64H192c-38.4 0-64 25.6-64 64v576c0 38.4 25.6 64 64 64h576c38.4 0 64-25.6 64-64V512h-64v320z"
+    fill="#2C2C2C"
+    p-id="2952"
+  ></path>
+</svg>
