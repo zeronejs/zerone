@@ -19,8 +19,6 @@ export interface GenerateApiActionConfig {
     excludeTags?: string[];
     prefix?: string;
     axiosInstanceUrl?: string;
-    optionsTypeName?: string;
-    optionsTypePath?: string;
 }
 
 export class GenerateApiAction extends AbstractAction {

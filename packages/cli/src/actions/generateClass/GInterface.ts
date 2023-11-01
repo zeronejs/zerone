@@ -101,7 +101,7 @@ export class GInterface {
                 if (!names.includes(typeName) && !typeNameInterface) {
                     importDeclaration.addNamedImport({
                         name: typeName,
-                        isTypeOnly: true
+                        isTypeOnly: true,
                     });
                 }
             } else if (!typeNameInterface) {
@@ -110,7 +110,7 @@ export class GInterface {
                 });
                 importDeclaration.addNamedImport({
                     name: typeName,
-                    isTypeOnly: true
+                    isTypeOnly: true,
                 });
             }
 
