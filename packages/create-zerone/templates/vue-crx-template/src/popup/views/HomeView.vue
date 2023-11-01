@@ -8,6 +8,7 @@
     </div>
     <!-- element icon -->
     <div>
+      {{ data }}
       element icon <el-icon><CirclePlus /></el-icon>
     </div>
     <!-- <el-image :src="Logo" class="fixed bottom-[100px] right-[60px] z-50 h-[50px] w-[50px]" /> -->
@@ -30,6 +31,7 @@
 <script setup lang="ts">
 import { CirclePlus } from '@element-plus/icons-vue';
 import Logo from '@/assets/logo.svg';
+const data = ref(123);
 const tableData = [
   {
     date: '2016-05-03',

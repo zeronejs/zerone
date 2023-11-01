@@ -1,40 +1,55 @@
-import path from 'path';
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { CRX_CONTENT_OUTDIR } from './globalConfig';
-
+import packageJson from '../package.json';
+import { sharedConfig } from './sharedConfig';
+import { r } from './utils';
 // https://vitejs.dev/config/
-export default defineConfig({
-  build: {
-    // 输出目录
-    outDir: CRX_CONTENT_OUTDIR,
-    lib: {
-      entry: [path.resolve(__dirname, '../', 'src/content/index.ts')],
-      // content script不支持ES6，因此不用使用es模式，需要改为cjs模式
-      formats: ['cjs'],
-      // 设置生成文件的文件名
-      fileName: () => {
-        // 将文件后缀名强制定为js，否则会生成cjs的后缀名
-        return 'content.js';
+export default defineConfig(env => {
+  const isDev = env.mode === 'development';
+  return {
+    ...sharedConfig(env, [
+      {
+        name: 'replace-plugin',
+        transform(code, id) {
+          if (id.endsWith('element-plus/dist/index.css')) {
+            return code.replaceAll(':root', ':host');
+          }
+        },
       },
+    ]),
+    define: {
+      __DEV__: isDev,
+      __NAME__: JSON.stringify(packageJson.name),
+      // https://github.com/vitejs/vite/issues/9320
+      // https://github.com/vitejs/vite/issues/9186
+      'process.env.NODE_ENV': JSON.stringify(isDev ? 'development' : 'production'),
     },
-    rollupOptions: {
-      output: {
-        assetFileNames: assetInfo => {
-          // 附属文件命名，content script会生成配套的css
-          return 'content.css';
+    build: {
+      watch: isDev ? {} : undefined,
+      outDir: r('extension/dist/contentScripts'),
+      cssCodeSplit: false,
+      emptyOutDir: false,
+      sourcemap: isDev ? 'inline' : false,
+      lib: {
+        entry: r('src/contentScripts/index.ts'),
+        name: packageJson.name,
+        formats: ['iife'],
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: 'index.global.js',
+          extend: true,
         },
       },
     },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, '../', 'src'),
-    },
-  },
-  // 解决代码中包含process.env.NODE_ENV导致无法使用的问题
-  define: {
-    'process.env.NODE_ENV': null,
-  },
-  plugins: [vue()],
+    // resolve: {
+    //   alias: {
+    //     '@': path.resolve(__dirname, '../', 'src'),
+    //   },
+    // },
+    // 解决代码中包含process.env.NODE_ENV导致无法使用的问题
+    // define: {
+    //   'process.env.NODE_ENV': null,
+    // },
+    // plugins: [vue()],
+  };
 });

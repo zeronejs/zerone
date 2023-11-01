@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 // 接受父组件传递的方法
-const emit = defineEmits<{
-  (e: 'onClose'): void;
-}>();
+const emit = defineEmits(['onClose']);
 // 接收父组件传递的参数
-const props = defineProps<{
-  visible: boolean;
-}>();
+const props = defineProps(['visible']);
 
 // 输入框中的内容
 const text = ref('');

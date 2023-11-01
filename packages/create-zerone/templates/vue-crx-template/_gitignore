@@ -22,3 +22,5 @@ auto-imports.d.ts
 pnpm-debug.log
 .eslintcache
 build/
+_build_content
+extension/manifest.json

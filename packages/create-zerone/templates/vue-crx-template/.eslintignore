@@ -4,3 +4,6 @@ public
 dist
 node_modules
 pnpm-lock.yaml
+build
+_build_content
+extension/manifest.json

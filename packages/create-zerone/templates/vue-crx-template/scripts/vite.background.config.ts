@@ -1,28 +1,38 @@
-import path from 'path';
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { CRX_BACKGROUND_OUTDIR } from './globalConfig';
+import packageJson from '../package.json';
+import { sharedConfig } from './sharedConfig';
+import { r } from './utils';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  build: {
-    // 输出目录
-    outDir: CRX_BACKGROUND_OUTDIR,
-    lib: {
-      entry: [path.resolve(__dirname, '../', 'src/background/index.ts')],
-      // background script不支持ES6，因此不用使用es模式，需要改为cjs模式
-      formats: ['cjs'],
-      // 设置生成文件的文件名
-      fileName: () => {
-        // 将文件后缀名强制定为js，否则会生成cjs的后缀名
-        return 'background.js';
+export default defineConfig(env => {
+  const isDev = env.mode === 'development';
+  return {
+    ...sharedConfig(env),
+    define: {
+      __DEV__: isDev,
+      __NAME__: JSON.stringify(packageJson.name),
+      // https://github.com/vitejs/vite/issues/9320
+      // https://github.com/vitejs/vite/issues/9186
+      'process.env.NODE_ENV': JSON.stringify(isDev ? 'development' : 'production'),
+    },
+
+    build: {
+      watch: isDev ? {} : undefined,
+      outDir: r('extension/dist/background'),
+      cssCodeSplit: false,
+      emptyOutDir: false,
+      sourcemap: isDev ? 'inline' : false,
+      lib: {
+        entry: r('src/background/main.ts'),
+        name: packageJson.name,
+        formats: ['iife'],
+      },
+      rollupOptions: {
+        output: {
+          entryFileNames: 'index.mjs',
+          extend: true,
+        },
       },
     },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, '../', 'src'),
-    },
-  },
-  plugins: [vue()],
+  };
 });
