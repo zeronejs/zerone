@@ -91,6 +91,7 @@ export class GInterface {
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
         if (subSchema.$ref) {
+            // TODO
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
             const typeNameInterface = this.sourceFile.getInterface(typeName);
             // import 导入
@@ -98,13 +99,19 @@ export class GInterface {
             if (importDeclaration) {
                 const names = importDeclaration.getNamedImports().map(it => it.getName());
                 if (!names.includes(typeName) && !typeNameInterface) {
-                    importDeclaration.addNamedImport(typeName);
+                    importDeclaration.addNamedImport({
+                        name: typeName,
+                        isTypeOnly: true
+                    });
                 }
             } else if (!typeNameInterface) {
                 importDeclaration = this.sourceFile.addImportDeclaration({
                     moduleSpecifier: '../../interface',
                 });
-                importDeclaration.addNamedImport(typeName);
+                importDeclaration.addNamedImport({
+                    name: typeName,
+                    isTypeOnly: true
+                });
             }
 
             return typeName;

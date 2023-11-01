@@ -22,6 +22,7 @@ export class GController {
     // tags名称
     private tagsItem = 'default';
     private sourceProject?: SourceFile;
+    private optionsTypeName: string = 'any'
     constructor(operation: Operation, methodKey: string, pathKey: string) {
         this.operation = operation;
         this.methodKey = methodKey;
@@ -29,7 +30,7 @@ export class GController {
     }
     async genController(
         controllerUrl: string,
-        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl'>
+        config: Pick<GenerateApiActionConfig, 'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'optionsTypeName' | 'optionsTypePath'>
     ) {
         const operation = this.operation;
         const methodKey = this.methodKey;
@@ -57,6 +58,12 @@ export class GController {
         this.sourceProject = sourceProject;
         // import 导入
         this.genImports(config.axiosInstanceUrl);
+        config.optionsTypeName && (this.optionsTypeName = config.optionsTypeName)
+        config.optionsTypePath && this.sourceProject?.addImportDeclaration({
+            namedImports:[this.optionsTypeName],
+            isTypeOnly: true,
+            moduleSpecifier: config.optionsTypePath
+        })
         // 生成方法
         this.genApiFn(key, config.prefix);
         sourceProject.formatText({
@@ -99,13 +106,19 @@ export class GController {
         if (importDeclaration) {
             const names = importDeclaration.getNamedImports().map(it => it.getName());
             if (!names.includes(DeepRequiredKey)) {
-                importDeclaration.addNamedImport(DeepRequiredKey);
+                importDeclaration.addNamedImport({
+                    name: DeepRequiredKey,
+                    isTypeOnly: true
+                });
             }
         } else {
             importDeclaration = sourceProject.addImportDeclaration({
                 moduleSpecifier: interfacePre + '../../interface',
             });
-            importDeclaration.addNamedImport(DeepRequiredKey);
+            importDeclaration.addNamedImport({
+                name: DeepRequiredKey,
+                isTypeOnly: true
+            });
         }
 
         // sourceProject.addImportDeclaration({
@@ -191,6 +204,7 @@ export class GController {
                         } else if (hasDataMethods) {
                             inputContent = 'null,';
                         }
+                        //TODO 在这里修改
                         writer.writeLine(
                             `return request.${
                                 this.methodKey
@@ -199,6 +213,7 @@ export class GController {
                             )}\`, ${inputContent} {`
                         );
                         writer.writeLine(`params: paramsInput,`);
+                        writer.writeLine(`...(options || {}),`);
                         if (requestBodySchema && !hasDataMethods) {
                             writer.writeLine(`data: input,`);
                         }
@@ -262,6 +277,11 @@ export class GController {
                 hasQuestionToken: !requestBody.required,
             });
         }
+        functionDeclaration.addParameter({
+            name: 'options',
+            type: this.optionsTypeName,
+            hasQuestionToken: true,
+        });
         functionDeclaration.addJsDoc(
             `${this.operation.summary ? '\n' + this.operation.summary : ''}\n${this.pathKey}`
         );

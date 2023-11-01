@@ -28,6 +28,7 @@ export class ClassesInterpret {
         for (const classDeclaration of classDeclarations) {
             const fileClasses: SourceFileClasses = {
                 name: '',
+                //@ts-ignore
                 decorators: generateDecoratorDoc(this.interpretCore.sourceFile, classDeclaration.decorators),
                 documentation: '',
                 properties: [],
@@ -49,6 +50,7 @@ export class ClassesInterpret {
                         name: this.interpretCore.getIdentifierTextName(member.name),
                         documentation: '',
                         isOptional: ts.SymbolFlags.Property + ts.SymbolFlags.Optional === symbol?.flags,
+                        //@ts-ignore
                         decorators: generateDecoratorDoc(this.interpretCore.sourceFile, member.decorators),
                         type: {
                             value: member.type?.getText(this.interpretCore.sourceFile) ?? 'any',
