@@ -6,12 +6,10 @@
 
 <template>
   <!-- <router-view /> -->
-  <div>hello</div>
+  <div class="p-1 text-base">hello</div>
 </template>
 <style>
 body {
   position: relative;
-  width: 380px;
-  height: 510px;
 }
 </style>

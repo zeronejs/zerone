@@ -1,13 +1,22 @@
 import useClipboard from 'vue-clipboard3';
 import { ElMessage } from 'element-plus';
+import { contentScriptsMessage } from '@/api/gassApi/interceptors';
 export const handleCopy = async (str: string) => {
   const { toClipboard } = useClipboard();
   // const { copy } = useClipboard({ legacy: true });
   try {
     await toClipboard(str);
-    ElMessage.success('复制成功');
+    contentScriptsMessage({
+      type: 'success',
+      message: '复制成功',
+    });
+    // ElMessage.success('复制成功');
   } catch (error) {
     console.error(error);
-    ElMessage.error('复制失败');
+    contentScriptsMessage({
+      type: 'error',
+      message: '复制失败',
+    });
+    // ElMessage.error('复制失败');
   }
 };

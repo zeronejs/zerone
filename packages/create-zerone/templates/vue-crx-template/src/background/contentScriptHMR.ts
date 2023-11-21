@@ -17,3 +17,4 @@ chrome.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
     })
     .catch(error => console.error(error));
 });
+export {};

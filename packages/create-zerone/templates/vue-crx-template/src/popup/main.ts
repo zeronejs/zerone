@@ -6,7 +6,7 @@ import { createApp } from 'vue';
 // import zhCn from 'element-plus/es/locale/lang/zh-cn';
 // import router from './router';
 import Popup from '@/popup/popup.vue';
-// import '../style.css';
+import '../style.css';
 
 const app = createApp(Popup);
 // app.use(ElementPlus, {

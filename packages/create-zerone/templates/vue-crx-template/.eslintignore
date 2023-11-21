@@ -7,3 +7,4 @@ pnpm-lock.yaml
 build
 _build_content
 extension/manifest.json
+product-collection-crx.zip
