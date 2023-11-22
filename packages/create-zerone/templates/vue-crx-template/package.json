@@ -36,6 +36,7 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@ffflorian/jszip-cli": "3.5.0",
     "@tsconfig/node18": "^18.2.2",
     "@types/chrome": "^0.0.248",
     "@types/fs-extra": "^11.0.3",
