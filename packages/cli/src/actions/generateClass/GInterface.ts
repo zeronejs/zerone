@@ -1,6 +1,6 @@
 import { upperFirst } from 'lodash';
 import { Schema as SwaggerSchema } from 'swagger-schema-official';
-import { SourceFile } from 'ts-morph';
+import { InterfaceDeclaration, SourceFile } from 'ts-morph';
 import { getRefTypeName, isNumberStart } from '../../utils/generateUtil';
 export class GInterface {
     private schema: SwaggerSchema;
@@ -11,7 +11,32 @@ export class GInterface {
         this.sourceFile = sourceFile;
         this.keyName = keyName;
     }
+    private genStringType(prefix = '') {
+        if (!this.keyName) {
+            return;
+        }
+        let declaration;
+        if (this.schema.enum && this.schema.enum?.length > 0) {
+            declaration = this.sourceFile.getEnum(this.keyName);
+            if (!declaration) {
+                declaration = this.sourceFile.addEnum({
+                    name: this.keyName,
+                    members: this.schema.enum.map(it => ({ name: it, value: it })),
+                });
+            }
+        } else {
+            declaration = this.sourceFile.getTypeAlias(this.keyName);
+            if (!declaration) {
+                declaration = this.sourceFile.addTypeAlias({
+                    name: this.keyName,
+                    type: this.getTsType(this.schema, '', prefix),
+                });
+            }
+        }
 
+        declaration.setIsExported(true);
+        return declaration;
+    }
     private genObjectType(prefix = '', extendsName?: string) {
         if (!this.keyName) {
             return;
@@ -135,11 +160,13 @@ export class GInterface {
                             ? `'${key}'`
                             : key;
                     // 普通属性
-                    moduleInterface?.addProperty({
-                        // key,
-                        name: inputKey,
-                        type: this.getTsType(value, key, prefix),
-                    });
+                    if (moduleInterface instanceof InterfaceDeclaration) {
+                        moduleInterface?.addProperty({
+                            // key,
+                            name: inputKey,
+                            type: this.getTsType(value, key, prefix),
+                        });
+                    }
                 }
             }
             return keyName;
@@ -219,9 +246,9 @@ export class GInterface {
         //     return this.genBooleanType();
         // }
 
-        // if (this.schema.type === 'string') {
-        //     return this.genStringType();
-        // }
+        if (this.schema.type === 'string') {
+            return this.genStringType(prefix);
+        }
 
         // if (['number', 'integer'].includes(this.schema.type as string)) {
         //     return this.genNumberType();
