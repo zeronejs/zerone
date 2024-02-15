@@ -94,24 +94,30 @@ export class GController {
             const count = (this.tagsItem.match(/\//g) || []).length;
             interfacePre = Array(count).fill('../').join('');
         }
-        const DeepRequiredKey = 'DeepRequired';
-        let importDeclaration = sourceProject.getImportDeclaration(interfacePre + '../../interface');
-        if (importDeclaration) {
-            const names = importDeclaration.getNamedImports().map(it => it.getName());
-            if (!names.includes(DeepRequiredKey)) {
+        // 顶部需要导入的类型
+        const typeKeys = [
+            { name: 'AxiosRequestConfig', url: 'axios' },
+            { name: 'DeepRequired', url: interfacePre + '../../interface' },
+        ];
+        for (const tyepItem of typeKeys) {
+            let importDeclaration = sourceProject.getImportDeclaration(tyepItem.url);
+            if (importDeclaration) {
+                const names = importDeclaration.getNamedImports().map(it => it.getName());
+                if (!names.includes(tyepItem.name)) {
+                    importDeclaration.addNamedImport({
+                        name: tyepItem.name,
+                        isTypeOnly: true,
+                    });
+                }
+            } else {
+                importDeclaration = sourceProject.addImportDeclaration({
+                    moduleSpecifier: tyepItem.url,
+                });
                 importDeclaration.addNamedImport({
-                    name: DeepRequiredKey,
+                    name: tyepItem.name,
                     isTypeOnly: true,
                 });
             }
-        } else {
-            importDeclaration = sourceProject.addImportDeclaration({
-                moduleSpecifier: interfacePre + '../../interface',
-            });
-            importDeclaration.addNamedImport({
-                name: DeepRequiredKey,
-                isTypeOnly: true,
-            });
         }
 
         // sourceProject.addImportDeclaration({
@@ -126,7 +132,7 @@ export class GController {
         const requestUrl = parseSwaggerPathTemplate(this.pathKey);
         functionDeclaration.setBodyText(
             `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${requestUrl}\`${
-                requestBodySchema ? ',input' : ''
+                requestBodySchema ? ',input,config' : ',config'
             });`
         );
         const parsedUrl = url.parse(requestUrl, true);
@@ -148,6 +154,7 @@ export class GController {
                 const paramsTypeName = upperFirst(fnName) + 'Params';
                 functionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
                 const interfaceDeclaration = sourceProject.addInterface({ name: paramsTypeName });
+                interfaceDeclaration.setIsExported(true);
                 // query参数处理
                 if (parameters.some(param => param.in === 'query')) {
                     functionDeclaration.setBodyText(writer => {
@@ -205,6 +212,7 @@ export class GController {
                                 this.pathKey
                             )}\`, ${inputContent} {`
                         );
+                        writer.writeLine(`...config,`);
                         writer.writeLine(`params: paramsInput,`);
                         if (requestBodySchema && !hasDataMethods) {
                             writer.writeLine(`data: input,`);
@@ -269,6 +277,11 @@ export class GController {
                 hasQuestionToken: !requestBody.required,
             });
         }
+        functionDeclaration.addParameter({
+            name: 'config',
+            type: 'AxiosRequestConfig',
+            hasQuestionToken: true,
+        });
         functionDeclaration.addJsDoc(
             `${this.operation.summary ? '\n' + this.operation.summary : ''}\n${this.pathKey}`
         );
