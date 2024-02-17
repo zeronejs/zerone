@@ -9,11 +9,12 @@ import {
     parseSwaggerPathTemplate,
     parseSwaggerPathTemplateToFnName,
     isNumberStart,
+    parseSwaggerPathMatches,
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
 
-export class GController {
+export class GVueUseAxios {
     private operation: Operation;
     // 请求method
     private methodKey: string;
@@ -27,7 +28,7 @@ export class GController {
         this.methodKey = methodKey;
         this.pathKey = pathKey;
     }
-    async genController(
+    async genVueUseAxios(
         controllerUrl: string,
         config: Pick<
             GenerateApiActionConfig,
@@ -37,38 +38,45 @@ export class GController {
         const operation = this.operation;
         const methodKey = this.methodKey;
         const pathKey = this.pathKey;
-        // 不生成已废弃的接口
-        if (operation.deprecated) {
-            return;
-        }
+        // // 不生成已废弃的接口
+        // if (operation.deprecated) {
+        //     return;
+        // }
         const tagsItem = operation.tags?.[0] ?? 'default';
-        // includeTags
-        if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
-            return;
-        }
-        // excludeTags
-        if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
-            return;
-        }
+        // // includeTags
+        // if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
+        //     return;
+        // }
+        // // excludeTags
+        // if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
+        //     return;
+        // }
         this.tagsItem = tagsChineseToPinyin(tagsItem);
-        const key = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
+        const key = camelCase('use' + upperFirst(methodKey) + parseSwaggerPathTemplateToFnName(pathKey));
+        const apiKey = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
         const sourceFilePath = join(controllerUrl, this.tagsItem, `${key}.ts`);
         await remove(sourceFilePath);
         await ensureFile(sourceFilePath);
         const project = new Project();
         const sourceProject = project.addSourceFileAtPath(sourceFilePath);
         this.sourceProject = sourceProject;
-        // import 导入
-        this.genImports(config.axiosInstanceUrl);
+
         // 生成方法
-        this.genApiFn(key, config.prefix);
+        this.genApiFn(key, apiKey, config);
         sourceProject.formatText({
             placeOpenBraceOnNewLineForFunctions: false,
         });
         await sourceProject.save();
         return { key, tagsItem: this.tagsItem };
     }
-    private genApiFn(fnName: string, prefix = '') {
+    private genApiFn(
+        fnName: string,
+        apiFnName: string,
+        config: Pick<
+            GenerateApiActionConfig,
+            'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
+        >
+    ) {
         if (!this.sourceProject) {
             return;
         }
@@ -77,19 +85,7 @@ export class GController {
         const schema = this.getSuccessResponseSchema();
         let resType = 'any';
         if (schema) {
-            resType = new GInterface(schema, sourceProject, upperFirst(fnName) + 'Result').getTsType(
-                schema,
-                '',
-                prefix
-            );
-            // // 导入复杂类型
-            // if (schema.$ref) {
-            //     // import 导入
-            //     const importDeclaration = sourceProject.addImportDeclaration({
-            //         namedImports: [resType],
-            //         moduleSpecifier: '../../interface',
-            //     });
-            // }
+            resType = upperFirst(apiFnName) + 'Result';
         }
         let interfacePre = '';
         // 获取当前tags嵌套深度
@@ -97,52 +93,61 @@ export class GController {
             const count = (this.tagsItem.match(/\//g) || []).length;
             interfacePre = Array(count).fill('../').join('');
         }
-        // 顶部需要导入的类型
-        const typeKeys = [
-            { name: 'AxiosRequestConfig', url: 'axios' },
-            { name: 'DeepRequired', url: interfacePre + '../../interface' },
-        ];
-        for (const tyepItem of typeKeys) {
-            let importDeclaration = sourceProject.getImportDeclaration(tyepItem.url);
-            if (importDeclaration) {
-                const names = importDeclaration.getNamedImports().map(it => it.getName());
-                if (!names.includes(tyepItem.name)) {
-                    importDeclaration.addNamedImport({
-                        name: tyepItem.name,
-                        isTypeOnly: true,
-                    });
-                }
-            } else {
-                importDeclaration = sourceProject.addImportDeclaration({
-                    moduleSpecifier: tyepItem.url,
-                });
-                importDeclaration.addNamedImport({
-                    name: tyepItem.name,
-                    isTypeOnly: true,
-                });
-            }
-        }
+        this.addNamedImport({
+            name: 'UseAxiosOptions',
+            url: `@vueuse/integrations/useAxios`,
+            isTypeOnly: true,
+        });
+        this.addNamedImport({ name: 'useAxios', url: `@vueuse/integrations/useAxios`, isTypeOnly: false });
 
-        // sourceProject.addImportDeclaration({
-        //     namedImports: ['DeepRequired'],
-        //     moduleSpecifier: '@/utils/types',
-        // });
+        this.addNamedImport({ name: 'AxiosRequestConfig', url: 'axios', isTypeOnly: true });
+
+        this.addNamedImport({
+            name: 'DeepRequired',
+            url: interfacePre + '../../interface',
+            isTypeOnly: true,
+        });
+
+        this.addNamedImport({ name: resType, url: `./${apiFnName}`, isTypeOnly: true });
+        // import 导入axios实例
+        this.genImports(config.axiosInstanceUrl);
         const functionDeclaration = sourceProject.addFunction({
             name: fnName,
+        });
+        functionDeclaration.setIsExported(true);
+        // 添加useAxiosReturn
+        functionDeclaration.setBodyText(writer =>
+            writer
+                .writeLine(`const useAxiosReturn = useAxios<DeepRequired<${resType}>>(`)
+                .writeLine(`'${this.pathKey}',`)
+                .writeLine(`{ method: '${this.methodKey}', ...config },`)
+                .writeLine(`request,`)
+                .writeLine(`{ immediate: false, ...options }`)
+                .writeLine(`)`)
+        );
+        // functionDeclaration.setBodyText(writer =>
+        //     writer
+        //         .writeLine('const myNumber = 5;')
+        //         .write('if (myNumber === 5)')
+        //         .block(() => {
+        //             writer.writeLine("console.log('yes')");
+        //         })
+        // );
+        const execFunctionDeclaration = functionDeclaration.addFunction({
+            name: 'exec',
         });
         const requestBodySchema = this.getRequestBodySchema();
         // 请求路径
         const requestUrl = parseSwaggerPathTemplate(this.pathKey);
-        functionDeclaration.setBodyText(
-            `return request.${this.methodKey}<DeepRequired<${resType}>>(\`${requestUrl}\`${
-                requestBodySchema ? ',input,config' : ',config'
+        execFunctionDeclaration.setBodyText(
+            `return useAxiosReturn.execute(${
+                requestBodySchema ? '{ data: input, ...axiosConfig }' : 'axiosConfig'
             });`
         );
         const parsedUrl = url.parse(requestUrl, true);
         // 在链接中已存在的query
         const existedQueryKeys = Object.keys(parsedUrl.query);
 
-        functionDeclaration.setIsExported(true);
         // 处理链接上的参数
         if (this.operation.parameters && this.operation.parameters.length) {
             const parameters = this.operation.parameters.filter(param => {
@@ -154,13 +159,12 @@ export class GController {
                 return ['query', 'path'].includes(param.in);
             }) as Parameter[];
             if (parameters.length) {
-                const paramsTypeName = upperFirst(fnName) + 'Params';
-                functionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
-                const interfaceDeclaration = sourceProject.addInterface({ name: paramsTypeName });
-                interfaceDeclaration.setIsExported(true);
+                const paramsTypeName = upperFirst(apiFnName) + 'Params';
+                execFunctionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
+                this.addNamedImport({ name: paramsTypeName, url: `./${apiFnName}`, isTypeOnly: true });
                 // query参数处理
                 if (parameters.some(param => param.in === 'query')) {
-                    functionDeclaration.setBodyText(writer => {
+                    execFunctionDeclaration.setBodyText(writer => {
                         // writer.writeLine(`const searchParams = new URLSearchParams('');`);
                         writer.writeLine(`const paramsInput = {`);
                         parameters.map(param => {
@@ -193,96 +197,59 @@ export class GController {
                             }
                         });
                         writer.writeLine(`};`);
-                        const hasDataMethods = [
-                            'post',
-                            'put',
-                            'patch',
-                            'postForm',
-                            'putForm',
-                            'patchForm',
-                        ].includes(this.methodKey);
-                        let inputContent = '';
-                        if (requestBodySchema && hasDataMethods) {
-                            inputContent = 'input,';
-                        } else if (hasDataMethods) {
-                            inputContent = 'null,';
+
+                        writer.writeLine(`return useAxiosReturn.execute( {`);
+                        if (parseSwaggerPathMatches(this.pathKey).length > 0) {
+                            writer.writeLine(`url: \`${parseSwaggerPathTemplate(this.pathKey)}\`,`);
                         }
-                        //TODO 在这里修改
-                        writer.writeLine(
-                            `return request.${
-                                this.methodKey
-                            }<DeepRequired<${resType}>>(\`${parseSwaggerPathTemplate(
-                                this.pathKey
-                            )}\`, ${inputContent} {`
-                        );
                         writer.writeLine(`params: paramsInput,`);
-                        writer.writeLine(`...config,`);
-                        if (requestBodySchema && !hasDataMethods) {
+                        if (requestBodySchema) {
                             writer.writeLine(`data: input,`);
                         }
+                        writer.writeLine(`...axiosConfig,`);
                         writer.writeLine(`});`);
 
                         return writer;
                     });
                 }
-
-                parameters.map(param => {
-                    if (param.in === 'query' && existedQueryKeys.includes(param.name)) {
-                        return;
-                    }
-                    const paramType = new GInterface(
-                        (param as any).schema,
-                        sourceProject,
-                        paramsTypeName + upperFirst(param.name)
-                    ).getTsType((param as any).schema, '', prefix);
-                    const paramName =
-                        param.name.includes('[') ||
-                        param.name.includes('-') ||
-                        param.name.includes('.') ||
-                        isNumberStart(param.name)
-                            ? `'${param.name}'`
-                            : param.name;
-                    const propertyDeclaration = interfaceDeclaration.addProperty({
-                        name: paramName,
-                        type: paramType,
-                        hasQuestionToken: !param.required,
-                    });
-                    if (param.description) {
-                        propertyDeclaration.addJsDoc(param.description);
-                    }
-                });
             }
         }
         // requestBody类型生成
         if (requestBodySchema) {
-            const inputType = new GInterface(
-                requestBodySchema,
-                sourceProject,
-                upperFirst(fnName) + 'Input'
-            ).getTsType(requestBodySchema, '', prefix);
-            // // 导入复杂类型
-            // if (requestBodySchema.$ref) {
-            //     // import 导入
-            //     let importDeclaration = sourceProject.getImportDeclaration('../../interface');
-            //     if (!importDeclaration) {
-            //         importDeclaration = sourceProject.addImportDeclaration({
-            //             namedImports: [inputType],
-            //             moduleSpecifier: '../../interface',
-            //         });
-            //     } else {
-            //         importDeclaration.addNamedImport(inputType);
-            //     }
-            // }
+            const inputType = upperFirst(apiFnName) + 'Input';
             const requestBody = (this.operation as any).requestBody;
-            functionDeclaration.addParameter({
+            execFunctionDeclaration.addParameter({
                 name: 'input',
                 type: inputType,
                 hasQuestionToken: !requestBody.required,
             });
+            this.addNamedImport({ name: inputType, url: `./${apiFnName}`, isTypeOnly: true });
         }
+        execFunctionDeclaration.addParameter({
+            name: 'axiosConfig',
+            type: 'AxiosRequestConfig',
+            hasQuestionToken: true,
+        });
+        // functionDeclaration.setBodyText(writer => {
+        //     // writer.writeLine(`const searchParams = new URLSearchParams('');`);
+        //     writer.writeLine(`return { ...useAxiosReturn, exec };`);
+        //     return writer;
+        // });
+        let functionDeclarationBody = functionDeclaration.getBodyText() ?? '';
+        // functionDeclarationBody += execFunctionDeclaration.getBodyText();
+        // execFunctionDeclaration.remove();
+        // execFunctionDeclaration.forget();
+        functionDeclarationBody += `\n\t\treturn { ...useAxiosReturn, exec };`;
+        functionDeclaration.removeBody();
+        functionDeclaration.setBodyText(functionDeclarationBody);
         functionDeclaration.addParameter({
             name: 'config',
             type: 'AxiosRequestConfig',
+            hasQuestionToken: true,
+        });
+        functionDeclaration.addParameter({
+            name: 'options',
+            type: `UseAxiosOptions<DeepRequired<${resType}>>`,
             hasQuestionToken: true,
         });
         functionDeclaration.addJsDoc(
@@ -318,6 +285,29 @@ export class GController {
             return response.content[Object.keys(response.content)[0]].schema as Schema;
         } catch (error) {
             return undefined;
+        }
+    }
+    private addNamedImport(options: { name: string; url: string; isTypeOnly: boolean }) {
+        if (!this.sourceProject) {
+            return;
+        }
+        let importDeclaration = this.sourceProject.getImportDeclaration(options.url);
+        if (importDeclaration) {
+            const names = importDeclaration.getNamedImports().map(it => it.getName());
+            if (!names.includes(options.name)) {
+                importDeclaration.addNamedImport({
+                    name: options.name,
+                    isTypeOnly: options.isTypeOnly,
+                });
+            }
+        } else {
+            importDeclaration = this.sourceProject.addImportDeclaration({
+                moduleSpecifier: options.url,
+            });
+            importDeclaration?.addNamedImport({
+                name: options.name,
+                isTypeOnly: options.isTypeOnly,
+            });
         }
     }
 }

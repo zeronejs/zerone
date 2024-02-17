@@ -13,12 +13,15 @@ import { groupBy, upperFirst } from 'lodash';
 import { isString } from '@zeronejs/utils';
 import url from 'node:url';
 import { normalize } from 'node:path';
+import { GVueUseAxios } from './generateClass/GVueUseAxios';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
     excludeTags?: string[];
     prefix?: string;
     axiosInstanceUrl?: string;
+    // 是否生成useAxios文件
+    vueUseAxios?: boolean;
 }
 
 export class GenerateApiAction extends AbstractAction {
@@ -168,8 +171,14 @@ const GControllerHandle = async (
                     methodKey,
                     config.prefix ? `/${config.prefix}${pathKey}` : pathKey
                 ).genController(join(root, 'controller'), config);
-                if (res?.key && res.tagsItem) {
+                if (config.vueUseAxios && res?.key && res.tagsItem) {
                     controllers.push({ key: res.key, tagsItem: res.tagsItem });
+                    const genAxiosRes = await new GVueUseAxios(
+                        operation,
+                        methodKey,
+                        config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                    ).genVueUseAxios(join(root, 'controller'), config);
+                    controllers.push({ key: genAxiosRes.key, tagsItem: genAxiosRes.tagsItem });
                 }
             } catch (err) {
                 console.log({ err });
