@@ -60,7 +60,7 @@ const FRAMEWORKS: Framework[] = [
             {
                 name: 'vue-admin-ts',
                 display: 'admin-ts',
-                color: blue,
+                color: lightGreen,
             },
             {
                 name: 'vue-crx-template',
@@ -87,9 +87,9 @@ const FRAMEWORKS: Framework[] = [
         color: yellow,
         variants: [
             {
-                name: 'html-parcel-ts',
-                display: 'parcel-ts',
-                color: blue,
+                name: 'html-vite-ts',
+                display: 'vite-ts',
+                color: lightGreen,
             },
         ],
     },

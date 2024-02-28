@@ -17,6 +17,10 @@ const bootstrap = async () => {
             dirName: 'html-parcel-ts',
         },
         {
+            url: 'direct:https://codeload.github.com/zzh948498/vite-html-template/zip/main',
+            dirName: 'html-vite-ts',
+        },
+        {
             url: 'direct:https://codeload.github.com/zzh948498/zerone-nestjs-templates/zip/main',
             dirName: 'nestjs',
         },
