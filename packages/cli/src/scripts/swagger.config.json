@@ -1,5 +1,5 @@
 {
-    "docsUrl": "http://192.168.1.203:4523/export/openapi?projectId=3001718&version=3.1",
+    "docsUrl": "http://127.0.0.1:4523/export/openapi?projectId=2118497&version=3.1",
     "includeTags": [],
     "excludeTags": [],
     "axiosInstanceUrl": "@/api/gassApi/service",

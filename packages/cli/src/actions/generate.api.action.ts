@@ -171,14 +171,16 @@ const GControllerHandle = async (
                     methodKey,
                     config.prefix ? `/${config.prefix}${pathKey}` : pathKey
                 ).genController(join(root, 'controller'), config);
-                if (config.vueUseAxios && res?.key && res.tagsItem) {
+                if (res?.key && res.tagsItem) {
                     controllers.push({ key: res.key, tagsItem: res.tagsItem });
-                    const genAxiosRes = await new GVueUseAxios(
-                        operation,
-                        methodKey,
-                        config.prefix ? `/${config.prefix}${pathKey}` : pathKey
-                    ).genVueUseAxios(join(root, 'controller'), config);
-                    controllers.push({ key: genAxiosRes.key, tagsItem: genAxiosRes.tagsItem });
+                    if (config.vueUseAxios) {
+                        const genAxiosRes = await new GVueUseAxios(
+                            operation,
+                            methodKey,
+                            config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                        ).genVueUseAxios(join(root, 'controller'), config);
+                        controllers.push({ key: genAxiosRes.key, tagsItem: genAxiosRes.tagsItem });
+                    }
                 }
             } catch (err) {
                 console.log({ err });
