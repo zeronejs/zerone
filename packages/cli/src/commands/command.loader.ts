@@ -13,6 +13,7 @@ import {
     // StartAction,
     // UpdateAction,
     LogAction,
+    FontGrabberAction,
 } from '../actions';
 import { ERROR_PREFIX } from '../ui';
 // import { AddCommand } from './add.command';
@@ -25,6 +26,7 @@ import { NewCommand } from './new.command';
 // import { StartCommand } from './start.command';
 // import { UpdateCommand } from './update.command';
 import { LogCommand } from './log.command';
+import { FontGrabberCommand } from './font.grabber.command';
 export class CommandLoader {
     public static load(program: Command): void {
         new NewCommand(new NewAction()).load(program);
@@ -39,6 +41,7 @@ export class CommandLoader {
         new GenerateApiCommand(new GenerateApiAction()).load(program);
         // new GenerateFeCommand(new GenerateFeAction()).load(program);
         new LogCommand(new LogAction()).load(program);
+        new FontGrabberCommand(new FontGrabberAction()).load(program);
 
         this.handleInvalidCommand(program);
     }

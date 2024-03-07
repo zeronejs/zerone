@@ -1,0 +1,4 @@
+{
+    "cssUrl": "./test.css",
+    "output": "dist/iconfont.css"
+}

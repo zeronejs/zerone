@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Zerone Cli",
   "engines": {
     "node": ">=12.0.0"
@@ -47,12 +47,11 @@
     "ora": "^5.4.1",
     "os-name": "^4.0.1",
     "pinyin": "^2.11.2",
+    "postcss": "^8.4.35",
     "ts-morph": "^21.0.1",
     "typescript": "4.5.5"
   },
   "devDependencies": {
-    "@vueuse/core": "^10.7.2",
-    "@vueuse/integrations": "^10.7.2",
     "@types/fs-extra": "^9.0.13",
     "@types/gulp": "^4.0.9",
     "@types/inquirer": "^8.1.3",
@@ -61,6 +60,8 @@
     "@types/ora": "^3.2.0",
     "@types/os-name": "3.1.0",
     "@types/pinyin": "^2.10.0",
-    "@types/swagger-schema-official": "^2.0.22"
+    "@types/swagger-schema-official": "^2.0.22",
+    "@vueuse/core": "^10.7.2",
+    "@vueuse/integrations": "^10.7.2"
   }
 }

@@ -7,3 +7,4 @@ export * from './generate.node.action';
 export * from './generate.api.action';
 export * from './generate.fe.action';
 export * from './log.action';
+export * from './font.grabber.action';
