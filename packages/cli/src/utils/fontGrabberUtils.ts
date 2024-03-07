@@ -1,11 +1,11 @@
 import url, { fileURLToPath } from 'node:url';
-import { writeFileSync } from 'fs';
+import { createWriteStream, mkdirSync, writeFileSync } from 'fs';
 import path from 'node:path';
 import { debug } from 'console';
 import { Declaration, Container } from 'postcss';
 import axios from 'axios';
-import { ensureFile } from 'fs-extra';
 import { isLocalFilePath } from './utils';
+import { ensureFile } from 'fs-extra';
 // postcss-font-grabber
 
 export interface ParsedSrc {
@@ -101,11 +101,20 @@ export function calculateFontSpecs(fontFaceNode: Declaration): FontSpec[] {
 }
 
 export async function downloadFile(fileUrl: string, outputLocationPath: string) {
-    const { data } = await axios({
+    await ensureFile(outputLocationPath);
+    const writer = createWriteStream(outputLocationPath);
+
+    return axios({
         method: 'get',
         url: fileUrl,
-        responseType: 'blob',
+        responseType: 'stream',
+    }).then(response => {
+        // 确保提供的路径的目录存在
+        // mkdirSync(path.dirname(outputLocationPath), { recursive: true });
+        response.data.pipe(writer);
+        return new Promise((resolve, reject) => {
+            writer.on('finish', resolve);
+            writer.on('error', reject);
+        });
     });
-    await ensureFile(outputLocationPath);
-    writeFileSync(outputLocationPath, data);
 }
