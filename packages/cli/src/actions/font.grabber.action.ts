@@ -7,7 +7,7 @@ import url from 'node:url';
 import postcss, { AtRule } from 'postcss';
 import { isString } from '@zeronejs/utils';
 import axios from 'axios';
-import { FontSpec, calculateFontSpecs, downloadFile } from '../utils/fontGrabberUtils';
+import { FontSpec, calculateFontSpecs, downloadFile, md5 } from '../utils/fontGrabberUtils';
 import { isLocalFilePath } from '../utils/utils';
 
 export interface FontGrabberActionConfig {
@@ -77,6 +77,7 @@ export class FontGrabberAction extends AbstractAction {
                     string,
                     {
                         fontSpec: FontSpec;
+                        downMd5: string;
                     }
                 > = {};
                 const now = Date.now();
@@ -86,12 +87,19 @@ export class FontGrabberAction extends AbstractAction {
                     // Download the font file if it hasn't been downloaded yet.
                     const filename = `${outputParse.name}.${extension}`;
                     if (!downloaded[fontUrlString]) {
-                        await downloadFile(fontUrlString, path.join(outputParse.dir, filename));
+                        const downValue = await downloadFile(
+                            fontUrlString,
+                            path.join(outputParse.dir, filename)
+                        );
                         downloaded[fontUrlString] = {
                             fontSpec,
+                            downMd5: md5(downValue),
                         };
                     }
-                    srcDecl.value = srcDecl.value.replace(fontUrlString, `${filename}?t=${now}`);
+                    srcDecl.value = srcDecl.value.replace(
+                        fontUrlString,
+                        `${filename}?md5=${downloaded[fontUrlString].downMd5}`
+                    );
                 }
             }
         }
