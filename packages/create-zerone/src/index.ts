@@ -53,6 +53,11 @@ const FRAMEWORKS: Framework[] = [
         color: green,
         variants: [
             {
+                name: 'vue-giime-ts',
+                display: 'giime-ts',
+                color: yellow,
+            },
+            {
                 name: 'vue-tailwind-ts',
                 display: 'tailwind-ts',
                 color: green,

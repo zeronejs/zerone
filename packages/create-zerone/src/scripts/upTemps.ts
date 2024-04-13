@@ -32,6 +32,10 @@ const bootstrap = async () => {
             url: 'direct:https://codeload.github.com/zzh948498/vue3-crx-template/zip/main',
             dirName: 'vue-crx-template',
         },
+        {
+            url: 'direct:https://codeload.github.com/zzh948498/vue3-ts-giime-template/zip/main',
+            dirName: 'vue-giime-ts',
+        },
     ];
 
     try {
