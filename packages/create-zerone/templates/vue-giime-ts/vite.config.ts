@@ -6,7 +6,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-import { GiimeResolver } from 'giime';
+import { GiimeResolver, giimeDevProxy } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 const pathSrc = path.resolve(__dirname, 'src');
 
@@ -70,6 +70,7 @@ export default defineConfig(({ mode, command }) => {
     server: {
       host: '0.0.0.0',
       proxy: {
+        ...giimeDevProxy,
         // https://cn.vitejs.dev/config/#server-proxy
         '/shop-api': {
           target: 'http://192.168.4.125:10086/gstore/',

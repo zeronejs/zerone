@@ -11,6 +11,9 @@ dependencies:
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.21)
+  '@vueuse/integrations':
+    specifier: ^10.9.0
+    version: 10.9.0(axios@1.6.8)(vue@3.4.21)
   axios:
     specifier: ^1.6.8
     version: 1.6.8
@@ -18,8 +21,8 @@ dependencies:
     specifier: ^2.7.0
     version: 2.7.0(vue@3.4.21)
   giime:
-    specifier: ^0.0.1
-    version: 0.0.1(element-plus@2.7.0)(vue@3.4.21)
+    specifier: ^0.0.9
+    version: 0.0.9(element-plus@2.7.0)(vue@3.4.21)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -1237,6 +1240,56 @@ packages:
       '@types/web-bluetooth': 0.0.16
       '@vueuse/metadata': 9.13.0
       '@vueuse/shared': 9.13.0(vue@3.4.21)
+      vue-demi: 0.14.7(vue@3.4.21)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vueuse/integrations@10.9.0(axios@1.6.8)(vue@3.4.21):
+    resolution: {integrity: sha512-acK+A01AYdWSvL4BZmCoJAcyHJ6EqhmkQEXbQLwev1MY7NBnS+hcEMx/BzVoR9zKI+UqEPMD9u6PsyAuiTRT4Q==}
+    peerDependencies:
+      async-validator: '*'
+      axios: '*'
+      change-case: '*'
+      drauu: '*'
+      focus-trap: '*'
+      fuse.js: '*'
+      idb-keyval: '*'
+      jwt-decode: '*'
+      nprogress: '*'
+      qrcode: '*'
+      sortablejs: '*'
+      universal-cookie: '*'
+    peerDependenciesMeta:
+      async-validator:
+        optional: true
+      axios:
+        optional: true
+      change-case:
+        optional: true
+      drauu:
+        optional: true
+      focus-trap:
+        optional: true
+      fuse.js:
+        optional: true
+      idb-keyval:
+        optional: true
+      jwt-decode:
+        optional: true
+      nprogress:
+        optional: true
+      qrcode:
+        optional: true
+      sortablejs:
+        optional: true
+      universal-cookie:
+        optional: true
+    dependencies:
+      '@vueuse/core': 10.9.0(vue@3.4.21)
+      '@vueuse/shared': 10.9.0(vue@3.4.21)
+      axios: 1.6.8
       vue-demi: 0.14.7(vue@3.4.21)
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -3256,13 +3309,16 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /giime@0.0.1(element-plus@2.7.0)(vue@3.4.21):
-    resolution: {integrity: sha512-43meo4VeAVYVAEMb4B8T5pJbXXC4KzRqim+uc1OO+LgFSv5LZ31AEXZTtg36LrHSsrr8kg33dw3f/0z3FL7TYw==}
+  /giime@0.0.9(element-plus@2.7.0)(vue@3.4.21):
+    resolution: {integrity: sha512-4F7z9bDbVcYjs3sGVx/0EnIZ4tPip1sHebTRp68DTyK2mIOU/MPZJ2tD8Dn7p8E4BXAP0boHTEF70aVKSwwwrQ==}
     peerDependencies:
       element-plus: ^2.6.1
       vue: ^3.4.0
     dependencies:
+      '@types/lodash': 4.17.0
+      '@types/lodash-es': 4.17.12
       element-plus: 2.7.0(vue@3.4.21)
+      lodash-es: 4.17.21
       vue: 3.4.21(typescript@5.4.5)
     dev: false
 

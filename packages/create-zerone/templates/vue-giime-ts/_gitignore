@@ -21,3 +21,4 @@ auto-imports.d
 auto-imports.d.ts
 pnpm-debug.log
 .eslintcache
+vite.config.ts.timestamp-*.mjs
