@@ -4,7 +4,9 @@ import { createPinia } from 'pinia';
 import 'element-plus/dist/index.css'; // element-plus
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-
+// dayjs
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 // giime
 import Giime from 'giime';
 import 'giime/theme-chalk/index.css'; // giime css变量
@@ -23,6 +25,8 @@ import Pagination from '@/components/Pagination.vue';
 // 自定义表格工具组件
 import RightToolbar from '@/components/RightToolbar.vue';
 import '@/styles/element-ui.scss'; // global css
+
+dayjs.locale('zh-cn');
 
 const app = createApp(App);
 app.use(createPinia());
