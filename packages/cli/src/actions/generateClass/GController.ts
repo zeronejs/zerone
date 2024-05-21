@@ -22,6 +22,7 @@ export class GController {
     // tags名称
     private tagsItem = 'default';
     private sourceProject?: SourceFile;
+    private interfacePre = '';
     constructor(operation: Operation, methodKey: string, pathKey: string) {
         this.operation = operation;
         this.methodKey = methodKey;
@@ -73,15 +74,18 @@ export class GController {
             return;
         }
         const sourceProject = this.sourceProject;
+        // 获取当前tags嵌套深度
+        if (this.tagsItem.includes('/')) {
+            const count = (this.tagsItem.match(/\//g) || []).length;
+            this.interfacePre = Array(count).fill('../').join('');
+        }
         // 获取返回值类型
         const schema = this.getSuccessResponseSchema();
         let resType = 'any';
         if (schema) {
-            resType = new GInterface(schema, sourceProject, upperFirst(fnName) + 'Result').getTsType(
-                schema,
-                '',
-                prefix
-            );
+            resType = new GInterface(schema, sourceProject, upperFirst(fnName) + 'Result', {
+                interfacePre: this.interfacePre,
+            }).getTsType(schema, '', prefix);
             // // 导入复杂类型
             // if (schema.$ref) {
             //     // import 导入
@@ -91,16 +95,11 @@ export class GController {
             //     });
             // }
         }
-        let interfacePre = '';
-        // 获取当前tags嵌套深度
-        if (this.tagsItem.includes('/')) {
-            const count = (this.tagsItem.match(/\//g) || []).length;
-            interfacePre = Array(count).fill('../').join('');
-        }
+
         // 顶部需要导入的类型
         const typeKeys = [
             { name: 'AxiosRequestConfig', url: 'axios' },
-            { name: 'DeepRequired', url: interfacePre + '../../interface' },
+            { name: 'DeepRequired', url: this.interfacePre + '../../interface' },
         ];
         for (const tyepItem of typeKeys) {
             let importDeclaration = sourceProject.getImportDeclaration(tyepItem.url);
@@ -233,7 +232,10 @@ export class GController {
                     const paramType = new GInterface(
                         (param as any).schema,
                         sourceProject,
-                        paramsTypeName + upperFirst(param.name)
+                        paramsTypeName + upperFirst(param.name),
+                        {
+                            interfacePre: this.interfacePre,
+                        }
                     ).getTsType((param as any).schema, '', prefix);
                     const paramName =
                         param.name.includes('[') ||
@@ -255,11 +257,9 @@ export class GController {
         }
         // requestBody类型生成
         if (requestBodySchema) {
-            const inputType = new GInterface(
-                requestBodySchema,
-                sourceProject,
-                upperFirst(fnName) + 'Input'
-            ).getTsType(requestBodySchema, '', prefix);
+            const inputType = new GInterface(requestBodySchema, sourceProject, upperFirst(fnName) + 'Input', {
+                interfacePre: this.interfacePre,
+            }).getTsType(requestBodySchema, '', prefix);
             // // 导入复杂类型
             // if (requestBodySchema.$ref) {
             //     // import 导入

@@ -6,7 +6,13 @@ export class GInterface {
     private schema: SwaggerSchema;
     private sourceFile: SourceFile;
     private keyName: string;
-    constructor(swaggerSchema: SwaggerSchema, sourceFile: SourceFile, keyName: string) {
+
+    constructor(
+        swaggerSchema: SwaggerSchema,
+        sourceFile: SourceFile,
+        keyName: string,
+        public options: { interfacePre: string }
+    ) {
         this.schema = swaggerSchema;
         this.sourceFile = sourceFile;
         this.keyName = keyName;
@@ -114,13 +120,15 @@ export class GInterface {
         }
         return interfaceDeclaration;
     }
-    getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix = ''): string {
+    getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix: string): string {
         if (subSchema.$ref) {
             // TODO
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
             const typeNameInterface = this.sourceFile.getInterface(typeName);
             // import 导入
-            let importDeclaration = this.sourceFile.getImportDeclaration('../../interface');
+            let importDeclaration = this.sourceFile.getImportDeclaration(
+                this.options.interfacePre + '../../interface'
+            );
             if (importDeclaration) {
                 const names = importDeclaration.getNamedImports().map(it => it.getName());
                 if (!names.includes(typeName) && !typeNameInterface) {
@@ -131,7 +139,7 @@ export class GInterface {
                 }
             } else if (!typeNameInterface) {
                 importDeclaration = this.sourceFile.addImportDeclaration({
-                    moduleSpecifier: '../../interface',
+                    moduleSpecifier: this.options.interfacePre + '../../interface',
                 });
                 importDeclaration.addNamedImport({
                     name: typeName,
@@ -146,10 +154,12 @@ export class GInterface {
             if (subSchema.allOf.length === 1) {
                 return this.getTsType(subSchema.allOf[0], this.keyName, '');
             }
-            const moduleInterface = new GInterface(subSchema.allOf[0], this.sourceFile, keyName).genTsType(
-                '',
-                this.getTsType(subSchema.allOf[0], subKeyName, prefix)
-            );
+            const moduleInterface = new GInterface(
+                subSchema.allOf[0],
+                this.sourceFile,
+                keyName,
+                this.options
+            ).genTsType('', this.getTsType(subSchema.allOf[0], subKeyName, prefix));
 
             for (let index = 1; index < subSchema.allOf.length; index++) {
                 const item = subSchema.allOf[index];
@@ -209,7 +219,7 @@ export class GInterface {
                         keyName = keyName.replaceAll('-', '___');
                     }
 
-                    new GInterface(subSchema, this.sourceFile, keyName).genTsType(prefix);
+                    new GInterface(subSchema, this.sourceFile, keyName, this.options).genTsType(prefix);
                     return keyName;
                 }
                 // 泛型会变成object  所以用any

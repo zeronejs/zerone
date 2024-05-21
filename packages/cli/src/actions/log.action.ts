@@ -106,7 +106,7 @@ const types = {
         value: 'release',
     },
     style: {
-        description: '格式化',
+        description: '样式',
         emoji: '💄',
         value: 'style',
     },
