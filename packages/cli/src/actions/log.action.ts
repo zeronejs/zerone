@@ -33,7 +33,8 @@ export class LogAction extends AbstractAction {
             const list = res
                 .toString()
                 // .replaceAll(new RegExp(emojis.join('|'),'g'), '')
-                .split('\n').toReversed();
+                .split('\n')
+                .reverse();
             const groupValue = groupBy(list, item => {
                 const groupName = typeKeys.find(it => item.startsWith(it));
                 return groupName ?? 'other';
