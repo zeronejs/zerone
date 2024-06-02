@@ -24,8 +24,8 @@ dependencies:
     specifier: ^2.7.2
     version: 2.7.3(vue@3.4.21)
   giime:
-    specifier: ^0.1.5
-    version: 0.1.5(element-plus@2.7.3)(vue@3.4.21)
+    specifier: ^0.1.17
+    version: 0.1.17(element-plus@2.7.3)(vue@3.4.21)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -97,6 +97,9 @@ devDependencies:
   prettier-plugin-tailwindcss:
     specifier: ^0.5.13
     version: 0.5.13(prettier@3.2.5)
+  rimraf:
+    specifier: ^5.0.7
+    version: 5.0.7
   tailwindcss:
     specifier: ^3.4.3
     version: 3.4.3
@@ -3326,8 +3329,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /giime@0.1.5(element-plus@2.7.3)(vue@3.4.21):
-    resolution: {integrity: sha512-qb3RPDQ8LVNzerl3Lj6u6fOSfH30rn0Qjsr26f209QSzHuRVZ0Y8mvoOpleOgJxtouaQjGlXGEM99nuy5b+5Uw==}
+  /giime@0.1.17(element-plus@2.7.3)(vue@3.4.21):
+    resolution: {integrity: sha512-gQEM6muKY1GmWdf9ifbWPQKSKqjdh/3lyUbJlKTL8ekVtXRfFh2sUrmkNjsn8C/44KFnzDByuwLUd9bWPOdqLA==}
     peerDependencies:
       element-plus: ^2.6.1
       vue: ^3.4.0
@@ -5427,9 +5430,18 @@ packages:
 
   /rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: true
+
+  /rimraf@5.0.7:
+    resolution: {integrity: sha512-nV6YcJo5wbLW77m+8KjH8aB/7/rxQy9SZ0HY5shnwULfS+9nmTtVXAJET5NdZmCzA4fPI/Hm1wo/Po/4mopOdg==}
+    engines: {node: '>=14.18'}
+    hasBin: true
+    dependencies:
+      glob: 10.3.12
     dev: true
 
   /rollup@4.14.2:
