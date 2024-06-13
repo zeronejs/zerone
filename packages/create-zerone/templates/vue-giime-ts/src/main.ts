@@ -14,6 +14,7 @@ import 'virtual:svg-icons-register';
 import App from './App.vue';
 import router from './router';
 // css
+// import 'element-plus/dist/index.css'; // element-plus
 import 'giime/theme-chalk/element/index.scss'; // element-plus
 import '@/styles/element-ui.scss'; // global css
 import 'giime/theme-chalk/index.css'; // giime css变量
