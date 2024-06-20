@@ -20,13 +20,8 @@ import '@/styles/element-ui.scss'; // global css
 import 'giime/theme-chalk/index.css'; // giime css变量
 import 'giime/dist/index.css'; // giime组件样式
 import './style.css';
-// import './assets/main.css'
 // svg图标
 import SvgIcon from '@/components/SvgIcon.vue';
-// 分页组件
-import Pagination from '@/components/Pagination.vue';
-// 自定义表格工具组件
-import RightToolbar from '@/components/RightToolbar.vue';
 
 dayjs.locale('zh-cn');
 
@@ -38,7 +33,5 @@ app.use(ElementPlus, {
 });
 app.use(Giime, { env: import.meta.env, router });
 app.component('SvgIcon', SvgIcon);
-app.component('RightToolbar', RightToolbar);
-app.component('Pagination', Pagination);
 
 app.mount('#app');

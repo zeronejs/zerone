@@ -21,11 +21,11 @@ dependencies:
     specifier: ^1.11.10
     version: 1.11.10
   element-plus:
-    specifier: ^2.7.2
-    version: 2.7.3(vue@3.4.21)
+    specifier: 2.7.2
+    version: 2.7.2(vue@3.4.21)
   giime:
-    specifier: ^0.2.0
-    version: 0.2.0(element-plus@2.7.3)(vue@3.4.21)
+    specifier: ^0.2.3
+    version: 0.2.3(element-plus@2.7.2)(vue@3.4.21)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -2422,8 +2422,8 @@ packages:
     resolution: {integrity: sha512-Rer6wc3ynLelKNM4lOCg7/zPQj8tPOCB2hzD32PX9wd3hgRRi9MxEbmkFCokzcEhRVMiOVLjnL9ig9cefJ+6+Q==}
     dev: true
 
-  /element-plus@2.7.3(vue@3.4.21):
-    resolution: {integrity: sha512-OaqY1kQ2xzNyRFyge3fzM7jqMwux+464RBEqd+ybRV9xPiGxtgnj/sVK4iEbnKnzQIa9XK03DOIFzoToUhu1DA==}
+  /element-plus@2.7.2(vue@3.4.21):
+    resolution: {integrity: sha512-AdEzBU/A68iUleio0MkQ46JeU5SeQvFFd915GJFScJmUEo5AmYg3OQ4pVjcu+p3b3Nupg9MC5Wa4xjAiC51kUg==}
     peerDependencies:
       vue: ^3.2.0
     dependencies:
@@ -3329,8 +3329,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /giime@0.2.0(element-plus@2.7.3)(vue@3.4.21):
-    resolution: {integrity: sha512-Kebzwlsycvk74J4vBlA7BVgpIiBrEojs+Po1RRST0k5O5Y7CxVVpu/22RhIxRdD+DSw1YldAd8Kb7uCnfkteXg==}
+  /giime@0.2.3(element-plus@2.7.2)(vue@3.4.21):
+    resolution: {integrity: sha512-okktukYXgpLbH1zkhaOsQ2k8ElGugTrC2Fkyrqr0mOP5DNaZUcIFSYlLWE0H+no/ORf9ht7skzs2uH+y/rvcDQ==}
     peerDependencies:
       element-plus: ^2.6.1
       vue: ^3.4.0
@@ -3339,7 +3339,7 @@ packages:
       '@types/lodash': 4.17.0
       '@types/lodash-es': 4.17.12
       clipboard: 2.0.11
-      element-plus: 2.7.3(vue@3.4.21)
+      element-plus: 2.7.2(vue@3.4.21)
       file-saver: 2.0.5
       idb-keyval: 6.2.1
       jszip: 3.10.1
