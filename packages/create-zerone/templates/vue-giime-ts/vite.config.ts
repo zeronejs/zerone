@@ -20,6 +20,17 @@ export default defineConfig(({ mode, command }) => {
         '@/': `${pathSrc}/`,
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vue: ['vue', 'vue-router', 'pinia'],
+            elementPlus: ['element-plus'],
+            giime: ['giime'],
+          },
+        },
+      },
+    },
     plugins: [
       vue(),
       AutoImport({
