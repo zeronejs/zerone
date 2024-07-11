@@ -24,8 +24,8 @@ dependencies:
     specifier: 2.7.6
     version: 2.7.6(vue@3.4.31)
   giime:
-    specifier: ^0.3.1
-    version: 0.3.1(element-plus@2.7.6)(vue@3.4.31)
+    specifier: ^0.3.5
+    version: 0.3.5(element-plus@2.7.6)(vue@3.4.31)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -3353,8 +3353,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /giime@0.3.1(element-plus@2.7.6)(vue@3.4.31):
-    resolution: {integrity: sha512-7RtFMUFfPR/Q+lwWYyDstj0dNTAr91k/d4cBSlx/Foij9dG398vhaE86XzIqXEqLDBojGlwDZE2yTZR+DIH3kw==}
+  /giime@0.3.5(element-plus@2.7.6)(vue@3.4.31):
+    resolution: {integrity: sha512-MtN0hMu4Z6Um7hkFHKAw1ZHft39ocpwqb50PeUdiodAcHcKru46nulQC6gBT/7Vw7TQ1SPYrOcd16XHY+3TFbw==}
     peerDependencies:
       element-plus: ^2.6.1
       vue: ^3.4.0

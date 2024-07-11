@@ -14,7 +14,9 @@ const pathSrc = path.resolve(__dirname, 'src');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ mode, command }) => {
   const isBuild = command === 'build';
+  // const base = mode === 'production' ? '你的CDN地址/' : '/';
   return {
+    // base,
     resolve: {
       alias: {
         '@/': `${pathSrc}/`,
