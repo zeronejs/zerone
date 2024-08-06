@@ -26,7 +26,9 @@
     </gm-row>
     <ul class="flex flex-wrap p-9">
       <li v-for="(item, index) in routes" :key="index" class="mb-3 ml-3">
-        <gm-button type="primary" @click="$router.push(item.path)">{{ item.path }}</gm-button>
+        <gm-button type="primary" @click="$router.push(item.path)">
+          {{ item.path }} <span v-if="item.meta?.title">（{{ item.meta?.title }}）</span>
+        </gm-button>
       </li>
     </ul>
   </main>
