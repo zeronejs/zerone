@@ -209,7 +209,6 @@ export class GInterface {
                 })
                 .join(' | ');
         }
-
         switch (subSchema.type) {
             case 'string':
                 if (subSchema.enum && subSchema.enum.length) {
@@ -238,7 +237,8 @@ export class GInterface {
                     }
                     return this.getTsType(subSchema.items, subKeyName, prefix) + '[]';
                 }
-                return 'unknown[]';
+                // return 'unknown[]';
+                return 'any[]';
             case 'object':
                 if (subSchema.properties || subSchema.additionalProperties) {
                     let keyName = this.keyName + upperFirst(subKeyName);
@@ -259,7 +259,12 @@ export class GInterface {
 
             default:
                 if (Array.isArray(subSchema.type)) {
-                    return 'any';
+                    return (subSchema as any).type
+                        .map((it: any, index: number) => {
+                            return this.getTsType({ ...subSchema, type: it }, subKeyName, prefix);
+                        })
+                        .join(' | ');
+                    // return 'any';
                 }
                 if (subSchema.type) {
                     return subSchema.type;

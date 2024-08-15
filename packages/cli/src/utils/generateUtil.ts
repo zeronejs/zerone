@@ -37,7 +37,9 @@ export const createModelFileName = (ref: string) => {
 
 export const getRefTypeName = (ref: string) => {
     const paths = ref.split('/');
-    const modelName = paths.pop() as string;
+    let modelName = paths.pop() as string;
+    // 过滤 »  过滤 «
+    modelName = modelName.replaceAll('%C2%BB', '').replaceAll('%C2%AB', '');
     if (/[^0-9a-zA-Z]/.test(modelName)) {
         return escapeVar(chineseToPinyin(modelName));
     }
