@@ -44,11 +44,23 @@ export class GController {
         }
         const tagsItem = operation.tags?.[0] ?? 'default';
         // includeTags
-        if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
+        // if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
+        //     return;
+        // }
+        if (
+            config.includeTags &&
+            config.includeTags.length &&
+            // 当前 includeTags 是否每一个都不是 tagsItem 的前缀
+            config.includeTags.every(item => !tagsItem.startsWith(item))
+        ) {
             return;
         }
         // excludeTags
-        if (config.excludeTags && config.excludeTags.length && config.excludeTags.includes(tagsItem)) {
+        if (
+            config.excludeTags &&
+            config.excludeTags.length &&
+            config.excludeTags.some(item => tagsItem.startsWith(item))
+        ) {
             return;
         }
         this.tagsItem = tagsChineseToPinyin(tagsItem);
