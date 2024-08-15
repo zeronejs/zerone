@@ -24,8 +24,8 @@ dependencies:
     specifier: 2.7.6
     version: 2.7.6(vue@3.4.31)
   giime:
-    specifier: ^0.3.9
-    version: 0.3.9(element-plus@2.7.6)(vue@3.4.31)
+    specifier: ^0.3.10
+    version: 0.3.10(element-plus@2.7.6)(vue@3.4.31)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -65,8 +65,8 @@ devDependencies:
     specifier: ^0.5.1
     version: 0.5.1
   '@zeronejs/cli':
-    specifier: ^3.3.1
-    version: 3.3.1
+    specifier: ^3.4.0
+    version: 3.4.0
   '@zeronejs/eslint-config-vue3':
     specifier: ^0.0.7
     version: 0.0.7(eslint@8.57.0)
@@ -1362,8 +1362,8 @@ packages:
       typescript: 4.5.5
     dev: true
 
-  /@zeronejs/cli@3.3.1:
-    resolution: {integrity: sha512-k6i+4xXqm+6gb4ckI7HWXTaPqsXVT0AX9nHuppQg8mX0QFm+qPOQCcHPpzTuPXkKSAifOrU2cjHsrFuDxyAGBw==}
+  /@zeronejs/cli@3.4.0:
+    resolution: {integrity: sha512-NImmSOgFpHTSTCg781sVD1ByUAdljxqE02ZCHhDXmR3obaTIkOrUxD38rJW3WTE4x6usd3t0pxJVzN8W+nJdjw==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -3362,8 +3362,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /giime@0.3.9(element-plus@2.7.6)(vue@3.4.31):
-    resolution: {integrity: sha512-MtqxCNUGxXqUzWTHuwk9Xhmbb8JYYBeMFVRw321S/GeANWcuc2ti3yVIyimCl8UzIsIkLYULx4iFrnTuF7OwyA==}
+  /giime@0.3.10(element-plus@2.7.6)(vue@3.4.31):
+    resolution: {integrity: sha512-/JoK23C1knkMuw1ufgJyry/GV/ZkBQXLKaBv9FF13D0x1MYrNwsosLlrMLWd+jVfcG1jMmfddgDmVLFs8fNRdA==}
     peerDependencies:
       element-plus: ^2.6.1
       vue: ^3.4.0
