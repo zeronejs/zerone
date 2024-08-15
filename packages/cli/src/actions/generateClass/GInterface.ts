@@ -121,6 +121,8 @@ export class GInterface {
         return interfaceDeclaration;
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix: string): string {
+        const anyOfItem: SwaggerSchema[] = (subSchema as any).anyOf;
+        const oneOfItem: SwaggerSchema[] = (subSchema as any).oneOf;
         if (subSchema.$ref) {
             // TODO
             const typeName = upperFirst(prefix) + getRefTypeName(subSchema.$ref);
@@ -180,6 +182,32 @@ export class GInterface {
                 }
             }
             return keyName;
+        } else if (anyOfItem && anyOfItem.length) {
+            return anyOfItem
+                .map((it: any, index: number) => {
+                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    if (keyName.includes('-')) {
+                        // 横杠换成三个下划线  避免重复
+                        keyName = keyName.replaceAll('-', '___');
+                    }
+
+                    new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
+                    return keyName;
+                })
+                .join(' | ');
+        } else if (oneOfItem && oneOfItem.length) {
+            return oneOfItem
+                .map((it: any, index: number) => {
+                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    if (keyName.includes('-')) {
+                        // 横杠换成三个下划线  避免重复
+                        keyName = keyName.replaceAll('-', '___');
+                    }
+
+                    new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
+                    return keyName;
+                })
+                .join(' | ');
         }
 
         switch (subSchema.type) {
@@ -236,7 +264,7 @@ export class GInterface {
                 if (subSchema.type) {
                     return subSchema.type;
                 }
-                return 'unknown';
+                return 'any';
         }
     }
     genTsType(prefix = '', extendsName?: string) {
