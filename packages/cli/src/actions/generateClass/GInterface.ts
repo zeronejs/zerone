@@ -83,7 +83,15 @@ export class GInterface {
                 return {
                     key,
                     name: inputKey,
-                    type: this.getTsType(properties[key], key, prefix),
+                    type: this.getTsType(
+                        properties[key],
+                        key
+                            .replaceAll('[', '___')
+                            .replaceAll(']', '___')
+                            .replaceAll('-', '___')
+                            .replaceAll('.', '___'),
+                        prefix
+                    ),
                     hasQuestionToken: !requireds.includes(key),
                 };
             });
