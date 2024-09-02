@@ -7,6 +7,7 @@ export function hasChinese(str: string) {
 
 // swagger中tags的中文换成拼音
 export const tagsChineseToPinyin = (str: string) => {
+    str = str.replaceAll(' ', '');
     if (!hasChinese(str)) {
         return str;
     }
