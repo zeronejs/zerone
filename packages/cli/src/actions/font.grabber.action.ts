@@ -36,7 +36,9 @@ export class FontGrabberAction extends AbstractAction {
         let data: string;
         // 地址
         if (!isLocalFilePath(config.cssUrl)) {
-            const res = await axios.get(config.cssUrl).catch(err => {
+            const cssUrl = config.cssUrl.startsWith('//') ? `https:${config.cssUrl}` : config.cssUrl;
+
+            const res = await axios.get(cssUrl).catch(err => {
                 throw console.info(chalk.red('json链接读取失败 ！！！'));
             });
             data = res.data;

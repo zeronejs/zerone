@@ -105,9 +105,10 @@ export function calculateFontSpecs(fontFaceNode: Declaration): FontSpec[] {
 export async function downloadFile(fileUrl: string, outputLocationPath: string) {
     await ensureFile(outputLocationPath);
     const writer = createWriteStream(outputLocationPath);
+    const fileItemUrl = fileUrl.startsWith('//') ? `https:${fileUrl}` : fileUrl;
     const { data } = await axios({
         method: 'get',
-        url: fileUrl,
+        url: fileItemUrl,
         responseType: 'stream',
     });
 
