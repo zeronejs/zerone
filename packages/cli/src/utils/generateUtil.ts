@@ -117,3 +117,27 @@ export function parseSwaggerPathTemplateToFnName(pathTemplate: string) {
 export function isNumberStart(str: string) {
     return /^\d/.test(str);
 }
+
+/**
+ * tags过滤
+ */
+export const filterTags = (curTags: string[], includeTags?: string[], excludeTags?: string[]) => {
+    if (
+        includeTags &&
+        includeTags.length &&
+        // 当前curTags不存在于includeTags中 则过滤掉
+        !includeTags.filter(Boolean).some(item => curTags.some(tagsItem => tagsItem.startsWith(item)))
+    ) {
+        return false;
+    }
+    // excludeTags
+    if (
+        excludeTags &&
+        excludeTags.length &&
+        // 当前curTags存在于 excludeTags 中 则过滤掉
+        excludeTags.filter(Boolean).some(item => curTags.some(tagsItem => tagsItem.startsWith(item)))
+    ) {
+        return false;
+    }
+    return true;
+};

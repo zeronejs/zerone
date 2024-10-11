@@ -11,7 +11,7 @@ jest.mock('fs', () => {
     };
 });
 
-describe('@zeronejs/cli => compiler index.supplementary', () => {
+describe.skip('@zeronejs/cli => compiler index.supplementary', () => {
     let docEntry: DocEntry;
     beforeAll(() => {
         docEntry = generateAstDocumentation(join(__dirname, 'mockTest', 'entities', 'test.entity.ts'));

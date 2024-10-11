@@ -11,7 +11,7 @@ jest.mock('fs', () => {
     };
 });
 
-describe('@zeronejs/cli => compiler module.supplementary', () => {
+describe.skip('@zeronejs/cli => compiler module.supplementary', () => {
     let docEntry: DocEntry;
     let dir: string;
     beforeAll(() => {

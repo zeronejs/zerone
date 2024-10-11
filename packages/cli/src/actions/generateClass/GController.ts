@@ -9,6 +9,7 @@ import {
     parseSwaggerPathTemplate,
     parseSwaggerPathTemplateToFnName,
     isNumberStart,
+    filterTags,
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
@@ -42,27 +43,19 @@ export class GController {
         if (operation.deprecated) {
             return;
         }
+        /**第一个tag  用于制作目录结构 */
         const tagsItem = operation.tags?.[0] ?? 'default';
+        const curTags = operation.tags ?? ['default'];
         // includeTags
         // if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
         //     return;
         // }
-        if (
-            config.includeTags &&
-            config.includeTags.length &&
-            // 当前 includeTags 是否每一个都不是 tagsItem 的前缀
-            config.includeTags.every(item => !tagsItem.startsWith(item))
-        ) {
+        // Tags是否符合要求 是否可以继续
+        const isContinue = filterTags(curTags, config.includeTags, config.excludeTags);
+        if (!isContinue) {
             return;
         }
-        // excludeTags
-        if (
-            config.excludeTags &&
-            config.excludeTags.length &&
-            config.excludeTags.some(item => tagsItem.startsWith(item))
-        ) {
-            return;
-        }
+
         this.tagsItem = tagsChineseToPinyin(tagsItem);
         const key = camelCase(methodKey + parseSwaggerPathTemplateToFnName(pathKey));
         const sourceFilePath = join(controllerUrl, this.tagsItem, `${key}.ts`);

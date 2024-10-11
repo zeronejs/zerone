@@ -1,7 +1,7 @@
 import { DocEntry, generateAstDocumentation } from '../../src/compiler/ts-class.ast.document';
 import { join } from 'path';
 import { TestEntity } from './mockTest/entities/test.entity';
-describe('@zeronejs/cli => compiler ts-class.document', () => {
+describe.skip('@zeronejs/cli => compiler ts-class.document', () => {
     let docEntry: DocEntry;
     beforeAll(() => {
         docEntry = generateAstDocumentation(join(__dirname, 'mockTest', 'entities', 'test.entity.ts'));

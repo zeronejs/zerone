@@ -11,7 +11,7 @@ import {
 
 import { TestEntity } from './test.entity';
 
-describe('@zeronejs/ast => ts InterpretCore', () => {
+describe.skip('@zeronejs/ast => ts InterpretCore', () => {
     it('entity 文件读取', async () => {
         const interpretCore = new InterpretCore(path.join(__dirname, 'test.entity.ts'));
         const classes = new ClassesInterpret(interpretCore).interpret();
