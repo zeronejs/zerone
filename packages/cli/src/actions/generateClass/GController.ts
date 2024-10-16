@@ -13,7 +13,8 @@ import {
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
-
+export type GControllerInstance = InstanceType<typeof GController>;
+export type GenControllerResult = Awaited<ReturnType<GControllerInstance['genController']>>;
 export class GController {
     private operation: Operation;
     // 请求method
@@ -67,16 +68,16 @@ export class GController {
         // import 导入
         this.genImports(config.axiosInstanceUrl);
         // 生成方法
-        this.genApiFn(key, config.prefix);
+        const { resType, inputType, interfaceImportNames } = this.genApiFn(key, config.prefix);
         sourceProject.formatText({
             placeOpenBraceOnNewLineForFunctions: false,
         });
         await sourceProject.save();
-        return { key, tagsItem: this.tagsItem };
+        return { key, tagsItem: this.tagsItem, resType, inputType, interfaceImportNames };
     }
     private genApiFn(fnName: string, prefix = '') {
         if (!this.sourceProject) {
-            return;
+            return {};
         }
         const sourceProject = this.sourceProject;
         // 获取当前tags嵌套深度
@@ -100,11 +101,11 @@ export class GController {
             //     });
             // }
         }
-
+        const interfaceUrl = this.interfacePre + '../../interface';
         // 顶部需要导入的类型
         const typeKeys = [
             { name: 'AxiosRequestConfig', url: 'axios' },
-            { name: 'DeepRequired', url: this.interfacePre + '../../interface' },
+            { name: 'DeepRequired', url: interfaceUrl },
         ];
         for (const tyepItem of typeKeys) {
             let importDeclaration = sourceProject.getImportDeclaration(tyepItem.url);
@@ -260,9 +261,11 @@ export class GController {
                 });
             }
         }
+        // body参数类型
+        let inputType = 'any';
         // requestBody类型生成
         if (requestBodySchema) {
-            const inputType = new GInterface(requestBodySchema, sourceProject, upperFirst(fnName) + 'Input', {
+            inputType = new GInterface(requestBodySchema, sourceProject, upperFirst(fnName) + 'Input', {
                 interfacePre: this.interfacePre,
             }).getTsType(requestBodySchema, '', prefix);
             // // 导入复杂类型
@@ -293,8 +296,10 @@ export class GController {
         functionDeclaration.addJsDoc(
             `${this.operation.summary ? '\n' + this.operation.summary : ''}\n${this.pathKey}`
         );
-
-        return functionDeclaration;
+        const importDeclaration = sourceProject.getImportDeclaration(interfaceUrl);
+        // interface 导入的names
+        const interfaceImportNames = importDeclaration?.getNamedImports().map(it => it.getName());
+        return { functionDeclaration, resType, inputType, interfaceImportNames };
     }
     private genImports(url?: string) {
         // import 导入

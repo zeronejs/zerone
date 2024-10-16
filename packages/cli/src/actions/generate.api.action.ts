@@ -178,7 +178,7 @@ const GControllerHandle = async (
                             operation,
                             methodKey,
                             config.prefix ? `/${config.prefix}${pathKey}` : pathKey
-                        ).genVueUseAxios(join(root, 'controller'), config);
+                        ).genVueUseAxios(join(root, 'controller'), config, res);
                         controllers.push({ key: genAxiosRes.key, tagsItem: genAxiosRes.tagsItem });
                     }
                 }

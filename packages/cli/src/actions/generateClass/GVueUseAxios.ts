@@ -13,6 +13,7 @@ import {
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
+import { GenControllerResult } from './GController';
 
 export class GVueUseAxios {
     private operation: Operation;
@@ -33,7 +34,8 @@ export class GVueUseAxios {
         config: Pick<
             GenerateApiActionConfig,
             'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
-        >
+        >,
+        genControllerResult: GenControllerResult
     ) {
         const operation = this.operation;
         const methodKey = this.methodKey;
@@ -62,7 +64,7 @@ export class GVueUseAxios {
         this.sourceProject = sourceProject;
 
         // 生成方法
-        this.genApiFn(key, apiKey, config);
+        this.genApiFn(key, apiKey, config, genControllerResult);
         sourceProject.formatText({
             placeOpenBraceOnNewLineForFunctions: false,
         });
@@ -75,7 +77,8 @@ export class GVueUseAxios {
         config: Pick<
             GenerateApiActionConfig,
             'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
-        >
+        >,
+        genControllerResult: GenControllerResult
     ) {
         if (!this.sourceProject) {
             return;
@@ -85,7 +88,7 @@ export class GVueUseAxios {
         const schema = this.getSuccessResponseSchema();
         let resType = 'any';
         if (schema) {
-            resType = upperFirst(apiFnName) + 'Result';
+            resType = genControllerResult?.resType ?? upperFirst(apiFnName) + 'Result';
         }
         let interfacePre = '';
         // 获取当前tags嵌套深度
@@ -101,14 +104,21 @@ export class GVueUseAxios {
         this.addNamedImport({ name: 'useAxios', url: `@vueuse/integrations/useAxios`, isTypeOnly: false });
 
         this.addNamedImport({ name: 'AxiosRequestConfig', url: 'axios', isTypeOnly: true });
-
         this.addNamedImport({
             name: 'DeepRequired',
             url: interfacePre + '../../interface',
             isTypeOnly: true,
         });
-
-        this.addNamedImport({ name: resType, url: `./${apiFnName}`, isTypeOnly: true });
+        genControllerResult?.interfaceImportNames?.forEach(item => {
+            this.addNamedImport({
+                name: item,
+                url: interfacePre + '../../interface',
+                isTypeOnly: true,
+            });
+        });
+        if (!schema?.$ref) {
+            this.addNamedImport({ name: resType, url: `./${apiFnName}`, isTypeOnly: true });
+        }
         // import 导入axios实例
         this.genImports(config.axiosInstanceUrl);
         const functionDeclaration = sourceProject.addFunction({
@@ -220,10 +230,12 @@ export class GVueUseAxios {
             const requestBody = (this.operation as any).requestBody;
             execFunctionDeclaration.addParameter({
                 name: 'input',
-                type: inputType,
+                type: genControllerResult?.inputType ?? inputType,
                 hasQuestionToken: !requestBody.required,
             });
-            this.addNamedImport({ name: inputType, url: `./${apiFnName}`, isTypeOnly: true });
+            if (!requestBodySchema.$ref) {
+                this.addNamedImport({ name: inputType, url: `./${apiFnName}`, isTypeOnly: true });
+            }
         }
         execFunctionDeclaration.addParameter({
             name: 'axiosConfig',
