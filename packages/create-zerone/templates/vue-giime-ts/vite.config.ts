@@ -17,6 +17,9 @@ export default defineConfig(({ mode, command }) => {
   // const base = mode === 'production' ? '你的CDN地址/' : '/';
   return {
     // base,
+    define: {
+      __APP_BUILD_TIME__: String(Date.now()),
+    },
     resolve: {
       alias: {
         '@/': `${pathSrc}/`,

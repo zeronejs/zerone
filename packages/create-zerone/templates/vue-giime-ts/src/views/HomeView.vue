@@ -2,6 +2,7 @@
   <main class="text-center">
     <!-- tailwindcss -->
     <h1 class="text-3xl font-bold underline">Hello world!</h1>
+    构建时间 {{ appBuildTime }}
     <!-- svg icon -->
     <div>
       svg icon <gm-icon><SvgIcon icon-class="jump" /></gm-icon> iconfont <i class="gfont icon-yonghu1" />
@@ -34,8 +35,10 @@
   </main>
 </template>
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import { CirclePlus } from '@element-plus/icons-vue';
 import { routes } from '@/router';
+const appBuildTime = dayjs(__APP_BUILD_TIME__).format('YYYY-MM-DD HH:mm:ss');
 const tableData = [
   {
     date: '2016-05-03',
