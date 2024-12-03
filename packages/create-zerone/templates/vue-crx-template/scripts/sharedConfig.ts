@@ -5,6 +5,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import { GiimeResolver } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import { r } from './utils';
 import type { ConfigEnv, PluginOption, UserConfig, UserConfigFnObject } from 'vite';
@@ -36,6 +37,7 @@ export const sharedConfig = (env: ConfigEnv, PluginOptions: PluginOption[] = [])
         // Auto import functions from Element Plus, e.g. ElMessage, ElMessageBox... (with style)
         // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
         resolvers: [
+          GiimeResolver(),
           // ElementPlusResolver(),
 
           // Auto import icon components

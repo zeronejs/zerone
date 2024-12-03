@@ -1,16 +1,34 @@
-import { defineConfig } from 'vite';
+import path from 'path';
+import { defineConfig, loadEnv } from 'vite';
+import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import packageJson from '../package.json';
 import { sharedConfig } from './sharedConfig';
 import { port, r } from './utils';
+import { createLoader } from './popup/loader';
 
 // https://vitejs.dev/config/
 export default defineConfig(env => {
   const isDev = env.mode === 'development';
+  // const __TIME__ = String(Date.now());
+  const shared = sharedConfig(env);
+  const loadedEnv = loadEnv(env.mode, path.resolve(__dirname, '..'));
   return {
     ...sharedConfig(env),
+    plugins: [
+      ...(shared.plugins || []),
+      // {
+      //   name: 'get-hash-plugin',
+      //   generateBundle(options, bundle) {
+      //     // console.log({ bundle });
+      //     // console.log({ options });
+      //     !isDev ? createLoader(Object.keys(bundle), loadedEnv) : null;
+      //   },
+      // },
+    ],
     define: {
       __DEV__: isDev,
       __NAME__: JSON.stringify(packageJson.name),
+      // __TIME__,
     },
     build: {
       watch: isDev ? {} : undefined,

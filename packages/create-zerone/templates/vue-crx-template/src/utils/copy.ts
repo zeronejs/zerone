@@ -1,6 +1,6 @@
 import useClipboard from 'vue-clipboard3';
 import { ElMessage } from 'element-plus';
-import { contentScriptsMessage } from '@/api/gassApi/interceptors';
+import { contentScriptsMessage } from './contentScriptsMessage';
 export const handleCopy = async (str: string) => {
   const { toClipboard } = useClipboard();
   // const { copy } = useClipboard({ legacy: true });

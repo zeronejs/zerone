@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import fs from 'fs-extra';
 import { isDev, port, r } from '../scripts/utils';
 import type PkgType from '../package.json';
@@ -34,6 +35,7 @@ export async function getManifest() {
       'notifications',
       'declarativeNetRequest',
       'declarativeNetRequestFeedback',
+      'webNavigation',
       'declarativeNetRequestWithHostAccess',
       'storage',
       'cookies',

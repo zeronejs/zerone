@@ -1,5 +1,5 @@
 // only on dev mode
-// import { postFspiderGoodsGoodInfo } from '@/api/gassApi/controller';
+import { apiList } from '@/api/apiList';
 if (import.meta.hot) {
   // @ts-expect-error for background HMR
   import('/@vite/client');
@@ -29,20 +29,22 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
 
     // eslint-disable-next-line no-console
     console.log('previous tab', tab);
-    chrome.tabs.sendMessage(tabId, { title: tab.title }, { frameId: 0 });
+    // chrome.tabs.sendMessage(tabId, { title: tab.title }, { frameId: 0 });
   });
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('onMessage');
-  // 采集
-  // if (request.type === 'shopeeGather') {
-  //   postFspiderGoodsGoodInfo(request.content)
-  //     .then(data => sendResponse(data))
-  //     .catch(e => sendResponse(e));
+  const findApi = apiList.find(item => item.name === request.type);
+  if (findApi) {
+    findApi
+      .fn(...((request.params || []) as [any, any]))
+      .then(data => {
+        sendResponse(data);
+      })
+      .catch(e => sendResponse(e));
+    return true;
+  }
 
-  //   return true;
-  // }
   // if (message === 'get-current-tab') {
   //   chrome.tabs.get(previousTabId, tab => {
   //     if (chrome.runtime.lastError) {

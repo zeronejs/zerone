@@ -10,7 +10,7 @@ tests/**/coverage/
 /coverage
 # Editor directories and files
 .idea
-.vscode
+# .vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -25,3 +25,9 @@ build/
 _build_content
 extension/manifest.json
 product-collection-crx.zip
+vite.config.ts.timestamp-*.mjs
+vitest.config.ts.timestamp-*.mjs
+scripts/vite.*.config.ts.timestamp-*.mjs
+scripts/vitest.*.config.ts.timestamp-*.mjs
+third-gather-crx.zip
+third-gather-crx-*.zip

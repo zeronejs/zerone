@@ -30,8 +30,8 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // 接收来自content script的消息，requset里不允许传递function和file类型的参数
-  chrome.tabs.query({ currentWindow: true, active: true }, tabs => {});
-  return true;
-});
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   // 接收来自content script的消息，requset里不允许传递function和file类型的参数
+//   chrome.tabs.query({ currentWindow: true, active: true }, tabs => {});
+//   return true;
+// });
