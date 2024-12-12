@@ -30,9 +30,13 @@ export class GenerateAiMdAction extends AbstractAction {
         ) {
             // 不存在config  并且 在根目录
             await ensureFile(join(root, configFileName));
-            await writeJson(join(root, configFileName), {
-                serviceUrl: 'http://192.168.1.203:5010/genAI/getTemplate',
-            });
+            await writeJson(
+                join(root, configFileName),
+                {
+                    serviceUrl: 'http://192.168.1.203:5010/genAI/getTemplate',
+                },
+                { spaces: 2 }
+            );
         }
         const config: GenerateAiMdActionConfig = await readJson(join(root, configFileName));
 

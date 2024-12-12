@@ -1,4 +1,4 @@
-# @zeronejs/wechat-login
+# @zeronejs/eslint-config-vue3
 
 <!-- ![npm (scoped)](https://img.shields.io/npm/v/@zeronejs/ast-ts) -->
  
