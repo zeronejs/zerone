@@ -38,8 +38,8 @@ export default tseslint.config(
     },
     rules: {
       // @eslint/js
-      camelcase: ['error', { properties: 'never' }],
-      'no-console': ['warn', { allow: ['error'] }],
+      camelcase: off,
+      'no-console': ['warn', { allow: ['error', 'warn'] }],
       'no-debugger': 'warn',
       'no-constant-condition': ['error', { checkLoops: false }],
       'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
@@ -83,28 +83,20 @@ export default tseslint.config(
       'prefer-exponentiation-operator': 'error',
 
       // @eslint-community/eslint-comments
-    //   '@eslint-community/eslint-comments/disable-enable-pair': [
-    //     'error',
-    //     { allowWholeFile: true },
-    //   ],
+      //   '@eslint-community/eslint-comments/disable-enable-pair': [
+      //     'error',
+      //     { allowWholeFile: true },
+      //   ],
 
+      // prettier
+      'prettier/prettier': 'error',
       // import
-      'import/no-duplicates': 'error',
       'import/first': 'error',
-      'import/export': 'error',
+      'import/no-duplicates': 'error',
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-            'object',
-            'type',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
           pathGroups: [
             {
               pattern: 'vue',
@@ -124,6 +116,12 @@ export default tseslint.config(
           pathGroupsExcludedImportTypes: ['type'],
         },
       ],
+      'import/no-unresolved': 'off',
+      'import/namespace': 'off',
+      'import/default': 'off',
+      'import/no-named-as-default': 'off',
+      'import/no-named-as-default-member': 'off',
+      'import/named': 'off',
 
       // unicorn
       'unicorn/custom-error-definition': 'error',
@@ -174,7 +172,7 @@ export default tseslint.config(
         'error',
         { disallowTypeAnnotations: false },
       ],
-      '@typescript-eslint/ban-ts-comment': ['off'],
+      '@typescript-eslint/ban-ts-comment': ['off', { 'ts-ignore': false }],
       // Due to the latest "@typescript-eslint recommended" added some additional rules,
       // temporarily off the following rules to keep the behavior the same as before.
       '@typescript-eslint/no-unused-expressions': 'off',
