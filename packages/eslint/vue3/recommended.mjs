@@ -38,7 +38,7 @@ export default tseslint.config(
     },
     rules: {
       // @eslint/js
-      camelcase: off,
+      camelcase: 'off',
       'no-console': ['warn', { allow: ['error', 'warn'] }],
       'no-debugger': 'warn',
       'no-constant-condition': ['error', { checkLoops: false }],
