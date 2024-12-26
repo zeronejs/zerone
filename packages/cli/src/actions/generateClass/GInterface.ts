@@ -191,6 +191,7 @@ export class GInterface {
             }
             return keyName;
         } else if (anyOfItem && anyOfItem.length) {
+            // debugger
             return anyOfItem
                 .map((it: any, index: number) => {
                     let keyName = this.keyName + upperFirst(subKeyName) + index;
@@ -293,26 +294,63 @@ export class GInterface {
         //     return this.genRefType();
         // }
 
-        // if (this.schema.type === 'boolean') {
-        //     return this.genBooleanType();
-        // }
+        if (this.schema.type === 'boolean') {
+            return this.genBooleanType();
+        }
 
         if (this.schema.type === 'string') {
             return this.genStringType(prefix);
         }
 
-        // if (['number', 'integer'].includes(this.schema.type as string)) {
-        //     return this.genNumberType();
-        // }
+        if (['number', 'integer'].includes(this.schema.type as string)) {
+            return this.genNumberType();
+        }
 
         if (this.schema.type === 'object' || this.schema.properties || this.schema.$ref) {
             return this.genObjectType(prefix, extendsName);
         }
 
-        // if (this.schema.type === 'array') {
-        //     return this.genArrayType();
-        // }
+        if (this.schema.type === 'array') {
+            return this.genArrayType();
+        }
 
-        // return this.genAnyType();
+        return this.genAnyType();
+    }
+    private genBaseType(type: string) {
+        if (!this.keyName) {
+            return;
+        }
+        let declaration = this.sourceFile.getTypeAlias(this.keyName);
+        if (!declaration) {
+            declaration = this.sourceFile.addTypeAlias({
+                name: this.keyName,
+                type,
+            });
+        }
+        declaration.setIsExported(true);
+        return declaration;
+    }
+    private genAnyType() {
+        return this.genBaseType('any');
+    }
+    private genNumberType() {
+        return this.genBaseType('number');
+    }
+    private genBooleanType() {
+        return this.genBaseType('boolean');
+    }
+    genArrayType() {
+        if (!this.keyName) {
+            return;
+        }
+        let declaration = this.sourceFile.getTypeAlias(this.keyName);
+        if (!declaration) {
+            declaration = this.sourceFile.addTypeAlias({
+                name: this.keyName,
+                type: this.getTsType(this.schema.items as SwaggerSchema, this.keyName, '') + '[]',
+            });
+        }
+        declaration.setIsExported(true);
+        return declaration;
     }
 }

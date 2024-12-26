@@ -1,6 +1,6 @@
 {
-    "docsUrl": "http://127.0.0.1:4523/export/openapi?projectId=2434564&version=3.1",
-    "includeTags": ["会话管理"],
+    "docsUrl": "http://192.168.1.203:5010/apifox?projectId=",
+    "includeTags": [],
     "excludeTags": [],
     "axiosInstanceUrl": "@/api/gassApi/service",
     "vueUseAxios": true
