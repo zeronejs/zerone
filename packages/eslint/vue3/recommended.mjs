@@ -8,6 +8,7 @@ import prettier from 'eslint-plugin-prettier/recommended'
 import unicorn from 'eslint-plugin-unicorn'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
+import pluginVitest from '@vitest/eslint-plugin'
 
 export default tseslint.config(
   js.configs.recommended,
@@ -17,6 +18,10 @@ export default tseslint.config(
       unicorn,
       import: esimport,
     },
+  },
+  {
+    ...pluginVitest.configs.recommended,
+    files: ['src/**/__tests__/*'],
   },
   ...jsonc.configs['flat/recommended-with-jsonc'],
   ...markdown.configs.processor,
@@ -38,6 +43,7 @@ export default tseslint.config(
     },
     rules: {
       // @eslint/js
+      "eqeqeq": "warn",
       camelcase: 'off',
       'no-console': ['warn', { allow: ['error', 'warn'] }],
       'no-debugger': 'warn',
