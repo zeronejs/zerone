@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/eslint-config-vue3",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Zerone ESLint Config",
   "type": "module",
   "engines": {
@@ -36,6 +36,7 @@
     "prettier": "^3.0.0"
   },
   "dependencies": {
+    "@stylistic/eslint-plugin": "^2.12.1",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
     "@eslint/js": "^9.16.0",
     "@eslint/markdown": "^6.2.1",

@@ -9,6 +9,7 @@ import unicorn from 'eslint-plugin-unicorn'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
 import pluginVitest from '@vitest/eslint-plugin'
+import stylistic from '@stylistic/eslint-plugin';
 
 export default tseslint.config(
   js.configs.recommended,
@@ -17,6 +18,7 @@ export default tseslint.config(
     plugins: {
       unicorn,
       import: esimport,
+      '@stylistic': stylistic,
     },
   },
   {
@@ -185,6 +187,18 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-require-imports': 'off',
 
+      // stylistic
+      '@stylistic/padding-line-between-statements': [
+        'error',
+        // return
+        { blankLine: 'always', prev: '*', next: 'return' },
+        // import
+        { blankLine: 'always', prev: 'import', next: '*' },
+        { blankLine: 'any', prev: 'import', next: 'import' },
+        // 变量
+        { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+        { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+      ],
       // vue
       'vue/no-v-html': 'off',
       'vue/require-default-prop': 'off',
