@@ -1,11 +1,12 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+// import vueJsx from '@vitejs/plugin-vue-jsx';
 import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { GiimeResolver, giimeDevProxy } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 const pathSrc = path.resolve(__dirname, 'src');
@@ -38,6 +39,7 @@ export default defineConfig(({ mode, command }) => {
     },
     plugins: [
       vue(),
+      // vueJsx(),
       AutoImport({
         // Auto import functions from Vue, e.g. ref, reactive, toRef...
         // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等

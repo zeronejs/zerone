@@ -22,3 +22,5 @@ auto-imports.d.ts
 pnpm-debug.log
 .eslintcache
 vite.config.ts.timestamp-*.mjs
+vitest.config.ts.timestamp-*.mjs
+*.tsbuildinfo
