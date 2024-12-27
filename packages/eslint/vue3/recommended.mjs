@@ -171,7 +171,10 @@ export default tseslint.config(
       'unicorn/throw-new-error': 'error',
 
       // @typescript-eslint
-      // '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        "error",
+        { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" },
+      ],
       '@typescript-eslint/no-redeclare': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

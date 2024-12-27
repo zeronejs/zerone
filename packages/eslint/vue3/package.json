@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/eslint-config-vue3",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Zerone ESLint Config",
   "type": "module",
   "engines": {
