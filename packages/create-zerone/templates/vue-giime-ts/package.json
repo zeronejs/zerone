@@ -48,7 +48,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "@zeronejs/cli": "^3.7.1",
-    "@zeronejs/eslint-config-vue3": "^0.1.8",
+    "@zeronejs/eslint-config-vue3": "^0.1.9",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.17.0",
     "git-cz": "^4.9.0",

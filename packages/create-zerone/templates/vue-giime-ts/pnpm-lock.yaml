@@ -85,8 +85,8 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       '@zeronejs/eslint-config-vue3':
-        specifier: ^0.1.8
-        version: 0.1.8(@typescript-eslint/utils@8.18.2(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.2))(prettier@3.4.2)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1)(sass@1.83.0))
+        specifier: ^0.1.9
+        version: 0.1.9(@typescript-eslint/utils@8.18.2(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.2))(prettier@3.4.2)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1)(sass@1.83.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
@@ -1222,8 +1222,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  '@zeronejs/eslint-config-vue3@0.1.8':
-    resolution: {integrity: sha512-Wnv/DMQe1i4UDqXWW+CNjycOy2jCzJB9MbKPAchX0rhUtXT2BbfpVr0n4uhtCR+XPZFpeV2CdVt0af7O158rqw==}
+  '@zeronejs/eslint-config-vue3@0.1.9':
+    resolution: {integrity: sha512-iqVJ/597y46TB3jrPP1aQM1zLxmwmOaw3paIdFJuXQyCVX8jiFlHUE3l117IqBOsFEJwjcz4UBaTHqJ0XryBpg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       eslint: ^9.0.0
@@ -5753,7 +5753,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@zeronejs/eslint-config-vue3@0.1.8(@typescript-eslint/utils@8.18.2(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.2))(prettier@3.4.2)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1)(sass@1.83.0))':
+  '@zeronejs/eslint-config-vue3@0.1.9(@typescript-eslint/utils@8.18.2(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.2))(prettier@3.4.2)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.2)(jsdom@25.0.1)(sass@1.83.0))':
     dependencies:
       '@eslint-community/eslint-plugin-eslint-comments': 4.4.1(eslint@9.17.0(jiti@2.4.2))
       '@eslint/js': 9.17.0
