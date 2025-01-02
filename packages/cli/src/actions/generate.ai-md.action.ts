@@ -16,6 +16,7 @@ export interface GenerateAiMdActionConfig {
 export interface GenAIGetTemplateResultDto {
     fileName: string;
     tempContent: string;
+    fileBasePath?: string;
 }
 export class GenerateAiMdAction extends AbstractAction {
     public async handle(options: Input[]) {
@@ -58,8 +59,11 @@ export class GenerateAiMdAction extends AbstractAction {
         console.info(chalk.gray('生成文件中...'));
 
         for (const contentItem of data.data) {
-            await ensureFile(join(root, contentItem.fileName));
-            await writeFile(join(root, contentItem.fileName), contentItem.tempContent);
+            // 写入文件root
+            const writeRoot = contentItem.fileBasePath === 'root' ? process.cwd() : root;
+
+            await ensureFile(join(writeRoot, contentItem.fileName));
+            await writeFile(join(writeRoot, contentItem.fileName), contentItem.tempContent);
         }
 
         console.info(chalk.green(`生成文件完成`));
