@@ -12,12 +12,14 @@
       element icon <gm-icon><CirclePlus /></gm-icon>
     </div>
     <!-- element-plus -->
-    <gm-table style="width: 100%" :data="tableData">
-      <gm-table-column a b prop="date" label="Date" width="180" />
-      <gm-table-column prop="name" label="Name" width="180" />
+    <gm-table-ctx table-id="UniqueID">
+      <gm-table style="width: 100%" :data="tableData">
+        <gm-table-column a b prop="date" label="Date" width="180" />
+        <gm-table-column prop="name" label="Name" width="180" />
 
-      <gm-table-column prop="address" label="Address" />
-    </gm-table>
+        <gm-table-column prop="address" label="Address" />
+      </gm-table>
+    </gm-table-ctx>
     <gm-row class="mb-4">
       <gm-button>Default</gm-button>
       <gm-button type="primary">Primary</gm-button>
