@@ -4,6 +4,7 @@ const easeInOutQuad = function (t: number, b: number, c: number, d: number) {
     return (c / 2) * t * t + b;
   }
   t--;
+
   return (-c / 2) * (t * (t - 2) - 1) + b;
 };
 
@@ -43,12 +44,14 @@ export function scrollTo(to: number, duration: number, callback?: () => any) {
   const change = to - start;
   const increment = 20;
   let currentTime = 0;
+
   duration = typeof duration === 'undefined' ? 500 : duration;
   const animateScroll = function () {
     // increment the time
     currentTime += increment;
     // find the value with the quadratic in-out easing function
     const val = easeInOutQuad(currentTime, start, change, duration);
+
     // move the document.body
     move(val);
     // do the animation unless its over
@@ -61,5 +64,6 @@ export function scrollTo(to: number, duration: number, callback?: () => any) {
       }
     }
   };
+
   animateScroll();
 }

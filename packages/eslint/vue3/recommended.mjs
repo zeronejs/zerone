@@ -364,7 +364,7 @@ export default tseslint.config(
       'public',
       'src/api/**/controller/**/*.ts',
       'src/api/**/interface/**/*.ts',
-      'reqs'
+      // 'reqs'
     ],
   }
 )

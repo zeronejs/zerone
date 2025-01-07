@@ -21,7 +21,7 @@
     <gm-row class="mb-4">
       <gm-button>Default</gm-button>
       <gm-button type="primary">Primary</gm-button>
-      <gm-button type="success">Success</gm-button>
+      <gm-button type="success" @click="handleMessage">Success</gm-button>
       <gm-button type="info">Info</gm-button>
       <gm-button type="warning">Warning</gm-button>
       <gm-button type="danger">Danger</gm-button>
@@ -63,4 +63,8 @@ const tableData = [
     address: 'No. 189, Grove St, Los Angeles',
   },
 ];
+const handleMessage = () => {
+  GmMessage('test');
+  GmMessageBox({});
+};
 </script>

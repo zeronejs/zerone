@@ -26,6 +26,7 @@ import SvgIcon from '@/components/SvgIcon.vue';
 dayjs.locale('zh-cn');
 
 const app = createApp(App);
+
 app.use(createPinia());
 app.use(router);
 app.use(ElementPlus, {

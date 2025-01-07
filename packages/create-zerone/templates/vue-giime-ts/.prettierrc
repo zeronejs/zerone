@@ -9,7 +9,5 @@
   "bracketSameLine": false,
   "arrowParens": "avoid",
   "endOfLine": "auto",
-  "plugins": [
-    "prettier-plugin-tailwindcss"
-  ]
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

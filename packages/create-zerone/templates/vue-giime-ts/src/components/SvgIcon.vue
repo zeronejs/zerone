@@ -29,6 +29,7 @@ export default defineComponent({
         if (props.className) {
           return `svg-icon ${props.className}`;
         }
+
         return 'svg-icon';
       }),
     };

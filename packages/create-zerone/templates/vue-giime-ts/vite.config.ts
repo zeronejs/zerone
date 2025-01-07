@@ -9,12 +9,14 @@ import Components from 'unplugin-vue-components/vite';
 // import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { GiimeResolver, giimeDevProxy } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+
 const pathSrc = path.resolve(__dirname, 'src');
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ mode, command }) => {
   const isBuild = command === 'build';
+
   // const base = mode === 'production' ? '你的CDN地址/' : '/';
   return {
     // base,

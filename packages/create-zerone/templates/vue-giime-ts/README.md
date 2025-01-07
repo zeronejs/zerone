@@ -3,6 +3,7 @@
 1. pnpm create zerone
 
 # 项目技术栈
+
 1. 打包：vite
 2. 语言：ts
 3. 框架：vue3

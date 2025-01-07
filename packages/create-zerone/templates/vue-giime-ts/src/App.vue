@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
+
 const route = useRoute();
 const includeNames = ref(new Set<string>());
+
 watch(route, value => {
   if (value.name && value.meta.keepAlive) {
     includeNames.value.add(value.name as string);
