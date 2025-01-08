@@ -129,6 +129,7 @@ export class GInterface {
         return interfaceDeclaration;
     }
     getTsType(subSchema: SwaggerSchema, subKeyName: string, prefix: string): string {
+        const allOfItem: SwaggerSchema[] = (subSchema as any).allOf;
         const anyOfItem: SwaggerSchema[] = (subSchema as any).anyOf;
         const oneOfItem: SwaggerSchema[] = (subSchema as any).oneOf;
         if (subSchema.$ref) {
@@ -158,38 +159,19 @@ export class GInterface {
             }
 
             return typeName;
-        } else if (subSchema.allOf && subSchema.allOf.length) {
-            // const keyName = subSchema.title ? subSchema.title : this.keyName + upperFirst(subKeyName);
-            const keyName = this.keyName + upperFirst(subKeyName);
-            if (subSchema.allOf.length === 1) {
-                return this.getTsType(subSchema.allOf[0], this.keyName, '');
-            }
-            const moduleInterface = new GInterface(
-                subSchema.allOf[0],
-                this.sourceFile,
-                keyName,
-                this.options
-            ).genTsType('', this.getTsType(subSchema.allOf[0], subKeyName, prefix));
-
-            for (let index = 1; index < subSchema.allOf.length; index++) {
-                const item = subSchema.allOf[index];
-                for (const key in item.properties) {
-                    const value = item.properties[key];
-                    const inputKey =
-                        key.includes('[') || key.includes('-') || key.includes('.') || isNumberStart(key)
-                            ? `'${key}'`
-                            : key;
-                    // 普通属性
-                    if (moduleInterface instanceof InterfaceDeclaration) {
-                        moduleInterface?.addProperty({
-                            // key,
-                            name: inputKey,
-                            type: this.getTsType(value, key, prefix),
-                        });
+        } else if (allOfItem && allOfItem.length) {
+            return allOfItem
+                .map((it: any, index: number) => {
+                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    if (keyName.includes('-')) {
+                        // 横杠换成三个下划线  避免重复
+                        keyName = keyName.replaceAll('-', '___');
                     }
-                }
-            }
-            return keyName;
+                    return this.getTsType(it, subKeyName, prefix);
+                    // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
+                    // return keyName;
+                })
+                .join(' & ');
         } else if (anyOfItem && anyOfItem.length) {
             // debugger
             return anyOfItem
@@ -199,9 +181,9 @@ export class GInterface {
                         // 横杠换成三个下划线  避免重复
                         keyName = keyName.replaceAll('-', '___');
                     }
-
-                    new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
-                    return keyName;
+                    return this.getTsType(it, subKeyName, prefix);
+                    // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
+                    // return keyName;
                 })
                 .join(' | ');
         } else if (oneOfItem && oneOfItem.length) {
@@ -212,9 +194,9 @@ export class GInterface {
                         // 横杠换成三个下划线  避免重复
                         keyName = keyName.replaceAll('-', '___');
                     }
-
-                    new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
-                    return keyName;
+                    return this.getTsType(it, subKeyName, prefix);
+                    // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
+                    // return keyName;
                 })
                 .join(' | ');
         }
@@ -265,7 +247,8 @@ export class GInterface {
 
             case 'file':
                 return 'File';
-
+            // case 'null':
+            //     return 'null';
             default:
                 if (Array.isArray(subSchema.type)) {
                     return (subSchema as any).type
