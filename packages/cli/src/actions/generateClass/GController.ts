@@ -2,7 +2,7 @@ import { ensureFile, remove } from 'fs-extra';
 import { camelCase, upperFirst } from 'lodash';
 import url from 'url';
 import { join } from 'path';
-import { Operation, Schema, Parameter, Reference } from 'swagger-schema-official';
+import { Operation, Schema, Parameter, Reference, Spec } from 'swagger-schema-official';
 import { Project, SourceFile } from 'ts-morph';
 import {
     tagsChineseToPinyin,
@@ -25,7 +25,7 @@ export class GController {
     private tagsItem = 'default';
     private sourceProject?: SourceFile;
     private interfacePre = '';
-    constructor(operation: Operation, methodKey: string, pathKey: string) {
+    constructor(operation: Operation, methodKey: string, pathKey: string, public jsonData: any) {
         this.operation = operation;
         this.methodKey = methodKey;
         this.pathKey = pathKey;
@@ -150,14 +150,25 @@ export class GController {
         functionDeclaration.setIsExported(true);
         // 处理链接上的参数
         if (this.operation.parameters && this.operation.parameters.length) {
-            const parameters = this.operation.parameters.filter(param => {
-                if (!this.isParam(param)) {
-                    // 暂不处理引用
-                    return false;
-                }
-                // 仅处理 query path
-                return ['query', 'path'].includes(param.in);
-            }) as Parameter[];
+            const parameters = this.operation.parameters
+                .map(param => {
+                    if (!this.isParam(param) && this.jsonData?.components?.parameters) {
+                        const refName = param.$ref.split('/').pop() ?? '';
+
+                        return this.jsonData.components.parameters[refName] ?? param;
+                        // this.operation.parameters?.find(it=>it.)
+                    }
+                    return param;
+                })
+                .filter(param => {
+                    if (!this.isParam(param)) {
+                        // 暂不处理引用
+                        return false;
+                    }
+                    // 仅处理 query path
+                    return ['query', 'path'].includes(param.in);
+                }) as Parameter[];
+
             if (parameters.length) {
                 const paramsTypeName = upperFirst(fnName) + 'Params';
                 functionDeclaration.addParameter({ name: 'params', type: paramsTypeName });

@@ -3,7 +3,7 @@ import { Input } from '../commands';
 import { AbstractAction } from './abstract.action';
 import { ensureFile, pathExists, readJson, remove, move } from 'fs-extra';
 import { join, resolve } from 'path';
-import { Path, Operation, Schema } from 'swagger-schema-official';
+import { Path, Operation, Schema, Spec } from 'swagger-schema-official';
 import { Project } from 'ts-morph';
 import axios from 'axios';
 import { GController } from './generateClass/GController';
@@ -79,7 +79,7 @@ export class GenerateApiAction extends AbstractAction {
         // 生成类型文件
         await GInterfaceHandle(data.components.schemas as Schema, root, config);
         // 生成Controller
-        await GControllerHandle(paths, root, config);
+        await GControllerHandle(paths, root, config, data);
         // 生成mock类型文件
         // await GMockClassHandle(data.components.schemas as Schema, root, config);
         if (javascriptOption === true) {
@@ -154,7 +154,8 @@ const supportMethodKeys = ['get', 'put', 'post', 'delete', 'options', 'head', 'p
 const GControllerHandle = async (
     paths: { [pathName: string]: Path },
     root: string,
-    config: GenerateApiActionConfig
+    config: GenerateApiActionConfig,
+    jsonData: any
 ) => {
     const controllers: { key: string; tagsItem: string }[] = [];
     for (const pathKey of Object.keys(paths)) {
@@ -169,7 +170,8 @@ const GControllerHandle = async (
                 const res = await new GController(
                     operation,
                     methodKey,
-                    config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                    config.prefix ? `/${config.prefix}${pathKey}` : pathKey,
+                    jsonData
                 ).genController(join(root, 'controller'), config);
                 if (res?.key && res.tagsItem) {
                     controllers.push({ key: res.key, tagsItem: res.tagsItem });
@@ -177,7 +179,8 @@ const GControllerHandle = async (
                         const genAxiosRes = await new GVueUseAxios(
                             operation,
                             methodKey,
-                            config.prefix ? `/${config.prefix}${pathKey}` : pathKey
+                            config.prefix ? `/${config.prefix}${pathKey}` : pathKey,
+                            jsonData
                         ).genVueUseAxios(join(root, 'controller'), config, res);
                         controllers.push({ key: genAxiosRes.key, tagsItem: genAxiosRes.tagsItem });
                     }

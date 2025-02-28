@@ -24,7 +24,7 @@ export class GVueUseAxios {
     // tags名称
     private tagsItem = 'default';
     private sourceProject?: SourceFile;
-    constructor(operation: Operation, methodKey: string, pathKey: string) {
+    constructor(operation: Operation, methodKey: string, pathKey: string, public jsonData: any) {
         this.operation = operation;
         this.methodKey = methodKey;
         this.pathKey = pathKey;
@@ -117,7 +117,13 @@ export class GVueUseAxios {
             });
         });
         if (!schema?.$ref) {
-            this.addNamedImport({ name: resType, url: `./${apiFnName}`, isTypeOnly: true });
+            resType.split('|').forEach(resTypeItem => {
+                let typeFilterArray = resTypeItem.trim();
+                if (typeFilterArray.endsWith('[]')) {
+                    typeFilterArray = typeFilterArray.slice(0, -2);
+                }
+                this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
+            });
         }
         // import 导入axios实例
         this.genImports(config.axiosInstanceUrl);
@@ -149,8 +155,10 @@ export class GVueUseAxios {
         const requestBodySchema = this.getRequestBodySchema();
         // 请求路径
         const requestUrl = parseSwaggerPathTemplate(this.pathKey);
+        const useUrl = parseSwaggerPathMatches(this.pathKey).length > 0 ? `\`${requestUrl}\`,` : '';
+
         execFunctionDeclaration.setBodyText(
-            `return useAxiosReturn.execute(${
+            `return useAxiosReturn.execute(${useUrl}${
                 requestBodySchema ? '{ data: input, ...axiosConfig }' : 'axiosConfig'
             });`
         );
@@ -160,14 +168,25 @@ export class GVueUseAxios {
 
         // 处理链接上的参数
         if (this.operation.parameters && this.operation.parameters.length) {
-            const parameters = this.operation.parameters.filter(param => {
-                if (!this.isParam(param)) {
-                    // 暂不处理引用
-                    return false;
-                }
-                // 仅处理 query path
-                return ['query', 'path'].includes(param.in);
-            }) as Parameter[];
+            const parameters = this.operation.parameters
+                .map(param => {
+                    if (!this.isParam(param) && this.jsonData?.components?.parameters) {
+                        const refName = param.$ref.split('/').pop() ?? '';
+
+                        return this.jsonData.components.parameters[refName] ?? param;
+                        // this.operation.parameters?.find(it=>it.)
+                    }
+                    return param;
+                })
+                .filter(param => {
+                    if (!this.isParam(param)) {
+                        // 暂不处理引用
+                        return false;
+                    }
+                    // 仅处理 query path
+                    return ['query', 'path'].includes(param.in);
+                }) as Parameter[];
+
             if (parameters.length) {
                 const paramsTypeName = upperFirst(apiFnName) + 'Params';
                 execFunctionDeclaration.addParameter({ name: 'params', type: paramsTypeName });
