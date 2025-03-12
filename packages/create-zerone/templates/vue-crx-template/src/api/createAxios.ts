@@ -42,7 +42,12 @@ export const createAxios = (
       }
       config.params._token = _token;
       config.params._user = _user;
-      config.headers.Authorization = `Bearer ${_token}`;
+      if (config.data) {
+        config.data.user_id = _user;
+      }
+      if (_token) {
+        config.headers.Authorization = `Bearer ${_token}`;
+      }
       await options?.requestInterceptors?.(config);
       return config;
     },
@@ -74,10 +79,10 @@ export const createAxios = (
       return response;
     },
     async (err: AxiosError) => {
-      console.error(err.config);
+      console.error(err);
       if (err?.response?.status === 401 && !err.message.includes('timeout')) {
         GmMessage.error('登录失效，请重新登录');
-        return;
+        return Promise.reject(err);
       } else {
         // 对响应错误做点什么
         responseErrorMessage(err);

@@ -53,14 +53,14 @@ export const createChromeRuntimeSendMessage = <ApiList extends Readonly<Array<Ch
       return response;
     } else {
       let message: string;
-      if (response?.response?.status === 401 && !response.message.includes('timeout')) {
+      if (response?.status === 401 && !response.message.includes('timeout')) {
         contentScriptsMessage({
           type: 'error',
           message: '登录失效，请重新登录',
         });
         throw Promise.reject(response);
-      } else if (response.response?.data?.message) {
-        message = response.response?.data?.message;
+      } else if (response?.data?.message) {
+        message = response?.data?.message;
       } else {
         message = response.message.includes('timeout') ? '请求超时' : response.message;
       }
