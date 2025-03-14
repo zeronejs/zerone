@@ -1,4 +1,0 @@
-{
-  "root": true,
-  "extends": ["@zeronejs/eslint-config-vue3/recommended"]
-}

@@ -13,12 +13,12 @@ const checkVersion = async () => {
     type: 'getBuildConfig',
   });
 
-  if (data.version !== __VERSION__) {
+  if (data.version > __VERSION__) {
     console.log(`请更新当前插件：${__NAME__}`);
     return contentScriptsMessage({
       dangerouslyUseHTMLString: true,
       message: `<div>${__DISPLAY_NAME__} 版本过低，请安装最新版：
-       <a href="${data.downloadUrl}" download="filename.txt" style="color: #0000FF;" >下载文件</a> 
+       <a href="${data.downloadUrl}" download="filename.txt" style="color: #0000FF;" >下载文件</a>
       </div>`,
       type: 'error',
       duration: 10_000,

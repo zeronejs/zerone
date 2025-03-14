@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { GmMessage, isNumber, responseErrorMessage } from 'giime';
 import type { AxiosError, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
+
 export interface CreateAxiosConfig extends CreateAxiosDefaults {
   baseURL: string;
   /**服务器调用成功的code 一般是 0 或 200 */
@@ -34,6 +35,7 @@ export const createAxios = (
         domain: '.giikin.com',
         // name: 'token',
       });
+
       _token = cookies.find(item => item.name === 'token')?.value ?? '';
       const _user = cookies.find(item => item.name === 'sso_user_id')?.value ?? '';
 
@@ -49,10 +51,12 @@ export const createAxios = (
         config.headers.Authorization = `Bearer ${_token}`;
       }
       await options?.requestInterceptors?.(config);
+
       return config;
     },
     error => {
       console.error('请求错误', error); // for debug
+
       return Promise.reject(error);
     },
   );
@@ -61,11 +65,13 @@ export const createAxios = (
     async response => {
       // 对响应数据做点什么
       const res = response.data;
+
       if (!isNumber(res?.code)) {
         return response;
       }
       if (res.code === 401) {
         GmMessage.error('登录失效，请重新登录');
+
         return response;
       } else if (res.code !== successCode && res.errCode !== successCode) {
         ElMessage({
@@ -76,16 +82,19 @@ export const createAxios = (
           showClose: true,
         });
       }
+
       return response;
     },
     async (err: AxiosError) => {
       console.error(err);
       if (err?.response?.status === 401 && !err.message.includes('timeout')) {
         GmMessage.error('登录失效，请重新登录');
+
         return Promise.reject(err);
       } else {
         // 对响应错误做点什么
         responseErrorMessage(err);
+
         return Promise.reject(err);
       }
     },

@@ -60,6 +60,7 @@ export default defineConfig(env => {
         entry: r('src/contentScripts/index.ts'),
         name: packageJson.name,
         formats: ['iife'],
+        cssFileName:'style'
       },
       rollupOptions: {
         output: {
