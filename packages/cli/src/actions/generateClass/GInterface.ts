@@ -76,22 +76,30 @@ export class GInterface {
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
                 const inputKey =
-                    key.includes('[') || key.includes('-') || key.includes('.') || isNumberStart(key)
+                    key.includes('[') ||
+                    key.includes('-') ||
+                    key.includes('.') ||
+                    isNumberStart(key) ||
+                    key.includes('/') ||
+                    key.includes('\\')
                         ? `'${key}'`
                         : key;
                 // 普通属性
                 return {
                     key,
                     name: inputKey,
-                    type: this.getTsType(
-                        properties[key],
-                        key
-                            .replaceAll('[', '___')
-                            .replaceAll(']', '___')
-                            .replaceAll('-', '___')
-                            .replaceAll('.', '___'),
-                        prefix
-                    ),
+                    type:
+                        this.getTsType(
+                            properties[key],
+                            key
+                                .replaceAll('[', '___')
+                                .replaceAll(']', '___')
+                                .replaceAll('-', '___')
+                                .replaceAll('/', '___')
+                                .replaceAll('\\', '___')
+                                .replaceAll('.', '___'),
+                            prefix
+                        ) ?? 'any',
                     hasQuestionToken: !requireds.includes(key),
                 };
             });
