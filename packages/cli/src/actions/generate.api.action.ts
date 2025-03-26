@@ -53,6 +53,7 @@ export class GenerateApiAction extends AbstractAction {
         // http文档地址
         if (parsedUrl.protocol && parsedUrl.host) {
             const res = await axios.get(config.docsUrl).catch(err => {
+                console.info(chalk.red(err?.response?.data ?? err?.message));
                 throw console.info(chalk.red('json链接读取失败 ！！！'));
             });
             data = res.data;
@@ -65,9 +66,8 @@ export class GenerateApiAction extends AbstractAction {
                 return console.info(chalk.red('json链接读取失败！！！'));
             }
         }
-
         if (!data || !data.paths) {
-            return console.info(chalk.red('json链接读取失败！！！'));
+            return console.info(chalk.red('json链接读取失败！！！', data?.msg || data));
         }
         console.info(chalk.green(`链接读取成功`));
         const paths = data.paths as { [pathName: string]: Path };
