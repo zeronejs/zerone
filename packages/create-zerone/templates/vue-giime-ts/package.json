@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:dev": "vite build --mode dev",
     "build:test": "vite build --mode test",
     "build:release": "vite build --mode release",
     "preview": "vite preview",
@@ -31,7 +32,7 @@
     "dayjs": "^1.11.13",
     "echarts": "^5.6.0",
     "element-plus": "2.9.2",
-    "giime": "^0.6.5",
+    "giime": "^0.6.16",
     "js-cookie": "^3.0.5",
     "pinia": "^2.3.0",
     "sass": "^1.83.1",
@@ -40,8 +41,8 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.6.1",
-    "@commitlint/config-conventional": "^19.6.0",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@tsconfig/node22": "^22.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/jsdom": "^21.1.7",
@@ -52,7 +53,7 @@
     "@vue/tsconfig": "^0.7.0",
     "@zeronejs/cli": "^3.7.2",
     "@zeronejs/eslint-config-vue3": "^0.1.9",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.17.0",
     "git-cz": "^4.9.0",
     "husky": "^9.1.7",
@@ -68,7 +69,7 @@
     "unplugin-auto-import": "^0.19.0",
     "unplugin-icons": "^0.22.0",
     "unplugin-vue-components": "^0.28.0",
-    "vite": "^6.0.7",
+    "vite": "^6.2.4",
     "vite-plugin-svg-icons": "^2.0.1",
     "vitest": "^2.1.8",
     "vue-tsc": "^2.2.0"

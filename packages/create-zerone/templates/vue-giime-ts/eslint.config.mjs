@@ -1,3 +1,8 @@
 import eslintConfig from '@zeronejs/eslint-config-vue3/recommended';
 
-export default [...eslintConfig];
+export default [
+  ...eslintConfig,
+  {
+    rules: {},
+  },
+];
