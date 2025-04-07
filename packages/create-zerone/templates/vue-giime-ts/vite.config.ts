@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
 // import vueJsx from '@vitejs/plugin-vue-jsx';
 import Icons from 'unplugin-icons/vite';
@@ -13,13 +13,19 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 const pathSrc = path.resolve(__dirname, 'src');
 
 // https://vitejs.dev/config/
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export default defineConfig(({ mode, command }) => {
   const isBuild = command === 'build';
 
-  // const base = mode === 'production' ? '你的CDN地址/' : '/';
+  const env = loadEnv(mode, process.cwd(), '');
+
+  const base =
+    mode === 'production'
+      ? '/' // CDN地址
+      : (env.VITE_BASE_URL ?? '/');
+
   return {
-    // base,
+    base,
     define: {
       __APP_BUILD_TIME__: String(Date.now()),
     },
@@ -93,7 +99,7 @@ export default defineConfig(({ mode, command }) => {
         ...giimeDevProxy,
         // https://cn.vitejs.dev/config/#server-proxy
         '/shop-api': {
-          target: 'http://192.168.4.125:10086/gstore/',
+          target: 'https://manage-dev.giikin.cn/guard/',
           changeOrigin: true,
           rewrite: p => p.replace(/^\/shop-api/, ''),
         },

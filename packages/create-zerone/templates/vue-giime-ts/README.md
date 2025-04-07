@@ -36,3 +36,19 @@ pnpm build
 ```sh
 pnpm build:test
 ```
+
+## 开发环境
+
+地址：https://manage-dev.giikin.cn/gsmp/home
+
+## 测试环境
+
+地址：https://manage-test.giikin.cn/gsmp/home
+
+## 预发布环境
+
+地址：https://front-pre.giikin.com/home
+
+## 正式环境
+
+地址：https://gsmp.giikin.com/home

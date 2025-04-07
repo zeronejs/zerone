@@ -82,8 +82,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.7.2)(vue@3.5.13(typescript@5.7.2))
       '@zeronejs/cli':
-        specifier: ^3.7.2
-        version: 3.7.2
+        specifier: ^3.7.6
+        version: 3.7.6
       '@zeronejs/eslint-config-vue3':
         specifier: ^0.1.9
         version: 0.1.9(@typescript-eslint/utils@8.19.1(eslint@9.17.0(jiti@2.4.2))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.2))(prettier@3.4.2)(typescript@5.7.2)(vitest@2.1.8(@types/node@22.10.5)(jsdom@25.0.1)(sass@1.83.1))
@@ -1467,8 +1467,8 @@ packages:
     resolution: {integrity: sha512-jB6FI1/7xUxe9YEegxS9xaWro8lh2wbeyIeXlT188MzgE/FWzQmfEta5C+s2T7jDORpb22IhzYrHsBm0kygFbw==}
     engines: {node: '>=12.0.0'}
 
-  '@zeronejs/cli@3.7.2':
-    resolution: {integrity: sha512-6INSycBMFVFFhL+fRfKFq8Oi2Q23Jo/ZS0cLeq3oxpTmsehvdwkiGYlM39r9FWPxAeW2c2iHpaYtxHfw8ggEsQ==}
+  '@zeronejs/cli@3.7.6':
+    resolution: {integrity: sha512-5KD0ro8jkK+obaoiMsB4Bylr/e3n2BVdJTS8JYF+M8Ty5lcYySOVikPobwlFCBBrT/5YPWRLSZ2CWtc1jVBi9A==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -6152,7 +6152,7 @@ snapshots:
     dependencies:
       typescript: 4.5.5
 
-  '@zeronejs/cli@3.7.2':
+  '@zeronejs/cli@3.7.6':
     dependencies:
       '@zeronejs/ast-ts': 1.0.0-beta.8
       '@zeronejs/utils': 2.2.1
