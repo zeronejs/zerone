@@ -56,6 +56,7 @@
     "@nestjs/testing": "^9.4.3",
     "@nestjs/typeorm": "^10.0.0",
     "@zeronejs/ast-ts": "workspace:*",
-    "@zeronejs/utils": "workspace:*"
+    "@zeronejs/utils": "workspace:*",
+    "path-to-regexp": "^8.2.0"
   }
 }

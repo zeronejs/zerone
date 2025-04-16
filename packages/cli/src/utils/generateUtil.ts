@@ -1,5 +1,6 @@
 import pinyin from 'pinyin';
 import { camelCase, upperFirst } from 'lodash';
+import { pathToRegexp } from 'path-to-regexp';
 export function hasChinese(str: string) {
     const reg = /[\u4e00-\u9fa5]/g; // 中文字符的 Unicode 范围
     return reg.test(str);
@@ -141,3 +142,28 @@ export const filterTags = (curTags: string[], includeTags?: string[], excludeTag
     }
     return true;
 };
+
+/**
+ * 检查路径是否匹配
+ * @param path
+ * @param includePaths
+ * @param excludePaths
+ * @returns
+ */
+export function checkPath(path: string, includePaths?: string[], excludePaths?: string[]) {
+    // Helper function to test if a path matches any pattern in the list
+    const matchesPattern = (path: string, patterns?: string[]) => {
+        return patterns?.some(pattern => {
+            const { regexp } = pathToRegexp(pattern);
+            return regexp.test(path);
+        });
+    };
+
+    // Check if path matches any include pattern and does not match any exclude pattern
+    const isIncluded = matchesPattern(path, includePaths);
+    const isExcluded = matchesPattern(path, excludePaths);
+    return {
+        isIncluded,
+        isExcluded,
+    };
+}

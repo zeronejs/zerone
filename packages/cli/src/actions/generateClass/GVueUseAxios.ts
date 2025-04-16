@@ -31,10 +31,7 @@ export class GVueUseAxios {
     }
     async genVueUseAxios(
         controllerUrl: string,
-        config: Pick<
-            GenerateApiActionConfig,
-            'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
-        >,
+        config: GenerateApiActionConfig,
         genControllerResult: GenControllerResult
     ) {
         const operation = this.operation;

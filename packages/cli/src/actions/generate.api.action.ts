@@ -18,6 +18,8 @@ export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
     excludeTags?: string[];
+    includePaths?: string[];
+    excludePaths?: string[];
     prefix?: string;
     axiosInstanceUrl?: string;
     // 是否生成useAxios文件

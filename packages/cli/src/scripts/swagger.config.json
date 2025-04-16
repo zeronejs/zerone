@@ -1,7 +1,10 @@
 {
-    "docsUrl": "http://192.168.1.203:5010/apifox?projectId=",
-    "includeTags": [],
+    "docsUrl": "http://192.168.1.203:5010/apifox?projectId=5370559",
+    "includeTags": ["基础服务/语种管理"],
     "excludeTags": [],
+    "includePaths": ["/basic/v1/currency/listAll","/basic/v1/sysArea{/*path}"],
+    "excludePaths": ["/basic/v1/language/remove"],
+
     "axiosInstanceUrl": "@/api/gassApi/service",
     "vueUseAxios": true
 }

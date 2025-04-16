@@ -10,6 +10,7 @@ import {
     parseSwaggerPathTemplateToFnName,
     isNumberStart,
     filterTags,
+    checkPath,
 } from '../../utils/generateUtil';
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
@@ -30,13 +31,7 @@ export class GController {
         this.methodKey = methodKey;
         this.pathKey = pathKey;
     }
-    async genController(
-        controllerUrl: string,
-        config: Pick<
-            GenerateApiActionConfig,
-            'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
-        >
-    ) {
+    async genController(controllerUrl: string, config: GenerateApiActionConfig) {
         const operation = this.operation;
         const methodKey = this.methodKey;
         const pathKey = this.pathKey;
@@ -51,8 +46,20 @@ export class GController {
         // if (config.includeTags && config.includeTags.length && !config.includeTags.includes(tagsItem)) {
         //     return;
         // }
+        // 检查path是否符合要求
+
+        let isContinue = filterTags(curTags, config.includeTags, config.excludeTags);
+        const { isIncluded, isExcluded } = checkPath(pathKey, config.includePaths, config.excludePaths);
+
+        if (isIncluded) {
+            isContinue = true;
+        }
+
+        if (isExcluded) {
+            isContinue = false;
+        }
+
         // Tags是否符合要求 是否可以继续
-        const isContinue = filterTags(curTags, config.includeTags, config.excludeTags);
         if (!isContinue) {
             return;
         }
