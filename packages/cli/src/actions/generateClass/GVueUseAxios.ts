@@ -14,6 +14,7 @@ import {
 import { GenerateApiActionConfig } from '../generate.api.action';
 import { GInterface } from './GInterface';
 import { GenControllerResult } from './GController';
+import { isString } from '@zeronejs/utils';
 
 export class GVueUseAxios {
     private operation: Operation;
@@ -71,10 +72,7 @@ export class GVueUseAxios {
     private genApiFn(
         fnName: string,
         apiFnName: string,
-        config: Pick<
-            GenerateApiActionConfig,
-            'excludeTags' | 'includeTags' | 'prefix' | 'axiosInstanceUrl' | 'vueUseAxios'
-        >,
+        config: GenerateApiActionConfig,
         genControllerResult: GenControllerResult
     ) {
         if (!this.sourceProject) {
@@ -93,12 +91,15 @@ export class GVueUseAxios {
             const count = (this.tagsItem.match(/\//g) || []).length;
             interfacePre = Array(count).fill('../').join('');
         }
+        const useAxiosUrl = isString(config.vueUseAxios)
+            ? config.vueUseAxios
+            : '@vueuse/integrations/useAxios';
         this.addNamedImport({
             name: 'UseAxiosOptions',
-            url: `@vueuse/integrations/useAxios`,
+            url: useAxiosUrl,
             isTypeOnly: true,
         });
-        this.addNamedImport({ name: 'useAxios', url: `@vueuse/integrations/useAxios`, isTypeOnly: false });
+        this.addNamedImport({ name: 'useAxios', url: useAxiosUrl, isTypeOnly: false });
 
         this.addNamedImport({ name: 'AxiosRequestConfig', url: 'axios', isTypeOnly: true });
         this.addNamedImport({

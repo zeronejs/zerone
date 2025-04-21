@@ -22,8 +22,8 @@ export interface GenerateApiActionConfig {
     excludePaths?: string[];
     prefix?: string;
     axiosInstanceUrl?: string;
-    // 是否生成useAxios文件
-    vueUseAxios?: boolean;
+    // 是否生成useAxios文件 字符串则直接指定导入的路径
+    vueUseAxios?: boolean | string;
 }
 
 export class GenerateApiAction extends AbstractAction {
