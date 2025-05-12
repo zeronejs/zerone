@@ -34,7 +34,7 @@ export class GenerateAiMdAction extends AbstractAction {
             await writeJson(
                 join(root, configFileName),
                 {
-                    serviceUrl: 'http://192.168.1.203:5010/genAI/getTemplate',
+                    serviceUrl: 'https://genapi-giime.giikin.com/genAI/getTemplate',
                 },
                 { spaces: 2 }
             );

@@ -1,7 +1,7 @@
 {
-  "docsUrl": "http://192.168.1.203:5010/apifox?projectId=",
+  "docsUrl": "https://genapi-giime.giikin.com/apifox?projectId=",
   "includeTags": [],
   "excludeTags": [],
   "axiosInstanceUrl": "@/api/demo/request",
-  "vueUseAxios": true
+  "vueUseAxios": "giime"
 }

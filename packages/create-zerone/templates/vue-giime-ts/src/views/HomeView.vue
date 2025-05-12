@@ -24,7 +24,7 @@
       <gm-button>Default</gm-button>
       <gm-button type="primary">Primary</gm-button>
       <gm-button type="success" @click="handleMessage">Success</gm-button>
-      <gm-button type="info">Info</gm-button>
+      <gm-button type="info" size="">Info</gm-button>
       <gm-button type="warning">Warning</gm-button>
       <gm-button type="danger">Danger</gm-button>
     </gm-row>

@@ -16,7 +16,7 @@ const modules: Array<RouteRecordRaw> = Object.values(moduleFiles).flat();
 
 export const routes: Array<RouteRecordRaw> = [...modules];
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(import.meta.env.VITE_BASE_URL ?? '/'),
   routes,
 });
 const title = useTitle();
