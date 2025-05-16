@@ -81,6 +81,7 @@ export class GInterface {
                     key.includes('.') ||
                     isNumberStart(key) ||
                     key.includes('/') ||
+                    key.includes('#') ||
                     key.includes('\\')
                         ? `'${key}'`
                         : key;
@@ -97,7 +98,8 @@ export class GInterface {
                                 .replaceAll('-', '___')
                                 .replaceAll('/', '___')
                                 .replaceAll('\\', '___')
-                                .replaceAll('.', '___'),
+                                .replaceAll('.', '___')
+                                .replaceAll('#', '___'),
                             prefix
                         ) ?? 'any',
                     hasQuestionToken: !requireds.includes(key),
