@@ -110,6 +110,7 @@ export async function downloadFile(fileUrl: string, outputLocationPath: string) 
         method: 'get',
         url: fileItemUrl,
         responseType: 'stream',
+        proxy: false,
     });
 
     // 确保提供的路径的目录存在

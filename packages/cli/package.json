@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "3.7.10",
+  "version": "3.7.11",
   "description": "Zerone Cli",
   "engines": {
     "node": ">=12.0.0"
@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "ts-node ./src/bin.ts build -d",
     "info": "ts-node ./src/bin.ts info",
+    "font": "tsx ./src/bin.ts font_grabber -p ./src/scripts",
     "publish:npm": "pnpm build && pnpm publish dist/"
   },
   "bin": {

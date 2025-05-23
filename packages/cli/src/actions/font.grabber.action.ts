@@ -38,7 +38,7 @@ export class FontGrabberAction extends AbstractAction {
         if (!isLocalFilePath(config.cssUrl)) {
             const cssUrl = config.cssUrl.startsWith('//') ? `https:${config.cssUrl}` : config.cssUrl;
 
-            const res = await axios.get(cssUrl).catch(err => {
+            const res = await axios.get(cssUrl, { proxy: false }).catch(err => {
                 throw console.info(chalk.red('json链接读取失败 ！！！'));
             });
             data = res.data;
@@ -59,7 +59,6 @@ export class FontGrabberAction extends AbstractAction {
         const outputParse = path.parse(outputPath);
         const result = await postcss().process(data, { from: config.cssUrl, to: outputPath });
         const postcssRoot = result.root;
-
         for (const node of postcssRoot.nodes) {
             if (node.type !== 'atrule' || node.name !== 'font-face') {
                 continue;
