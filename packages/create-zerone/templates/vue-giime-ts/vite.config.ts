@@ -7,7 +7,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 // import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-import { GiimeResolver, giimeDevProxy } from 'giime';
+import { GiimeResolver, bypass, giimeDevProxy } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 
 const pathSrc = path.resolve(__dirname, 'src');
@@ -102,6 +102,7 @@ export default defineConfig(({ mode, command }) => {
           target: 'https://manage-dev.giikin.cn/guard/',
           changeOrigin: true,
           rewrite: p => p.replace(/^\/shop-api/, ''),
+          bypass,
         },
       },
     },
