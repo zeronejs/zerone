@@ -236,7 +236,16 @@ export class GInterface {
                             .map(it => `'${it}'`)
                             .join(' | ');
                     }
-                    return this.getTsType(subSchema.items, subKeyName, prefix) + '[]';
+                    // 显示括号
+                    const showBrackets =
+                        (subSchema.items as any)?.oneOf?.length > 1 ||
+                        (subSchema.items as any)?.anyOf?.length > 1 ||
+                        (subSchema.items as any)?.allOf?.length > 1 ||
+                        (subSchema.items as any)?.enum?.length > 1;
+
+                    return `${showBrackets ? '(' : ''}${this.getTsType(subSchema.items, subKeyName, prefix)}${
+                        showBrackets ? ')' : ''
+                    }[]`;
                 }
                 // return 'unknown[]';
                 return 'any[]';
