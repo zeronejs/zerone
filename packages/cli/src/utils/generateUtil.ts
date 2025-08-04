@@ -12,7 +12,15 @@ export const tagsChineseToPinyin = (str: string) => {
     if (!hasChinese(str)) {
         return str;
     }
-    return chineseToPinyin(str);
+    return str
+        .split('/')
+        .map(it => {
+            if (!hasChinese(it)) {
+                return it;
+            }
+            return chineseToPinyin(it);
+        })
+        .join('/');
 };
 // 我们针对的是ts interface，所以首字母大写
 export const chineseToPinyin = (str: string) => {
