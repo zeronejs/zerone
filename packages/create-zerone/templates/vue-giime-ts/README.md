@@ -40,15 +40,19 @@ pnpm build:test
 ## 开发环境
 
 地址：https://manage-dev.giikin.cn/gsmp/home
+地址：https://manage-dev.giikin.cn/fe/
 
 ## 测试环境
 
 地址：https://manage-test.giikin.cn/gsmp/home
+地址：https://manage-test.giikin.cn/fe/
 
 ## 预发布环境
 
 地址：https://front-pre.giikin.com/home
+地址：https://manage-pre.giikin.com/fe/
 
 ## 正式环境
 
 地址：https://gsmp.giikin.com/home
+地址：https://manage.giikin.com/fe/
