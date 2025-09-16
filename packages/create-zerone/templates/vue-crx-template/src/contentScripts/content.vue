@@ -10,7 +10,7 @@ const isShowMainDialog = ref(false);
   <div>
     <div class="CRX-content">
       12312
-      <el-image :src="contentIcon" class="fixed bottom-[100px] right-[60px] z-50 h-[50px] w-[50px]" @click="isShowMainDialog = true" />
+      <el-image class="fixed bottom-[100px] right-[60px] z-50 h-[50px] w-[50px]" :src="contentIcon" @click="isShowMainDialog = true" />
       <MainDialog
         :visible="isShowMainDialog"
         @onClose="

@@ -7,7 +7,7 @@ import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 // import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-import { GiimeResolver, bypass, giimeDevProxy } from 'giime';
+import { GiimeResolver, bypass, giimeDevProxyFn } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 
 const pathSrc = path.resolve(__dirname, 'src');
@@ -19,10 +19,7 @@ export default defineConfig(({ mode, command }) => {
 
   const env = loadEnv(mode, process.cwd(), '');
 
-  const base =
-    mode === 'production'
-      ? '/' // CDN地址
-      : (env.VITE_BASE_URL ?? '/');
+  const base = env.VITE_BASE_CDN_URL || env.VITE_BASE_URL || '/';
 
   return {
     base,
@@ -96,7 +93,7 @@ export default defineConfig(({ mode, command }) => {
     server: {
       host: '0.0.0.0',
       proxy: {
-        ...giimeDevProxy,
+        ...giimeDevProxyFn(env),
         // https://cn.vitejs.dev/config/#server-proxy
         '/shop-api': {
           target: 'https://manage-dev.giikin.cn/guard/',
@@ -115,6 +112,7 @@ export default defineConfig(({ mode, command }) => {
           target: 'http://192.168.4.125:10086/gstore/',
           changeOrigin: true,
           rewrite: p => p.replace(/^\/test-api/, ''),
+          bypass,
         },
       },
     },
