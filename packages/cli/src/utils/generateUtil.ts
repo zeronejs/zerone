@@ -1,6 +1,6 @@
 import pinyin from 'pinyin';
 import { camelCase, upperFirst } from 'lodash';
-import { pathToRegexp } from 'path-to-regexp';
+// import { pathToRegexp } from 'path-to-regexp';
 export function hasChinese(str: string) {
     const reg = /[\u4e00-\u9fa5]/g; // 中文字符的 Unicode 范围
     return reg.test(str);
@@ -162,8 +162,10 @@ export function checkPath(path: string, includePaths?: string[], excludePaths?: 
     // Helper function to test if a path matches any pattern in the list
     const matchesPattern = (path: string, patterns?: string[]) => {
         return patterns?.some(pattern => {
-            const { regexp } = pathToRegexp(pattern);
-            return regexp.test(path);
+            // 解决链接中携带问号
+            return pattern === path;
+            // const { regexp } = pathToRegexp(pattern);
+            // return regexp.test(path);
         });
     };
 
