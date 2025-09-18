@@ -11,10 +11,10 @@ import { writeManifest } from './manifest';
 export default defineConfig(env => {
   const isDev = env.mode === 'development';
   // console.log(env);
-  // console.log(process.env.VITE_BASE_SHOP_API);
   // console.log(loadEnv(env.mode, path.resolve(__dirname, '..')));
   const shared = sharedConfig(env);
   const loadedEnv = loadEnv(env.mode, path.resolve(__dirname, '..'));
+
   // setupBackgroundBootstrap(loadedEnv);
   // writeManifest(loadedEnv);
   return {

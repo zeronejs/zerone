@@ -17,6 +17,7 @@ interface ResponseEventDetail {
 }
 function triggerCustomEvent(eventName: string, detail: object): void {
   const event = new CustomEvent(eventName, { detail });
+
   document.dispatchEvent(event);
 }
 type ChromeRuntimeProxy = {
@@ -28,7 +29,7 @@ type ChromeRuntimeProxy = {
 export const chromeRuntimeProxy = new Proxy<ChromeRuntimeProxy>({} as any, {
   get(target, propKey: string) {
     return function (...args: any[]): Promise<any> {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         const requestId = generateRequestId();
 
         // 监听响应事件

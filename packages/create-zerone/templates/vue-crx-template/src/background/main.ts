@@ -1,5 +1,6 @@
 // only on dev mode
 import { apiList } from '@/api/apiList';
+
 if (import.meta.hot) {
   // @ts-expect-error for background HMR
   import('/@vite/client');
@@ -19,6 +20,7 @@ let previousTabId = 0;
 chrome.tabs.onActivated.addListener(({ tabId }) => {
   if (!previousTabId) {
     previousTabId = tabId;
+
     return;
   }
 
@@ -35,6 +37,7 @@ chrome.tabs.onActivated.addListener(({ tabId }) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const findApi = apiList.find(item => item.name === request.type);
+
   if (findApi) {
     findApi
       .fn(...((request.params || []) as [any, any]))
@@ -42,6 +45,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse(data);
       })
       .catch(e => sendResponse(e));
+
     return true;
   }
 

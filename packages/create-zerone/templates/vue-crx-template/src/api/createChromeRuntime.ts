@@ -1,4 +1,4 @@
-import { chromeRuntimeProxy } from './chromeRuntime';
+// import { chromeRuntimeProxy } from './chromeRuntime';
 import { contentScriptsMessage } from '@/utils/contentScriptsMessage';
 
 interface ChromeApiListItem {
@@ -28,6 +28,7 @@ export const createChromeRuntimeSendMessage = <ApiList extends Readonly<Array<Ch
       type,
       params,
     });
+
     return responseInterceptors(data);
   };
   /**响应拦截器 */
@@ -36,11 +37,13 @@ export const createChromeRuntimeSendMessage = <ApiList extends Readonly<Array<Ch
       if (response.config.url?.includes('/adreport')) return response;
       // 对响应数据做点什么
       const res = response.data;
+
       if (res.code == 401) {
         contentScriptsMessage({
           type: 'error',
           message: '登录失效，请重新登录',
         });
+
         return response;
       } else if (res.code != 0 && res.code != 401) {
         contentScriptsMessage({
@@ -50,9 +53,11 @@ export const createChromeRuntimeSendMessage = <ApiList extends Readonly<Array<Ch
           showClose: true,
         });
       }
+
       return response;
     } else {
       let message: string;
+
       if (response?.status === 401 && !response.message.includes('timeout')) {
         contentScriptsMessage({
           type: 'error',
@@ -74,6 +79,7 @@ export const createChromeRuntimeSendMessage = <ApiList extends Readonly<Array<Ch
       throw Promise.reject(response);
     }
   };
+
   return {
     chromeRuntimeSendMessage,
   };

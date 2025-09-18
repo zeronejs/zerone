@@ -40,6 +40,7 @@ export async function getManifest() {
       'storage',
       'cookies',
       'activeTab',
+      'webRequest',
     ],
     host_permissions: ['*://*/*'],
     content_scripts: [

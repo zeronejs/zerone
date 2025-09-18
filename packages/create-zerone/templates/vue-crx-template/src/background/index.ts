@@ -25,6 +25,7 @@ chrome.runtime.onInstalled.addListener(() => {
     };
     // 整合所有规则
     const rules = [rule];
+
     // 执行规则
     chrome.declarativeContent.onPageChanged.addRules(rules);
   });
