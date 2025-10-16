@@ -225,10 +225,10 @@ export class GVueUseAxios {
                         });
                         writer.writeLine(`};`);
 
-                        writer.writeLine(`return useAxiosReturn.execute( {`);
-                        if (parseSwaggerPathMatches(this.pathKey).length > 0) {
-                            writer.writeLine(`url: \`${parseSwaggerPathTemplate(this.pathKey)}\`,`);
-                        }
+                        writer.writeLine(`return useAxiosReturn.execute(${useUrl}{`);
+                        // if (parseSwaggerPathMatches(this.pathKey).length > 0) {
+                        //     writer.writeLine(`url: \`${parseSwaggerPathTemplate(this.pathKey)}\`,`);
+                        // }
                         writer.writeLine(`params: paramsInput,`);
                         if (requestBodySchema) {
                             writer.writeLine(`data: input,`);
