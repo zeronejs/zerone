@@ -3,7 +3,7 @@ import ElementPlus from 'element-plus';
 // element
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 // giime
-import Giime, { isString } from 'giime';
+import Giime from 'giime';
 
 // 线性图标
 import '@/assets/gfont/iconfont.css';
@@ -31,6 +31,7 @@ import './checkVersion';
 console.info(`[你的插件: ${__NAME__}] 欢迎来到 content script`);
 
 const container = document.createElement('div');
+
 container.id = __NAME__;
 export const root = document.createElement('div');
 const main = () => {
@@ -40,6 +41,7 @@ const main = () => {
   const styleEl = document.createElement('link');
   // const shadowDOM = container.attachShadow?.({ mode: __DEV__ ? 'open' : 'closed' }) || container;
   const shadowDOM = container.attachShadow?.({ mode: 'open' }) || container;
+
   // const shadowDOM = container;
   styleEl.setAttribute('rel', 'stylesheet');
   styleEl.setAttribute('href', chrome.runtime.getURL('dist/contentScripts/style.css'));
@@ -49,6 +51,7 @@ const main = () => {
 
   // console.log('root', root);
   const app = createApp(Content);
+
   // app.component('SvgIcon', SvgIcon);
   app.component('CopyIcon', CopyIcon);
   // 集成Element Plus
@@ -60,6 +63,7 @@ const main = () => {
 
   app.mount(root);
 };
+
 // 是否是需要加载页面
 // if (gatherList.some(it => it.case)) {
 main();

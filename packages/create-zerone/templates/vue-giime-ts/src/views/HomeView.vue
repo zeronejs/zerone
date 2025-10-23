@@ -28,7 +28,7 @@
       <gm-button type="warning">Warning</gm-button>
       <gm-button type="danger">Danger</gm-button>
     </gm-row>
-    <ul class="flex flex-wrap p-9">
+    <ul v-if="currentUserStore.userInfo?.id" class="flex flex-wrap p-9">
       <li v-for="(item, index) in routes" :key="index" class="mb-3 ml-3">
         <gm-button type="primary" @click="$router.push(item.path)">
           {{ item.path }} <span v-if="item.meta?.title">（{{ item.meta?.title }}）</span>
@@ -39,8 +39,11 @@
 </template>
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import { useCurrentUserStore } from 'giime';
 import { CirclePlus } from '@element-plus/icons-vue';
 import { routes } from '@/router';
+
+const currentUserStore = useCurrentUserStore();
 
 const appBuildTime = dayjs(__APP_BUILD_TIME__).format('YYYY-MM-DD HH:mm:ss');
 const tableData = [
