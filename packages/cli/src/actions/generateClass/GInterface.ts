@@ -77,6 +77,8 @@ export class GInterface {
             const addPropertiesInput = Object.keys(properties).map(key => {
                 const inputKey =
                     key.includes('[') ||
+                    key.includes('(') ||
+                    key.includes(')') ||
                     key.includes('-') ||
                     key.includes('.') ||
                     isNumberStart(key) ||
@@ -93,6 +95,8 @@ export class GInterface {
                         this.getTsType(
                             properties[key],
                             key
+                                .replaceAll('(', '___')
+                                .replaceAll(')', '___')
                                 .replaceAll('[', '___')
                                 .replaceAll(']', '___')
                                 .replaceAll('-', '___')
