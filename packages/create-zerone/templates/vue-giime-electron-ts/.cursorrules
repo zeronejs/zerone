@@ -1,0 +1,121 @@
+# 项目规则
+
+1. 优先且严格遵循项目规则，而不是个人习惯。
+
+## 1. 编码规则
+
+1. 函数和变量使用 尽量使用camelCase
+2. 每个方法和变量定义时，请添加适量 JSDoc 注释，使用中文
+3. 函数内部添加适量的单行注释，注释使用中文
+4. 使用守卫语句：使用条件语句提前退出或抛出错误来处理无效或特殊情况，从而避免执行不必要的代码，减少代码的嵌套深度，提高代码的可读性、可维护性和健壮性
+
+## 2. vue编码规范
+
+1. 减少使用watch，能不用就不用
+2. 使用defineModel，这个宏可以用来声明一个双向绑定 prop
+3. 制作dialog组件时，请提供openDialog方法
+4. ['computed','ref','reactive','watch'] 等vue内置方法，已通过`unplugin-auto-import`自动导入，无需显式的使用import语句导入
+5. 组件的样式使用tailwindcss，非必要不使用style标签
+6. 与页面逻辑无关的配置数据，应该在相应modules /**/composables/usexxxOptions.ts中抽离复用。如下配置示例：
+
+```ts
+export const useXxxOptions = () => {
+
+  const tableId = 'xxx-xxx-xxx-xxx-xxx';
+  /** 选项 */
+  const xxxOptions = [
+    { label: '选项1', value: 1 ,tagType: 'primary' as const },
+    { label: '选项2', value: 2 ,tagType: 'success' as const },
+  ];
+  const rules = {
+    xxx: [{ required: true, message: 'xxx不能为空', trigger: 'blur' }],
+  };
+  return {
+    tableId,
+    xxxOptions,
+    rules,
+  };
+};
+7. 调用接口时，无需使用try catch代码块，接口会自动处理错误，gm-button组件也无需处理isLoading，其他情况请使用 try finally
+
+```
+
+## 3. 接口文件使用规则
+
+接口文件非常规范，请严格按照下面说明，查找和使用 相关方法和类型。
+
+- 文件限制：
+
+  - /src/api 文件夹下的文件可以简单修改，不能新建和删除
+
+- 文件命名：
+
+  - 文件名是通过 "请求方法+路由地址" 生成的，你可以依照此规则找到接口文件
+  - 示例：post `/open/v1/system/list` → `postOpenV1SystemList.ts`
+
+- 使用流程：
+  1. 如果提供了接口地址，第一步是找到`@/api/xxx/controller`中定义的请求方法
+  2. 仔细阅读接口文件中的类型定义，不要自己编参数
+  ```ts
+  export function postBasicV1VoltageDownloadTplDemo(input?: PostBasicV1VoltageDownloadTplDemoInput, config?: AxiosRequestConfig) {
+    return request.post<DeepRequired<PostBasicV1VoltageDownloadTplDemoResult>>(`/basic/v1/voltage/downloadTplDemo`, input, config);
+  }
+  ```
+  3. 在这个例子中，你需要阅读和使用`PostBasicV1VoltageDownloadTplDemoInput`和`PostBasicV1VoltageDownloadTplDemoResult`这两个类型
+  4. 数据源：下拉框、单选框等的数据源，可以根据接口文档的注释来获取。获取后 应该在useXxxOptions中抽离复用。
+
+## API模块导入规则
+
+这是一个强制性要求，不仅仅是建议：
+
+1. ✅ 正确的导入方式：
+
+```ts
+// 接口方法导入
+import type { PostGmpV1CrowdListInput } from '@/api/gmp/controller';
+import { postGmpV1CrowdList } from '@/api/gmp/controller';
+// 类型定义导入
+```
+
+2. ❌ 错误的导入方式：
+
+```ts
+// 禁止直接从具体文件导入
+import type { PostGmpV1CrowdListInput } from '@/api/gmp/controller/RenQunGuanLi/postGmpV1CrowdList';
+import { postGmpV1CrowdList } from '@/api/gmp/controller/RenQunGuanLi/postGmpV1CrowdList';
+```
+
+重要说明：
+
+- 这个规则同时适用于方法导入和类型导入
+- 所有接口和类型都应该从controller/index.ts（或interface/index.ts）统一导出
+- 即使IDE自动补全显示完整路径，也要手动修改为简化路径
+- 这样做的目的是降低代码耦合度，方便后期维护和重构
+
+影响：
+
+- 提高代码可维护性
+- 降低重构成本
+- 保持接口引用的一致性
+- 方便统一管理API变更
+
+注意：
+
+- 在开发时要特别注意类型导入，不要被IDE的自动补全误导
+- Code Review时应该重点检查API的导入方式
+- 如果发现使用了完整路径，必须修改为从controller导入
+
+## 4. 项目技术栈
+
+- 基础技术：
+
+  - 语言：ts
+  - 框架：vue3
+  - css：tailwindcss
+  - 状态管理：pinia
+
+- UI框架：
+
+  - 优先使用 giime，giime继承和扩展了element-plus，`el-`开头的组件，均可使用`gm-`
+  - 特殊需求时可使用 element-plus
+

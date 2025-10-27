@@ -36,6 +36,10 @@ const bootstrap = async () => {
             url: 'direct:https://codeload.github.com/zzh948498/vue3-ts-giime-template/zip/main',
             dirName: 'vue-giime-ts',
         },
+        {
+            url: 'direct:https://codeload.github.com/zzh948498/vue3-ts-giime-electron-template/zip/main',
+            dirName: 'vue-giime-electron-ts',
+        },
     ];
 
     try {

@@ -1,0 +1,61 @@
+{
+  "disableEmoji": false,
+  "list": ["test", "feat", "fix", "chore", "docs", "refactor", "style", "ci", "perf"],
+  "maxMessageLength": 64,
+  "minMessageLength": 3,
+  "questions": ["type", "scope", "subject", "body", "breaking", "issues", "lerna"],
+  "scopes": [],
+  "types": {
+    "feat": {
+      "description": "新功能",
+      "emoji": "🎸",
+      "value": "feat"
+    },
+    "fix": {
+      "description": "修复bug",
+      "emoji": "🐛",
+      "value": "fix"
+    },
+    "style": {
+      "description": "样式",
+      "emoji": "💄",
+      "value": "style"
+    },
+    "docs": {
+      "description": " 文档",
+      "emoji": "✏️",
+      "value": "docs"
+    },
+    "perf": {
+      "description": "性能优化",
+      "emoji": "⚡️",
+      "value": "perf"
+    },
+    "refactor": {
+      "description": "重构",
+      "emoji": "💡",
+      "value": "refactor"
+    },
+    "test": {
+      "description": "测试",
+      "emoji": "💍",
+      "value": "test"
+    },
+    "ci": {
+      "description": "持续集成",
+      "emoji": "🎡",
+      "value": "ci"
+    },
+    "release": {
+      "description": "发布",
+      "emoji": "🏹",
+      "value": "release"
+    },
+
+    "chore": {
+      "description": "杂务",
+      "emoji": "🤖",
+      "value": "chore"
+    }
+  }
+}

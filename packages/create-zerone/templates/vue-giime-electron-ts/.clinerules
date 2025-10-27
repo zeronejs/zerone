@@ -1,0 +1,103 @@
+# 项目规则
+
+1. 优先且严格遵循项目规则，而不是个人习惯。
+2. 如果规则或者需求有什么不明白的，请第一时间和我沟通，我确认后再进行下一步。
+
+## 1. 编码规则
+
+1. 函数和变量使用 尽量使用camelCase
+2. js/ts/vue 文件代码行数最大为 300 行
+3. 每个方法和变量定义时，请添加适量 JSDoc 注释，使用中文
+4. 函数内部添加适量的单行注释，注释使用中文
+
+## 2. 通用规则
+
+- TypeScript文件导入问题：
+
+  - 新建ts文件后，其他文件import可能报"文件不存在"错误
+  - 这是VSCode未及时识别新文件导致，可以忽略此错误
+
+- 自动格式化：
+
+  - 保存时会自动执行eslint修复 (`"editor.formatOnSave": true`)
+
+## 3. 接口文件使用规则
+
+接口文件非常规范，请严格按照下面说明，查找和使用 相关方法和类型。
+
+- 文件限制：
+
+  - /src/api 文件夹下的文件可以简单修改，不能新建和删除
+
+- 文件命名：
+
+  - 文件名是通过 "请求方法+路由地址" 生成的，你可以依照此规则找到接口文件
+  - 示例：post `/open/v1/system/list` → `postOpenV1SystemList.ts`
+
+- 使用流程：
+  1. 如果提供了接口地址，第一步是找到`@/api/xxx/controller`中定义的请求方法
+  2. 仔细阅读接口文件中的类型定义，不要自己编参数
+  ```ts
+  export function postBasicV1VoltageDownloadTplDemo(input?: PostBasicV1VoltageDownloadTplDemoInput, config?: AxiosRequestConfig) {
+    return request.post<DeepRequired<PostBasicV1VoltageDownloadTplDemoResult>>(`/basic/v1/voltage/downloadTplDemo`, input, config);
+  }
+  ```
+  3. 在这个例子中，你需要阅读和使用`PostBasicV1VoltageDownloadTplDemoInput`和`PostBasicV1VoltageDownloadTplDemoResult`这两个类型
+  4. 数据源：下拉框、单选框等的数据源，可以根据接口文档的注释来获取。获取后 应该在useXxxOptions中抽离复用。
+
+## API模块导入规则
+
+这是一个强制性要求，不仅仅是建议：
+
+1. ✅ 正确的导入方式：
+
+```ts
+// 接口方法导入
+import type { PostGmpV1CrowdListInput } from '@/api/gmp/controller';
+import { postGmpV1CrowdList } from '@/api/gmp/controller';
+// 类型定义导入
+```
+
+2. ❌ 错误的导入方式：
+
+```ts
+// 禁止直接从具体文件导入
+import type { PostGmpV1CrowdListInput } from '@/api/gmp/controller/RenQunGuanLi/postGmpV1CrowdList';
+import { postGmpV1CrowdList } from '@/api/gmp/controller/RenQunGuanLi/postGmpV1CrowdList';
+```
+
+重要说明：
+
+- 这个规则同时适用于方法导入和类型导入
+- 所有接口和类型都应该从controller/index.ts（或interface/index.ts）统一导出
+- 即使IDE自动补全显示完整路径，也要手动修改为简化路径
+- 这样做的目的是降低代码耦合度，方便后期维护和重构
+
+影响：
+
+- 提高代码可维护性
+- 降低重构成本
+- 保持接口引用的一致性
+- 方便统一管理API变更
+
+注意：
+
+- 在开发时要特别注意类型导入，不要被IDE的自动补全误导
+- Code Review时应该重点检查API的导入方式
+- 如果发现使用了完整路径，必须修改为从controller导入
+
+## 4. 项目技术栈
+
+- 基础技术：
+
+  - 语言：ts
+  - 框架：vue3
+  - css：tailwindcss
+  - 状态管理：pinia
+
+- UI框架：
+
+  - 优先使用 giime，giime继承和扩展了element-plus，`el-`开头的组件，均可使用`gm-`
+  - 特殊需求时可使用 element-plus
+
+- 当前系统：Windows

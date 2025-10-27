@@ -72,6 +72,11 @@ const FRAMEWORKS: Framework[] = [
                 display: 'vue-crx-template',
                 color: yellow,
             },
+            {
+                name: 'vue-giime-electron-ts',
+                display: 'giime-electron-ts',
+                color: green,
+            },
             // {
             //     name: 'custom-create-vue',
             //     display: 'Customize with create-vue ↗',
