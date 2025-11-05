@@ -176,12 +176,12 @@ export class GInterface {
         } else if (allOfItem && allOfItem.length) {
             return allOfItem
                 .map((it: any, index: number) => {
-                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    let keyName = upperFirst(subKeyName) + index;
                     if (keyName.includes('-')) {
                         // 横杠换成三个下划线  避免重复
                         keyName = keyName.replaceAll('-', '___');
                     }
-                    return this.getTsType(it, subKeyName, prefix);
+                    return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
                 })
@@ -190,12 +190,12 @@ export class GInterface {
             // debugger
             return anyOfItem
                 .map((it: any, index: number) => {
-                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    let keyName = upperFirst(subKeyName) + index;
                     if (keyName.includes('-')) {
                         // 横杠换成三个下划线  避免重复
                         keyName = keyName.replaceAll('-', '___');
                     }
-                    return this.getTsType(it, subKeyName, prefix);
+                    return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
                 })
@@ -203,12 +203,12 @@ export class GInterface {
         } else if (oneOfItem && oneOfItem.length) {
             return oneOfItem
                 .map((it: any, index: number) => {
-                    let keyName = this.keyName + upperFirst(subKeyName) + index;
+                    let keyName = upperFirst(subKeyName) + index;
                     if (keyName.includes('-')) {
                         // 横杠换成三个下划线  避免重复
                         keyName = keyName.replaceAll('-', '___');
                     }
-                    return this.getTsType(it, subKeyName, prefix);
+                    return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
                 })
