@@ -15,6 +15,7 @@ import {
     LogAction,
     FontGrabberAction,
     GenerateAiMdAction,
+    CheckDepsAction,
 } from '../actions';
 import { ERROR_PREFIX } from '../ui';
 // import { AddCommand } from './add.command';
@@ -29,6 +30,7 @@ import { NewCommand } from './new.command';
 import { LogCommand } from './log.command';
 import { FontGrabberCommand } from './font.grabber.command';
 import { GenerateAIMdCommand } from './generate.ai-md.command';
+import { CheckDepsCommand } from './check-deps.command';
 export class CommandLoader {
     public static load(program: Command): void {
         new NewCommand(new NewAction()).load(program);
@@ -45,6 +47,7 @@ export class CommandLoader {
         new LogCommand(new LogAction()).load(program);
         new FontGrabberCommand(new FontGrabberAction()).load(program);
         new GenerateAIMdCommand(new GenerateAiMdAction()).load(program);
+        new CheckDepsCommand(new CheckDepsAction()).load(program);
 
         this.handleInvalidCommand(program);
     }

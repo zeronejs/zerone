@@ -9,3 +9,4 @@ export * from './generate.fe.action';
 export * from './log.action';
 export * from './font.grabber.action';
 export * from './generate.ai-md.action';
+export * from './check-deps.action';
