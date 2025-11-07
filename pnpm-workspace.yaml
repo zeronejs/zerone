@@ -4,3 +4,4 @@ packages:
   - '!**/cli/**/templates/**'
   - '!**/create-zerone/**/templates/**'
   - '!**/dist/**'
+  - '!**/cli/**/scripts/**'
