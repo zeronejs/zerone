@@ -27,11 +27,11 @@ importers:
         specifier: ^5.6.0
         version: 5.6.0
       element-plus:
-        specifier: 2.11.7
-        version: 2.11.7(vue@3.5.24(typescript@5.9.3))
+        specifier: 2.11.8
+        version: 2.11.8(vue@3.5.24(typescript@5.9.3))
       giime:
-        specifier: ^0.8.2
-        version: 0.8.2(echarts@5.6.0)(element-plus@2.11.7(vue@3.5.24(typescript@5.9.3)))(vue@3.5.24(typescript@5.9.3))
+        specifier: ^0.8.6
+        version: 0.8.6(echarts@5.6.0)(element-plus@2.11.8(vue@3.5.24(typescript@5.9.3)))(vue@3.5.24(typescript@5.9.3))
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1969,8 +1969,8 @@ packages:
   electron-to-chromium@1.5.250:
     resolution: {integrity: sha512-/5UMj9IiGDMOFBnN4i7/Ry5onJrAGSbOGo3s9FEKmwobGq6xw832ccET0CE3CkkMBZ8GJSlUIesZofpyurqDXw==}
 
-  element-plus@2.11.7:
-    resolution: {integrity: sha512-Bh47wuzsqaNBNDkbtlOlZER1cGcOB8GsXp/+C9b95MOrk0wvoHUV4NKKK7xMkfYNFYdYysQ752oMhnExgAL6+g==}
+  element-plus@2.11.8:
+    resolution: {integrity: sha512-2wzSj2uubFU1f0t/gHkkE1d09mUgV18fSZX5excw3Ar6hyWcxph4E57U8dgYLDt7HwkKYv1BiqPyBdy0WqWlOA==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -2397,8 +2397,8 @@ packages:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
     engines: {node: '>=0.10.0'}
 
-  giime@0.8.2:
-    resolution: {integrity: sha512-ltyjA4bH43yg1J480jfw0aadC0dHl8lFrvkqRnFDHuJk9jhXzwU35cyOI9ox/cjMCqZfy5+e9FYXEHyBLeXI5g==}
+  giime@0.8.6:
+    resolution: {integrity: sha512-qu1+RY1taZI7NDQDRXFYFPNK8UPoRYeLBF3Te96pbV04pk4K++B5eo9nzUbdKn8AX61+/EcNmYvUZvD99Hzabg==}
     peerDependencies:
       echarts: ^5.5.1
       element-plus: ^2.11.0
@@ -6740,7 +6740,7 @@ snapshots:
 
   electron-to-chromium@1.5.250: {}
 
-  element-plus@2.11.7(vue@3.5.24(typescript@5.9.3)):
+  element-plus@2.11.8(vue@3.5.24(typescript@5.9.3)):
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       '@element-plus/icons-vue': 2.3.2(vue@3.5.24(typescript@5.9.3))
@@ -7331,7 +7331,7 @@ snapshots:
 
   get-value@2.0.6: {}
 
-  giime@0.8.2(echarts@5.6.0)(element-plus@2.11.7(vue@3.5.24(typescript@5.9.3)))(vue@3.5.24(typescript@5.9.3)):
+  giime@0.8.6(echarts@5.6.0)(element-plus@2.11.8(vue@3.5.24(typescript@5.9.3)))(vue@3.5.24(typescript@5.9.3)):
     dependencies:
       '@types/file-saver': 2.0.7
       '@types/lodash': 4.17.20
@@ -7339,7 +7339,7 @@ snapshots:
       clipboard: 2.0.11
       csstype: 3.1.3
       echarts: 5.6.0
-      element-plus: 2.11.7(vue@3.5.24(typescript@5.9.3))
+      element-plus: 2.11.8(vue@3.5.24(typescript@5.9.3))
       file-saver: 2.0.5
       idb-keyval: 6.2.2
       js-md5: 0.8.3
