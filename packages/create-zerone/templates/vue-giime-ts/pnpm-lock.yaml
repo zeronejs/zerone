@@ -133,8 +133,8 @@ importers:
         specifier: ^20.3.0
         version: 20.3.0(@vueuse/core@14.1.0(vue@3.5.26(typescript@5.9.3)))
       unplugin-icons:
-        specifier: ^22.5.0
-        version: 22.5.0(@vue/compiler-sfc@3.5.26)
+        specifier: 22.2.0
+        version: 22.2.0(@vue/compiler-sfc@3.5.26)
       unplugin-vue-components:
         specifier: ^30.0.0
         version: 30.0.0(@babel/parser@7.28.5)(vue@3.5.26(typescript@5.9.3))
@@ -159,6 +159,9 @@ packages:
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
+
+  '@antfu/utils@8.1.1':
+    resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
@@ -745,8 +748,8 @@ packages:
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
-  '@iconify/utils@3.1.0':
-    resolution: {integrity: sha512-Zlzem1ZXhI1iHeeERabLNzBHdOa4VhQbqAcOQaMKuTuyZCpwKbC2R4Dd0Zo3g9EAc+Y4fiarO8HIHRAth7+skw==}
+  '@iconify/utils@2.3.0':
+    resolution: {integrity: sha512-GmQ78prtwYW6EtzXRU1rY+KwOKfz32PD7iJh6Iyqw68GiKuoZ2A6pRtzWONz5VQJbp50mEjXh/7NkumtrAgRKA==}
 
   '@inquirer/external-editor@1.0.3':
     resolution: {integrity: sha512-RWbSrDiYmO4LbejWY7ttpxczuwQyZLBUyygsA9Nsv95hpzUWwnNTVQmAq3xuh7vNwCp07UTmE5i11XAEExx4RA==}
@@ -3143,6 +3146,9 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
+  kolorist@1.8.0:
+    resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
+
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -4658,8 +4664,8 @@ packages:
       '@vueuse/core':
         optional: true
 
-  unplugin-icons@22.5.0:
-    resolution: {integrity: sha512-MBlMtT5RuMYZy4TZgqUL2OTtOdTUVsS1Mhj6G1pEzMlFJlEnq6mhUfoIt45gBWxHcsOdXJDWLg3pRZ+YmvAVWQ==}
+  unplugin-icons@22.2.0:
+    resolution: {integrity: sha512-OdrXCiXexC1rFd0QpliAgcd4cMEEEQtoCf2WIrRIGu4iW6auBPpQKMCBeWxoe55phYdRyZLUWNOtzyTX+HOFSA==}
     peerDependencies:
       '@svgr/core': '>=7.0.0'
       '@svgx/core': ^1.0.1
@@ -5023,6 +5029,8 @@ snapshots:
     dependencies:
       package-manager-detector: 1.6.0
       tinyexec: 1.0.2
+
+  '@antfu/utils@8.1.1': {}
 
   '@asamuzakjp/css-color@3.2.0':
     dependencies:
@@ -5542,11 +5550,18 @@ snapshots:
 
   '@iconify/types@2.0.0': {}
 
-  '@iconify/utils@3.1.0':
+  '@iconify/utils@2.3.0':
     dependencies:
       '@antfu/install-pkg': 1.1.0
+      '@antfu/utils': 8.1.1
       '@iconify/types': 2.0.0
+      debug: 4.4.3
+      globals: 15.15.0
+      kolorist: 1.8.0
+      local-pkg: 1.1.2
       mlly: 1.8.0
+    transitivePeerDependencies:
+      - supports-color
 
   '@inquirer/external-editor@1.0.3(@types/node@24.10.4)':
     dependencies:
@@ -8180,6 +8195,8 @@ snapshots:
 
   kind-of@6.0.3: {}
 
+  kolorist@1.8.0: {}
+
   levn@0.4.1:
     dependencies:
       prelude-ls: 1.2.1
@@ -9945,10 +9962,10 @@ snapshots:
     optionalDependencies:
       '@vueuse/core': 14.1.0(vue@3.5.26(typescript@5.9.3))
 
-  unplugin-icons@22.5.0(@vue/compiler-sfc@3.5.26):
+  unplugin-icons@22.2.0(@vue/compiler-sfc@3.5.26):
     dependencies:
       '@antfu/install-pkg': 1.1.0
-      '@iconify/utils': 3.1.0
+      '@iconify/utils': 2.3.0
       debug: 4.4.3
       local-pkg: 1.1.2
       unplugin: 2.3.11
