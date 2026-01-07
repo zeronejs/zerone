@@ -33,7 +33,7 @@
     "dayjs": "^1.11.19",
     "echarts": "^5.6.0",
     "element-plus": "2.11.8",
-    "giime": "^0.8.13",
+    "giime": "^0.9.2",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.22",
     "pinia": "^3.0.4",

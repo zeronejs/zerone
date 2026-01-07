@@ -95,12 +95,12 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         ...giimeDevProxyFn(env),
         // https://cn.vitejs.dev/config/#server-proxy
-        '/shop-api': {
-          target: 'https://manage-dev.giikin.cn/guard/',
-          changeOrigin: true,
-          rewrite: p => p.replace(/^\/shop-api/, ''),
-          bypass,
-        },
+        // '/shop-api': {
+        //   target: 'https://manage-dev.giikin.cn/guard/',
+        //   changeOrigin: true,
+        //   rewrite: p => p.replace(/^\/shop-api/, ''),
+        //   bypass,
+        // },
       },
     },
     preview: {
