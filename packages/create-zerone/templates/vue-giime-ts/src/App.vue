@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
+import Clarity from '@microsoft/clarity';
 
+const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID;
+
+if (clarityProjectId) {
+  Clarity.init(clarityProjectId);
+}
 const route = useRoute();
 const includeNames = ref(new Set<string>());
 

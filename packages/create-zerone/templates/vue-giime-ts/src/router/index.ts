@@ -23,6 +23,6 @@ const title = useTitle();
 
 // 更改路由后  更改title
 router.afterEach(to => {
-  title.value = to.meta?.title ?? `三方-${to.name?.toString()}`;
+  title.value = to.meta?.title ?? `${to.name?.toString()}`;
 });
 export default router;

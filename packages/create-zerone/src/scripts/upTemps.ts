@@ -52,6 +52,7 @@ const bootstrap = async () => {
     const renameFiles = [
         { name: '.gitignore', rename: '_gitignore' },
         { name: '.npmrc', rename: '_npmrc' },
+        { name: '.env', rename: '_env' },
     ];
     for (const item of downList) {
         for (const renameFile of renameFiles) {

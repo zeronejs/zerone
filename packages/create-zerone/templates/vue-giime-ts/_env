@@ -1,0 +1,4 @@
+VITE_BASE_URL=/
+
+# 接口地址
+VITE_BASE_SHOP_API=/guard
