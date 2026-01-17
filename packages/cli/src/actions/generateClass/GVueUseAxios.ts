@@ -115,12 +115,17 @@ export class GVueUseAxios {
             });
         });
         if (!schema?.$ref) {
-            resType.split('|').forEach(resTypeItem => {
-                let typeFilterArray = resTypeItem.trim();
-                if (typeFilterArray.endsWith('[]')) {
+            // 先去掉所有括号和空格，再分割出所有类型名称
+            const cleanedResType = resType.replace(/[()\s]/g, '');
+            cleanedResType.split(/[|&]/).forEach(resTypeItem => {
+                let typeFilterArray = resTypeItem;
+                // 处理数组类型
+                while (typeFilterArray.endsWith('[]')) {
                     typeFilterArray = typeFilterArray.slice(0, -2);
                 }
-                this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
+                if (typeFilterArray) {
+                    this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
+                }
             });
         }
         // import 导入axios实例

@@ -214,6 +214,12 @@ export class GInterface {
                 })
                 .join(' | ');
         }
+
+        // 如果没有 type 但有 properties 或 additionalProperties，设置为 object 类型
+        if (!subSchema.type && (subSchema.properties || subSchema.additionalProperties)) {
+            subSchema.type = 'object';
+        }
+
         switch (subSchema.type) {
             case 'string':
                 if (subSchema.enum && subSchema.enum.length) {
