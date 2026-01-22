@@ -6,7 +6,7 @@
     "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig, .npmrc, changelog.config.json, commitlint.config.*"
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
+    "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
