@@ -78,10 +78,10 @@ export class GenerateApiAction extends AbstractAction {
             // 删除已生成的Controller和interface
             await Promise.all([remove(join(root, 'controller')), remove(join(root, 'interface'))]);
         }
-        // 生成类型文件
-        await GInterfaceHandle(data.components.schemas as Schema, root, config);
-        // 生成Controller
-        await GControllerHandle(paths, root, config, data);
+        // 先生成Controller，收集用到的 interface 类型
+        const { usedInterfaceNames } = await GControllerHandle(paths, root, config, data);
+        // 再按需生成类型文件
+        await GInterfaceHandle(data.components.schemas as Schema, root, config, usedInterfaceNames);
         // 生成mock类型文件
         // await GMockClassHandle(data.components.schemas as Schema, root, config);
         if (javascriptOption === true) {
@@ -96,16 +96,121 @@ export class GenerateApiAction extends AbstractAction {
         console.info(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
     }
 }
+// 递归收集 schema 的所有依赖类型
+const collectSchemaDependencies = (
+    schema: Schema,
+    inputSchemas: { [key: string]: Schema },
+    collected: Set<string>,
+    prefix: string
+): void => {
+    if (!schema) return;
+
+    // 处理 $ref
+    if (schema.$ref) {
+        const refName = schema.$ref.split('/').pop() ?? '';
+        const fullName = escapeVar(upperFirst(prefix) + refName);
+        if (fullName && !collected.has(fullName)) {
+            collected.add(fullName);
+            // 递归收集这个类型的依赖
+            const refSchema = inputSchemas[refName];
+            if (refSchema) {
+                collectSchemaDependencies(refSchema, inputSchemas, collected, prefix);
+            }
+        }
+        return;
+    }
+
+    // 处理 allOf / anyOf / oneOf
+    const compositeItems = [
+        ...((schema as any).allOf ?? []),
+        ...((schema as any).anyOf ?? []),
+        ...((schema as any).oneOf ?? []),
+    ];
+    for (const item of compositeItems) {
+        collectSchemaDependencies(item, inputSchemas, collected, prefix);
+    }
+
+    // 处理 properties
+    if (schema.properties) {
+        for (const propKey of Object.keys(schema.properties)) {
+            collectSchemaDependencies(schema.properties[propKey], inputSchemas, collected, prefix);
+        }
+    }
+
+    // 处理 array items
+    if (schema.type === 'array' && schema.items) {
+        if (Array.isArray(schema.items)) {
+            for (const item of schema.items) {
+                collectSchemaDependencies(item, inputSchemas, collected, prefix);
+            }
+        } else {
+            collectSchemaDependencies(schema.items, inputSchemas, collected, prefix);
+        }
+    }
+
+    // 处理 additionalProperties
+    if (schema.additionalProperties && typeof schema.additionalProperties === 'object') {
+        collectSchemaDependencies(schema.additionalProperties as Schema, inputSchemas, collected, prefix);
+    }
+};
+
 // 生成类型文件
-const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: GenerateApiActionConfig) => {
+const GInterfaceHandle = async (
+    inputSchemas: Schema,
+    root: string,
+    config: GenerateApiActionConfig,
+    usedInterfaceNames?: Set<string>
+) => {
     // 类型可能重复  暂时先用一个文件
-    const schemas = Object.keys(inputSchemas);
+    const allSchemas = Object.keys(inputSchemas);
     const indexUrl = join(root, 'interface', 'index.ts');
     await remove(indexUrl);
     await ensureFile(indexUrl);
     const indexProject = new Project();
     const indexSourceProject = indexProject.addSourceFileAtPath(indexUrl);
-    for (let key of schemas) {
+
+    // 建立处理后名字 -> 原始 schema key 的映射
+    const nameToSchemaKey = new Map<string, string>();
+    for (const key of allSchemas) {
+        const fullName = escapeVar(upperFirst(config.prefix) + key);
+        if (fullName) {
+            nameToSchemaKey.set(fullName, key);
+        }
+    }
+
+    // 如果有 usedInterfaceNames，则递归收集所有依赖的类型
+    let schemasToGenerate: string[];
+    if (usedInterfaceNames && usedInterfaceNames.size > 0) {
+        const allDependencies = new Set<string>(usedInterfaceNames);
+        // 递归收集每个已使用类型的依赖
+        for (const usedName of usedInterfaceNames) {
+            // 通过映射找到原始 schema key
+            const originalKey = nameToSchemaKey.get(usedName);
+            if (originalKey) {
+                const schema = (inputSchemas as any)[originalKey];
+                if (schema) {
+                    collectSchemaDependencies(
+                        schema,
+                        inputSchemas as any,
+                        allDependencies,
+                        config.prefix ?? ''
+                    );
+                }
+            }
+        }
+        // 只生成被用到的 schemas
+        schemasToGenerate = allSchemas.filter(key => {
+            const fullName = escapeVar(upperFirst(config.prefix) + key);
+            return fullName && allDependencies.has(fullName);
+        });
+        // console.info(
+        //     chalk.gray(`按需生成 Interface: ${schemasToGenerate.length}/${allSchemas.length} 个类型`)
+        // );
+    } else {
+        schemasToGenerate = allSchemas;
+    }
+
+    for (let key of schemasToGenerate) {
         const element: Schema = Reflect.get(inputSchemas, key);
         key = escapeVar(upperFirst(config.prefix) + key);
         if (!key) {
@@ -125,7 +230,7 @@ const GInterfaceHandle = async (inputSchemas: Schema, root: string, config: Gene
     }
 
     indexSourceProject.addExportDeclarations(
-        schemas
+        schemasToGenerate
             .map(key => {
                 const inputKey = escapeVar(upperFirst(config.prefix) + key);
                 if (!inputKey) {
@@ -158,8 +263,9 @@ const GControllerHandle = async (
     root: string,
     config: GenerateApiActionConfig,
     jsonData: any
-) => {
+): Promise<{ controllers: { key: string; tagsItem: string }[]; usedInterfaceNames: Set<string> }> => {
     const controllers: { key: string; tagsItem: string }[] = [];
+    const usedInterfaceNames = new Set<string>();
     for (const pathKey of Object.keys(paths)) {
         for (const methodKey of Object.keys(paths[pathKey])) {
             // 仅支持这些method
@@ -177,6 +283,8 @@ const GControllerHandle = async (
                 ).genController(join(root, 'controller'), config);
                 if (res?.key && res.tagsItem) {
                     controllers.push({ key: res.key, tagsItem: res.tagsItem });
+                    // 收集用到的 interface 名称
+                    res.interfaceImportNames?.forEach(name => usedInterfaceNames.add(name));
                     if (config.vueUseAxios) {
                         const genAxiosRes = await new GVueUseAxios(
                             operation,
@@ -222,6 +330,7 @@ const GControllerHandle = async (
         }))
     );
     await indexSourceProject.save();
+    return { controllers, usedInterfaceNames };
 };
 
 const GJavascript = async (root: string, axiosInstanceUrl?: string) => {
