@@ -32,15 +32,15 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vue: ['vue', 'vue-router', 'pinia'],
-            elementPlus: ['element-plus'],
-            giime: ['giime'],
-          },
-        },
-      },
+      // rollupOptions: {
+      //   output: {
+      //     manualChunks: {
+      //       vue: ['vue', 'vue-router', 'pinia'],
+      //       elementPlus: ['element-plus'],
+      //       giime: ['giime'],
+      //     },
+      //   },
+      // },
     },
     plugins: [
       vue(),
