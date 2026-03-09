@@ -1,7 +1,7 @@
 import { upperFirst } from 'lodash';
 import { Schema as SwaggerSchema } from 'swagger-schema-official';
-import { InterfaceDeclaration, SourceFile } from 'ts-morph';
-import { getRefTypeName, isNumberStart } from '../../utils/generateUtil';
+import { SourceFile } from 'ts-morph';
+import { getRefTypeName } from '../../utils/generateUtil';
 export class GInterface {
     private schema: SwaggerSchema;
     private sourceFile: SourceFile;
@@ -16,6 +16,25 @@ export class GInterface {
         this.schema = swaggerSchema;
         this.sourceFile = sourceFile;
         this.keyName = keyName;
+    }
+    private formatPropertyName(key: string) {
+        return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
+    }
+    private formatTypeNamePart(key: string) {
+        return key.replaceAll('-', '___');
+    }
+    private formatPropertyTypeNamePart(key: string) {
+        return key
+            .replaceAll('(', '___')
+            .replaceAll(')', '___')
+            .replaceAll('[', '___')
+            .replaceAll(']', '___')
+            .replaceAll('-', '___')
+            .replaceAll('/', '___')
+            .replaceAll('\\', '___')
+            .replaceAll('.', '___')
+            .replaceAll('#', '___')
+            .replaceAll(' ', '___');
     }
     private genStringType(prefix = '') {
         if (!this.keyName) {
@@ -75,37 +94,14 @@ export class GInterface {
         }
         if (properties) {
             const addPropertiesInput = Object.keys(properties).map(key => {
-                const inputKey =
-                    key.includes('[') ||
-                    key.includes('(') ||
-                    key.includes(')') ||
-                    key.includes('-') ||
-                    key.includes('.') ||
-                    isNumberStart(key) ||
-                    key.includes('/') ||
-                    key.includes('#') ||
-                    key.includes('\\')
-                        ? `'${key}'`
-                        : key;
+                const inputKey = this.formatPropertyName(key);
                 // 普通属性
                 return {
                     key,
                     name: inputKey,
                     type:
-                        this.getTsType(
-                            properties[key],
-                            key
-                                .replaceAll('(', '___')
-                                .replaceAll(')', '___')
-                                .replaceAll('[', '___')
-                                .replaceAll(']', '___')
-                                .replaceAll('-', '___')
-                                .replaceAll('/', '___')
-                                .replaceAll('\\', '___')
-                                .replaceAll('.', '___')
-                                .replaceAll('#', '___'),
-                            prefix
-                        ) ?? 'any',
+                        this.getTsType(properties[key], this.formatPropertyTypeNamePart(key), prefix) ??
+                        'any',
                     hasQuestionToken: !requireds.includes(key),
                 };
             });
@@ -176,11 +172,7 @@ export class GInterface {
         } else if (allOfItem && allOfItem.length) {
             return allOfItem
                 .map((it: any, index: number) => {
-                    let keyName = upperFirst(subKeyName) + index;
-                    if (keyName.includes('-')) {
-                        // 横杠换成三个下划线  避免重复
-                        keyName = keyName.replaceAll('-', '___');
-                    }
+                    const keyName = this.formatTypeNamePart(upperFirst(subKeyName) + index);
                     return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
@@ -190,11 +182,7 @@ export class GInterface {
             // debugger
             return anyOfItem
                 .map((it: any, index: number) => {
-                    let keyName = upperFirst(subKeyName) + index;
-                    if (keyName.includes('-')) {
-                        // 横杠换成三个下划线  避免重复
-                        keyName = keyName.replaceAll('-', '___');
-                    }
+                    const keyName = this.formatTypeNamePart(upperFirst(subKeyName) + index);
                     return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
@@ -203,11 +191,7 @@ export class GInterface {
         } else if (oneOfItem && oneOfItem.length) {
             return oneOfItem
                 .map((it: any, index: number) => {
-                    let keyName = upperFirst(subKeyName) + index;
-                    if (keyName.includes('-')) {
-                        // 横杠换成三个下划线  避免重复
-                        keyName = keyName.replaceAll('-', '___');
-                    }
+                    const keyName = this.formatTypeNamePart(upperFirst(subKeyName) + index);
                     return this.getTsType(it, keyName, prefix);
                     // new GInterface(it, this.sourceFile, keyName, this.options).genTsType(prefix);
                     // return keyName;
@@ -261,11 +245,7 @@ export class GInterface {
                 return 'any[]';
             case 'object':
                 if (subSchema.properties || subSchema.additionalProperties) {
-                    let keyName = this.keyName + upperFirst(subKeyName);
-                    if (keyName.includes('-')) {
-                        // 横杠换成三个下划线  避免重复
-                        keyName = keyName.replaceAll('-', '___');
-                    }
+                    const keyName = this.formatTypeNamePart(this.keyName + upperFirst(subKeyName));
 
                     new GInterface(subSchema, this.sourceFile, keyName, this.options).genTsType(prefix);
                     return keyName;
@@ -281,7 +261,7 @@ export class GInterface {
             default:
                 if (Array.isArray(subSchema.type)) {
                     return (subSchema as any).type
-                        .map((it: any, index: number) => {
+                        .map((it: any) => {
                             return this.getTsType({ ...subSchema, type: it }, subKeyName, prefix);
                         })
                         .join(' | ');
