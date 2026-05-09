@@ -354,7 +354,6 @@ export default defineConfig(
             'docs/.vitepress/crowdin/*',
             '**/*.json5',
             '!docs/.vitepress/crowdin/en-US',
-            '!.*',
             'build/*.js',
             'src/assets',
             'public',
