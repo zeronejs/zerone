@@ -1,9 +1,13 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "declaration": false
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "module": "ESNext",
+    "moduleResolution": "bundler"
   },
   "include": [
-    "recommended.mjs"
+    "recommended.ts"
   ]
 }
