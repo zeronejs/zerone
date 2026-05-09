@@ -32,15 +32,18 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     build: {
-      // rollupOptions: {
-      //   output: {
-      //     manualChunks: {
-      //       vue: ['vue', 'vue-router', 'pinia'],
-      //       elementPlus: ['element-plus'],
-      //       giime: ['giime'],
-      //     },
-      //   },
-      // },
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              { name: 'vue', test: /node_modules[\\/](vue|vue-router|pinia)/, priority: 30 },
+              { name: 'element-plus', test: /node_modules[\\/]element-plus/, priority: 20 },
+              { name: 'giime', test: /node_modules[\\/]giime/, priority: 20 },
+              // { name: 'vendor', test: /node_modules/, priority: 10 },
+            ],
+          },
+        },
+      },
     },
     plugins: [
       vue(),
