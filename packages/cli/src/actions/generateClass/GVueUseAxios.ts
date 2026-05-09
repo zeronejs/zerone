@@ -16,6 +16,47 @@ import { GInterface } from './GInterface';
 import { GenControllerResult } from './GController';
 import { isString } from '@zeronejs/utils';
 
+const BUILTIN_TYPES = new Set([
+    'any',
+    'never',
+    'void',
+    'unknown',
+    'null',
+    'undefined',
+    'string',
+    'number',
+    'boolean',
+    'bigint',
+    'symbol',
+    'object',
+    'File',
+    'Blob',
+    'ArrayBuffer',
+    'FormData',
+    'URLSearchParams',
+    'URL',
+    'Date',
+    'Error',
+    'Promise',
+    'Array',
+    'Object',
+    'Function',
+    'Map',
+    'Set',
+    'WeakMap',
+    'WeakSet',
+    'RegExp',
+    'Buffer',
+    'ReadableStream',
+    'WritableStream',
+    'Response',
+    'Request',
+    'Event',
+    'EventTarget',
+    'AbortSignal',
+    'AbortController',
+]);
+
 export class GVueUseAxios {
     private operation: Operation;
     // 请求method
@@ -123,7 +164,7 @@ export class GVueUseAxios {
                 while (typeFilterArray.endsWith('[]')) {
                     typeFilterArray = typeFilterArray.slice(0, -2);
                 }
-                if (typeFilterArray) {
+                if (typeFilterArray && !BUILTIN_TYPES.has(typeFilterArray)) {
                     this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
                 }
             });
