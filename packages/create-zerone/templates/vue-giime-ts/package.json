@@ -41,18 +41,18 @@
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.0.0",
-    "@commitlint/config-conventional": "^21.0.0",
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/js-cookie": "^3.0.6",
-    "@types/jsdom": "^28.0.1",
-    "@types/node": "^25.6.2",
+    "@types/jsdom": "^28.0.3",
+    "@types/node": "^25.7.0",
     "@vitejs/plugin-vue": "^6.0.6",
-    "@vitest/coverage-istanbul": "^4.1.5",
+    "@vitest/coverage-istanbul": "^4.1.6",
     "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.9.1",
-    "@zeronejs/cli": "^3.10.1",
-    "@zeronejs/eslint-config-vue3": "^0.2.1",
+    "@zeronejs/cli": "^3.10.2",
+    "@zeronejs/eslint-config-vue3": "^0.2.3",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.3.0",
     "git-cz": "^4.9.0",
@@ -69,9 +69,9 @@
     "unplugin-auto-import": "^21.0.0",
     "unplugin-icons": "23.0.1",
     "unplugin-vue-components": "^32.0.0",
-    "vite": "^8.0.11",
+    "vite": "^8.0.12",
     "vite-plugin-svg-icons": "^2.0.1",
-    "vitest": "^4.1.5",
+    "vitest": "^4.1.6",
     "vue-tsc": "^3.2.8"
   }
 }
