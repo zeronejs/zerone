@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/eslint-config-vue3",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Zerone ESLint Config",
   "type": "module",
   "engines": {
@@ -55,7 +55,8 @@
     "eslint-plugin-unicorn": "^64.0.0",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
-    "typescript-eslint": "^8.59.2"
+    "typescript-eslint": "^8.59.2",
+    "vue-eslint-parser": "^10.4.0"
   },
   "devDependencies": {
     "eslint": "^10.3.0"
