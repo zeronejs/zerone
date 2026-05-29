@@ -1,7 +1,0 @@
-{
-  "docsUrl": "https://genapi-giime.giikin.com/apifox?projectId=3001718",
-  "includeTags": [""],
-  "includePaths": ["/api/task?type=343"],
-  "axiosInstanceUrl": "@/api/gsync/service",
-  "vueUseAxios": "giime"
-}

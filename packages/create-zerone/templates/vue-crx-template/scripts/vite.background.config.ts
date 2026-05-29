@@ -1,11 +1,8 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import packageJson from '../package.json';
 import { sharedConfig } from './sharedConfig';
 import { r } from './utils';
-import { setupBackgroundBootstrap } from './autoLoad';
-import { writeManifest } from './manifest';
 
 // https://vitejs.dev/config/
 export default defineConfig(env => {
@@ -13,10 +10,7 @@ export default defineConfig(env => {
   // console.log(env);
   // console.log(loadEnv(env.mode, path.resolve(__dirname, '..')));
   const shared = sharedConfig(env);
-  const loadedEnv = loadEnv(env.mode, path.resolve(__dirname, '..'));
 
-  // setupBackgroundBootstrap(loadedEnv);
-  // writeManifest(loadedEnv);
   return {
     ...shared,
     // plugins: [
@@ -55,15 +49,6 @@ export default defineConfig(env => {
         name: packageJson.name,
         formats: ['iife'],
       },
-      // rollupOptions: {
-      //   output: {
-      //     //  生产环境 build成es5
-      //     entryFileNames: 'index[hash].mjs',
-      //     format: 'es',
-      //     plugins: [getBabelOutputPlugin({ presets: ['@babel/preset-env'], allowAllFormats: true })],
-      //     extend: true,
-      //   },
-      // },
     },
   };
 });

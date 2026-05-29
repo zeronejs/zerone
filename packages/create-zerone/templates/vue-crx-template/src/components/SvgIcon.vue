@@ -1,5 +1,5 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true">
+  <svg aria-hidden="true" :class="svgClass">
     <use :xlink:href="iconName" :fill="color" />
   </svg>
 </template>
@@ -29,6 +29,7 @@ export default defineComponent({
         if (props.className) {
           return `svg-icon ${props.className}`;
         }
+
         return 'svg-icon';
       }),
     };

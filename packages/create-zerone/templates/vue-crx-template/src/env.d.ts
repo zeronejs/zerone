@@ -2,6 +2,9 @@
 interface ImportMetaEnv {
   readonly VITE_BASE_SHOP_API: string;
   readonly VITE_BASE_SHOP_WSAPI: string;
+  readonly VITE_CRX_PLUGIN_ID: string;
+  /** 跟 giime 一致的环境模式：production / release / test / develop。未配置时 fallback 到 production */
+  readonly VITE_GIIME_MODE?: 'production' | 'release' | 'test' | 'develop';
   // 更多环境变量...
 }
 declare const __DEV__: boolean;
@@ -18,8 +21,7 @@ declare const __VERSION__: string;
 declare module '*.vue' {
   import type { DefineComponent } from 'vue';
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const component: DefineComponent<{}, {}, any>;
+  const component: DefineComponent<object, object, any>;
 
   export default component;
 }

@@ -4,11 +4,13 @@ import Icons from 'unplugin-icons/vite';
 import IconsResolver from 'unplugin-icons/resolver';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { GiimeResolver } from 'giime';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import { crxAxiosIdPlugin } from '@giime/crx/vite-plugin';
 import { r } from './utils';
-import type { ConfigEnv, PluginOption, UserConfig, UserConfigFnObject } from 'vite';
+import type { ConfigEnv, PluginOption, UserConfig } from 'vite';
+
 const pathSrc = path.resolve(__dirname, '../', 'src');
 
 export const sharedConfig = (env: ConfigEnv, PluginOptions: PluginOption[] = []): UserConfig => {
@@ -16,6 +18,9 @@ export const sharedConfig = (env: ConfigEnv, PluginOptions: PluginOption[] = [])
 
   return {
     root: r('src'),
+    // .env* 文件都放在项目根目录而不是 src/，必须显式告诉 vite，
+    // 否则 import.meta.env.VITE_* 在所有 entry 里都是 undefined
+    envDir: r(),
     resolve: {
       alias: {
         '@/': `${pathSrc}/`,
@@ -23,11 +28,10 @@ export const sharedConfig = (env: ConfigEnv, PluginOptions: PluginOption[] = [])
     },
 
     plugins: [
-      vue({
-        script: {
-          defineModel: true,
-        },
-      }),
+      // 给所有 createCrxAxios({...}) 注入基于源文件路径的 __id__
+      // 必须放在最前面，确保拿到的是原始源码
+      crxAxiosIdPlugin(),
+      vue(),
       //   splitVendorChunkPlugin(),
       AutoImport({
         // Auto import functions from Vue, e.g. ref, reactive, toRef...

@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import archiver from 'archiver';
 import packageJson from '../package.json';
 import { r } from './utils';
+
 async function zipDirectory(sourceDir: string, outPath: string): Promise<void> {
   const output = fs.createWriteStream(outPath);
   const archive = archiver('zip', {

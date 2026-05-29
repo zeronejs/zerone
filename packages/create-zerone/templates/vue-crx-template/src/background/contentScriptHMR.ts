@@ -2,7 +2,7 @@
 
 // Firefox fetch files from cache instead of reloading changes from disk,
 // hmr will not work as Chromium based browser
-chrome.webNavigation.onCommitted.addListener(({ tabId, frameId, url }) => {
+chrome.webNavigation.onCommitted.addListener(({ tabId, frameId }) => {
   // Filter out non main window events.
   if (frameId !== 0) return;
 

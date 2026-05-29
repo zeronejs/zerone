@@ -1,38 +1,46 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-// 接受父组件传递的方法
+import { getCrxConfig } from '@giime/crx';
+
+const appendTo = getCrxConfig().contentScriptRoot as HTMLElement;
+
 const emit = defineEmits(['onClose']);
-// 接收父组件传递的参数
-const props = defineProps(['visible']);
+const props = defineProps<{ visible: boolean }>();
 
-// 输入框中的内容
-const text = ref('');
+const form = ref({
+  name: '',
+  remark: '',
+});
 
-// 是否显示对话框
 const isVisible = computed({
   get() {
     return props.visible;
   },
   set() {
-    // 关闭对话框的时候，会触发对isVisible=false的修改
-    // 通知父组件将对话框显示状态设置为false
     emit('onClose');
   },
 });
 
-// 提交
-const submit = () => {};
+const submit = () => {
+  // eslint-disable-next-line no-console
+  console.log('[MainDialog] submit:', form.value);
+  emit('onClose');
+};
 </script>
 
 <template>
-  <el-dialog v-if="isVisible" v-model="isVisible" title="CRX对话框" width="600">
-    <div class="main-content-con">
-      <div class="item-con">
-        <el-input v-model="text" placeholder="" />
-      </div>
-    </div>
+  <el-dialog v-if="isVisible" v-model="isVisible" title="CRX 对话框" width="480" :append-to="appendTo">
+    <el-form label-width="60px" :model="form">
+      <el-form-item label="名称">
+        <el-input v-model="form.name" placeholder="请输入名称" />
+      </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" :rows="3" />
+      </el-form-item>
+    </el-form>
     <template #footer>
-      <el-button type="primary" @click="submit"> Submit </el-button>
+      <el-button @click="isVisible = false">取消</el-button>
+      <el-button type="primary" @click="submit">提交</el-button>
     </template>
   </el-dialog>
 </template>

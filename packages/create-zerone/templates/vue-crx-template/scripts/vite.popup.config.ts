@@ -1,17 +1,14 @@
-import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import { defineConfig } from 'vite';
 import packageJson from '../package.json';
 import { sharedConfig } from './sharedConfig';
 import { port, r } from './utils';
-import { createLoader } from './popup/loader';
 
 // https://vitejs.dev/config/
 export default defineConfig(env => {
   const isDev = env.mode === 'development';
   // const __TIME__ = String(Date.now());
   const shared = sharedConfig(env);
-  const loadedEnv = loadEnv(env.mode, path.resolve(__dirname, '..'));
+
   return {
     ...sharedConfig(env),
     plugins: [
@@ -36,9 +33,11 @@ export default defineConfig(env => {
       emptyOutDir: false,
       sourcemap: isDev ? 'inline' : false,
       // https://developer.chrome.com/docs/webstore/program_policies/#:~:text=Code%20Readability%20Requirements
-      terserOptions: {
-        mangle: false,
-      },
+      // Chrome 商店要求代码不能混淆（obfuscate） 需要上架时取消注释
+      // minify: 'terser' as const,
+      // terserOptions: {
+      //   mangle: false,
+      // } as Record<string, unknown>,
       rollupOptions: {
         input: {
           options: r('src/options/index.html'),

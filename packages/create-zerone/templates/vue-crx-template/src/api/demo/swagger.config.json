@@ -1,0 +1,7 @@
+{
+  "docsUrl": "https://genapi-giime.giikin.com/apifox?projectId=",
+  "includeTags": [],
+  "excludeTags": [],
+  "axiosInstanceUrl": "@/api/demo/request",
+  "vueUseAxios": "giime"
+}

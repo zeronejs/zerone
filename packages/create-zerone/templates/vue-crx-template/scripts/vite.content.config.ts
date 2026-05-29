@@ -1,16 +1,17 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import packageJson from '../package.json';
 import { sharedConfig } from './sharedConfig';
 import { setupContentScriptBootstrap } from './autoLoad';
 import { r } from './utils';
+
 // https://vitejs.dev/config/
 export default defineConfig(env => {
   const isDev = env.mode === 'development';
   const loadedEnv = loadEnv(env.mode, path.resolve(__dirname, '..'));
   const __TIME__ = String(Date.now());
   const __VERSION__ = packageJson.version;
+
   return {
     ...sharedConfig(env, [
       {
@@ -57,10 +58,10 @@ export default defineConfig(env => {
       emptyOutDir: false,
       sourcemap: false,
       lib: {
-        entry: r('src/contentScripts/index.ts'),
+        entry: r('src/contentScripts/main.ts'),
         name: packageJson.name,
         formats: ['iife'],
-        cssFileName:'style'
+        cssFileName: 'style',
       },
       rollupOptions: {
         output: {

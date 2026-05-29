@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { isDev, log, port, r } from '../utils';
+import { r } from '../utils';
 
 export const createLoader = async (fileNames: string[], env: Record<string, string>) => {
   const baseUrl = env.VITE_BASE_URL;
@@ -90,5 +90,6 @@ fetchJson('${new URL('dist/popup/loader.json', baseUrl).toString()}').then((json
     await fs.ensureFile(r(`extension/dist/popup/loader.html`));
     await fs.writeFile(r(`extension/dist/popup/loader.html`), loaderHtml, 'utf-8');
   };
+
   await createHtml();
 };

@@ -1,15 +1,27 @@
 import fs from 'fs-extra';
 import packageJson from '../package.json';
-import { isDev, log, port, r } from './utils';
+import { log, r } from './utils';
+
+/** 安全构造 URL，base 为空时直接返回相对路径 */
+const toUrl = (path: string, base: string | undefined): string => {
+  if (!base) return path;
+  try {
+    return new URL(path, base.endsWith('/') ? base : `${base}/`).toString();
+  } catch {
+    return path;
+  }
+};
 /**资源config.json */
 const configJsonUrl = r(`extension/dist/js/config.json`);
 
 const readConfigJson = async () => {
   await fs.ensureFile(configJsonUrl);
   const configJson = await fs.readFile(configJsonUrl);
+
   if (!configJson.toString()) {
     await fs.writeJSON(configJsonUrl, {});
   }
+
   return fs.readJSON(configJsonUrl);
 };
 /**复制共享文件 */
@@ -27,8 +39,9 @@ const createBackgroundjs = async (env: Record<string, string>) => {
   let template = await fs.readFile(r(`static/autoLoad.js`), 'utf-8');
 
   // Setup background
-  template = template.replace('___CONFIGJSON___', new URL(`dist/js/config.json`, `${env.VITE_BASE_URL}/`).toString());
+  template = template.replace('___CONFIGJSON___', toUrl(`dist/js/config.json`, env.VITE_BASE_URL));
   const assetsCacheConfig = env.VITE_BASE_CDN_URL ? 'undefined' : "'no-cache'";
+
   template = template.replaceAll('___ASSETSCACHECONFIG___', assetsCacheConfig);
   // Ensure output directory exists and write file
   await fs.ensureFile(r(`extension/dist/js/background.js`));
@@ -40,7 +53,7 @@ export const setupBackgroundBootstrap = async (fileNames: string[], env: Record<
   const cdnUrl = env.VITE_BASE_CDN_URL || env.VITE_BASE_URL;
   const jsUrls = fileNames
     .filter(fileName => fileName.endsWith('.js') || fileName.endsWith('.mjs'))
-    .map(fileName => new URL(`dist/background/${fileName}`, `${cdnUrl}/`).toString());
+    .map(fileName => toUrl(`dist/background/${fileName}`, cdnUrl));
   const configJson = await readConfigJson();
 
   configJson.backgroundJsUrl = jsUrls[0];
@@ -61,6 +74,7 @@ export const setupContentScriptBootstrap = async (
 ) => {
   // contentScript模板文件 必要的修改
   let contentScript = await fs.readFile(r(`static/contentScript.js`), 'utf-8');
+
   contentScript = contentScript.replaceAll('__NAME__', options.name);
   await fs.writeFile(r(`extension/dist/contentScripts/contentScript.js`), contentScript, 'utf-8');
   // await fs.copyFile(r(`static/contentScript.js`), r(`extension/dist/contentScripts/contentScript.js`));
@@ -68,19 +82,18 @@ export const setupContentScriptBootstrap = async (
   const cdnUrl = env.VITE_BASE_CDN_URL || env.VITE_BASE_URL;
   const jsUrls = fileNames
     .filter(fileName => fileName.endsWith('.js') || fileName.endsWith('.mjs'))
-    .map(fileName => new URL(`dist/contentScripts/${fileName}`, `${cdnUrl}/`).toString());
+    .map(fileName => toUrl(`dist/contentScripts/${fileName}`, cdnUrl));
 
-  const cssUrl = fileNames
-    .filter(fileName => fileName.endsWith('.css'))
-    .map(fileName => new URL(`dist/contentScripts/${fileName}`, `${cdnUrl}/`).toString())[0];
+  const cssUrl = fileNames.filter(fileName => fileName.endsWith('.css')).map(fileName => toUrl(`dist/contentScripts/${fileName}`, cdnUrl))[0];
   // Read template file
   const configJson = await readConfigJson();
+
   configJson.scriptJsUrls = jsUrls;
-  configJson.scriptBaseJsUrls = [new URL(`dist/contentScripts/contentScript.js`, `${env.VITE_BASE_URL}/`).toString()];
+  configJson.scriptBaseJsUrls = [toUrl(`dist/contentScripts/contentScript.js`, env.VITE_BASE_URL)];
   // configJson.scriptBaseJsUrls = jsUrls;
   configJson.scriptCssUrl = cssUrl;
   configJson.version = options.version;
-  configJson.downloadUrl = new URL(`dist/download/${packageJson.displayName}-${options.version}.zip`, `${cdnUrl}/`).toString();
+  configJson.downloadUrl = toUrl(`dist/download/${packageJson.displayName}-${options.version}.zip`, cdnUrl);
   await fs.writeJSON(configJsonUrl, configJson, { spaces: 2 });
 
   log('PRE', `content scripts创建成功`);
