@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "dk-front-git-auto-commit-push": {
+      "source": "dk-front-git-auto-commit-push",
+      "sourceType": "acore",
+      "computedHash": "c8e89e204e0c059792e243567ac761a48c10420315a48b6bb66175a153e81ccf"
+    }
+  }
+}
