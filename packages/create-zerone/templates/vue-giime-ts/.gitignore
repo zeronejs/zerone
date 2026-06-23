@@ -24,3 +24,4 @@ pnpm-debug.log
 vite.config.ts.timestamp-*.mjs
 vitest.config.ts.timestamp-*.mjs
 *.tsbuildinfo
+*.local
