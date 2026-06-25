@@ -156,6 +156,9 @@ export class GVueUseAxios {
             });
         });
         if (!schema?.$ref) {
+            // 已从 ../../interface 导入的共享类型（如 allOf 中 $ref 公共响应体 ApiEnvelope），
+            // 不能再从同级 controller 文件重复导入，否则会出现重复标识符且该名称并未在 controller 中导出
+            const sharedInterfaceNames = new Set(genControllerResult?.interfaceImportNames ?? []);
             // 先去掉所有括号和空格，再分割出所有类型名称
             const cleanedResType = resType.replace(/[()\s]/g, '');
             cleanedResType.split(/[|&]/).forEach(resTypeItem => {
@@ -164,7 +167,11 @@ export class GVueUseAxios {
                 while (typeFilterArray.endsWith('[]')) {
                     typeFilterArray = typeFilterArray.slice(0, -2);
                 }
-                if (typeFilterArray && !BUILTIN_TYPES.has(typeFilterArray)) {
+                if (
+                    typeFilterArray &&
+                    !BUILTIN_TYPES.has(typeFilterArray) &&
+                    !sharedInterfaceNames.has(typeFilterArray)
+                ) {
                     this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
                 }
             });

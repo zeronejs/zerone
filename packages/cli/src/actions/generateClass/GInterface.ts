@@ -21,20 +21,26 @@ export class GInterface {
         return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
     }
     private formatTypeNamePart(key: string) {
-        return key.replaceAll('-', '___');
+        // 末尾兜底：换行/制表符等空白符（如文档字段名里误带的换行 \n）不能出现在类型名中，
+        // 否则生成的 interface 名会包含裸换行导致 ts-morph 解析报错
+        return key.replaceAll('-', '___').replace(/\s/g, '___');
     }
     private formatPropertyTypeNamePart(key: string) {
-        return key
-            .replaceAll('(', '___')
-            .replaceAll(')', '___')
-            .replaceAll('[', '___')
-            .replaceAll(']', '___')
-            .replaceAll('-', '___')
-            .replaceAll('/', '___')
-            .replaceAll('\\', '___')
-            .replaceAll('.', '___')
-            .replaceAll('#', '___')
-            .replaceAll(' ', '___');
+        return (
+            key
+                .replaceAll('(', '___')
+                .replaceAll(')', '___')
+                .replaceAll('[', '___')
+                .replaceAll(']', '___')
+                .replaceAll('-', '___')
+                .replaceAll('/', '___')
+                .replaceAll('\\', '___')
+                .replaceAll('.', '___')
+                .replaceAll('#', '___')
+                .replaceAll(' ', '___')
+                // 兜底处理换行/制表符等所有空白与控制字符
+                .replace(/\s/g, '___')
+        );
     }
     private genStringType(prefix = '') {
         if (!this.keyName) {
