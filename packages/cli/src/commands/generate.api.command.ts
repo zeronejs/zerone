@@ -14,6 +14,10 @@ export class GenerateApiCommand extends AbstractCommand {
                 '-p, --path <path>',
                 'Specifies the path to the "swagger.config.json" folder (relative to the command line).'
             )
+            .option(
+                '-f, --format [mode]',
+                "Format generated files with the target project's tools. Default on (prettier only). Pass 'false' to disable, or 'eslint' | 'prettier' | 'both'."
+            )
             // .option('-o, --output <path>', '')
 
             .action(async command => {
@@ -21,6 +25,7 @@ export class GenerateApiCommand extends AbstractCommand {
                 options.push({ name: 'delete', value: Boolean(command.delete) });
                 options.push({ name: 'javascript', value: Boolean(command.javascript) });
                 options.push({ name: 'path', value: command.path });
+                options.push({ name: 'format', value: command.format });
                 // options.push({ name: 'output', value: command.output });
 
                 await this.action.handle(options);

@@ -14,6 +14,7 @@ import { isString } from '@zeronejs/utils';
 import url from 'node:url';
 import { normalize } from 'node:path';
 import { GVueUseAxios } from './generateClass/GVueUseAxios';
+import { runFormat, FormatMode } from '../utils/formatGenerated';
 export interface GenerateApiActionConfig {
     docsUrl?: string;
     includeTags?: string[];
@@ -24,6 +25,9 @@ export interface GenerateApiActionConfig {
     axiosInstanceUrl?: string;
     // 是否生成useAxios文件 字符串则直接指定导入的路径
     vueUseAxios?: boolean | string;
+    // 生成后是否用目标项目本地工具格式化,默认 true(只用 prettier,没装则跳过)。
+    // 可设 false 关闭,或强制 'eslint' | 'prettier' | 'both'
+    format?: FormatMode;
 }
 
 export class GenerateApiAction extends AbstractAction {
@@ -33,6 +37,7 @@ export class GenerateApiAction extends AbstractAction {
         const pathOption = options.find(it => it.name === 'path')?.value;
         const deleteOption = options.find(it => it.name === 'delete')?.value;
         const javascriptOption = options.find(it => it.name === 'javascript')?.value;
+        const formatOption = options.find(it => it.name === 'format')?.value;
         if (isString(pathOption)) {
             root = join(root, pathOption);
         }
@@ -93,6 +98,15 @@ export class GenerateApiAction extends AbstractAction {
             await GJavascript(root, axiosInstanceUrl);
         }
         console.info(chalk.green(`生成文件完成`));
+        // 取值优先级:CLI --format > swagger.config.json 的 format > 默认 true(智能:优先 prettier)
+        const rawFormat = formatOption ?? config.format ?? true;
+        let formatMode: FormatMode = true;
+        if (rawFormat === false || rawFormat === 'false' || rawFormat === 'off' || rawFormat === 'none') {
+            formatMode = false;
+        } else if (rawFormat === 'eslint' || rawFormat === 'prettier' || rawFormat === 'both') {
+            formatMode = rawFormat;
+        }
+        runFormat(root, ['controller', 'interface'], formatMode);
         console.info(`✨  Done in ${((Date.now() - now) / 1000).toFixed(2)}s.`);
     }
 }

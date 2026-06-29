@@ -1,6 +1,6 @@
 {
   "name": "@zeronejs/cli",
-  "version": "3.10.3",
+  "version": "3.11.0",
   "description": "Zerone Cli",
   "engines": {
     "node": ">=12.0.0"
@@ -13,6 +13,7 @@
     "build": "ts-node ./src/bin.ts build -d",
     "info": "ts-node ./src/bin.ts info",
     "font": "tsx ./src/bin.ts font_grabber -p ./src/scripts",
+    "publish:snapshot": "pnpm version prerelease --preid=snapshot --no-git-tag-version && pnpm build && pnpm publish dist/ --no-git-checks --tag snapshot",
     "publish:npm": "pnpm build && pnpm publish dist/"
   },
   "bin": {
