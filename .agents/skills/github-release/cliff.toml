@@ -1,0 +1,45 @@
+# git-cliff 配置 —— 只为 @zeronejs/cli 主力包生成 Release Notes
+#
+# 约定：仅收录 Conventional Commit 中 scope 为 (cli) 的提交，
+# 其余包（create-zerone / eslint-vue3 / redis ...）的提交一律跳过。
+# 生成结果用作 GitHub Release 正文，标题已是 tag，故不再重复版本号。
+
+[changelog]
+header = ""
+body = """
+{% if commits | length == 0 %}\
+_本次发布没有 cli 相关改动。_
+{% else %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+{% for commit in commits %}\
+- {{ commit.message | upper_first }} ({{ commit.id | truncate(length=7, end="") }})
+{% endfor %}\
+{% endfor %}\
+{% if previous and previous.version %}
+**Full Changelog**: https://github.com/zeronejs/zerone/compare/{{ previous.version }}...{{ version }}
+{% endif %}\
+{% endif %}\
+"""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = true
+filter_commits = true
+sort_commits = "oldest"
+tag_pattern = 'v[0-9]*'
+
+# 只保留 scope 为 (cli) 的提交，按 type 分组；其余全部跳过。
+# group 前缀的 HTML 注释仅用于排序，GitHub 渲染 Markdown 时不可见。
+commit_parsers = [
+  { message = '^feat\(cli\)',     group = '<!-- 0 -->🚀 Features' },
+  { message = '^fix\(cli\)',      group = '<!-- 1 -->🐛 Bug Fixes' },
+  { message = '^perf\(cli\)',     group = '<!-- 2 -->⚡ Performance' },
+  { message = '^refactor\(cli\)', group = '<!-- 3 -->♻️ Refactor' },
+  { message = '^docs\(cli\)',     group = '<!-- 4 -->📝 Documentation' },
+  { message = '^style\(cli\)',    group = '<!-- 5 -->🎨 Styling' },
+  { message = '^revert\(cli\)',   group = '<!-- 6 -->⏪ Revert' },
+  { message = '^chore\(cli\)',    group = '<!-- 7 -->🧹 Chore' },
+  { message = '.*', skip = true },
+]
