@@ -25,14 +25,21 @@ import SvgIcon from '@/components/SvgIcon.vue';
 
 dayjs.locale('zh-cn');
 
-const app = createApp(App);
+const bootstrap = async () => {
+  const app = createApp(App);
 
-app.use(createPinia());
-app.use(router);
-app.use(ElementPlus, {
-  locale: zhCn,
-});
-app.use(Giime, { env: import.meta.env, router });
-app.component('SvgIcon', SvgIcon);
+  app.use(createPinia());
+  app.use(router);
+  app.use(ElementPlus, {
+    locale: zhCn,
+  });
+  app.use(Giime, { env: import.meta.env, router });
+  app.component('SvgIcon', SvgIcon);
 
-app.mount('#app');
+  // 等首屏路由的懒加载组件（如体积较大的 imageEdit chunk）解析完成后再挂载，
+  // 否则 RouterView 在组件下载期间渲染空内容，loading 移除后会出现白屏。
+  await router.isReady();
+  app.mount('#app');
+};
+
+bootstrap();

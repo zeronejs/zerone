@@ -11,7 +11,7 @@
 5. ui框架：element-plus / giime
 6. 状态管理：pinia
 7. 包管理：pnpm
-8. node 18.12以上
+8. node 22以上
 
 ## 项目安装
 
@@ -19,11 +19,12 @@
 pnpm install
 ```
 
-2. pnpm全部安装完后执行：
-
-```sh
-node node_modules/electron/install.js
-```
+> 已通过 `postinstall` 脚本自动下载 Electron 二进制，正常无需手动处理。
+> 若因网络原因下载失败（`pnpm dev` 报 `spawn ... Electron ENOENT`），手动重跑一次即可：
+>
+> ```sh
+> node node_modules/electron/install.js
+> ```
 
 ### 本地运行
 
@@ -42,23 +43,3 @@ pnpm build
 ```sh
 pnpm build:test
 ```
-
-## 开发环境
-
-地址：https://manage-dev.giikin.cn/gsmp/home
-地址：https://manage-dev.giikin.cn/fe/
-
-## 测试环境
-
-地址：https://manage-test.giikin.cn/gsmp/home
-地址：https://manage-test.giikin.cn/fe/
-
-## 预发布环境
-
-地址：https://front-pre.giikin.com/home
-地址：https://manage-pre.giikin.com/fe/
-
-## 正式环境
-
-地址：https://gsmp.giikin.com/home
-地址：https://manage.giikin.com/fe/
