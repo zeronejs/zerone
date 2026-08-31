@@ -156,25 +156,7 @@ export class GVueUseAxios {
             });
         });
         if (!schema?.$ref) {
-            // 已从 ../../interface 导入的共享类型（如 allOf 中 $ref 公共响应体 ApiEnvelope），
-            // 不能再从同级 controller 文件重复导入，否则会出现重复标识符且该名称并未在 controller 中导出
-            const sharedInterfaceNames = new Set(genControllerResult?.interfaceImportNames ?? []);
-            // 先去掉所有括号和空格，再分割出所有类型名称
-            const cleanedResType = resType.replace(/[()\s]/g, '');
-            cleanedResType.split(/[|&]/).forEach(resTypeItem => {
-                let typeFilterArray = resTypeItem;
-                // 处理数组类型
-                while (typeFilterArray.endsWith('[]')) {
-                    typeFilterArray = typeFilterArray.slice(0, -2);
-                }
-                if (
-                    typeFilterArray &&
-                    !BUILTIN_TYPES.has(typeFilterArray) &&
-                    !sharedInterfaceNames.has(typeFilterArray)
-                ) {
-                    this.addNamedImport({ name: typeFilterArray, url: `./${apiFnName}`, isTypeOnly: true });
-                }
-            });
+            this.addControllerTypeImports(resType, apiFnName, genControllerResult);
         }
         // import 导入axios实例
         this.genImports(config.axiosInstanceUrl);
@@ -296,15 +278,15 @@ export class GVueUseAxios {
         }
         // requestBody类型生成
         if (requestBodySchema) {
-            const inputType = upperFirst(apiFnName) + 'Input';
+            const inputType = genControllerResult?.inputType ?? upperFirst(apiFnName) + 'Input';
             const requestBody = (this.operation as any).requestBody;
             execFunctionDeclaration.addParameter({
                 name: 'input',
-                type: genControllerResult?.inputType ?? inputType,
+                type: inputType,
                 hasQuestionToken: !requestBody.required,
             });
             if (!requestBodySchema.$ref) {
-                this.addNamedImport({ name: inputType, url: `./${apiFnName}`, isTypeOnly: true });
+                this.addControllerTypeImports(inputType, apiFnName, genControllerResult);
             }
         }
         execFunctionDeclaration.addParameter({
@@ -339,6 +321,39 @@ export class GVueUseAxios {
         );
 
         return functionDeclaration;
+    }
+    /**
+     * 从 controller 文件按需导入类型。
+     * controller 里的 input/返回值类型可能是联合类型（oneOf/anyOf）、数组或内联字面量，
+     * 只能导入真正在 controller 中声明的标识符，且要排除已从 ../../interface 导入的共享类型，
+     * 否则会生成指向不存在导出的 import 或重复标识符。
+     */
+    private addControllerTypeImports(
+        type: string,
+        apiFnName: string,
+        genControllerResult: GenControllerResult
+    ) {
+        // 已从 ../../interface 导入的共享类型（如 allOf 中 $ref 公共响应体 ApiEnvelope），
+        // 不能再从同级 controller 文件重复导入，否则会出现重复标识符且该名称并未在 controller 中导出
+        const sharedInterfaceNames = new Set(genControllerResult?.interfaceImportNames ?? []);
+        // 先去掉所有括号和空格，再分割出所有类型名称
+        const cleanedType = type.replace(/[()\s]/g, '');
+        cleanedType.split(/[|&]/).forEach(typeItem => {
+            let typeName = typeItem;
+            // 处理数组类型
+            while (typeName.endsWith('[]')) {
+                typeName = typeName.slice(0, -2);
+            }
+            if (
+                typeName &&
+                // 内联字面量、泛型等非单一标识符不需要导入
+                /^[A-Za-z_$][\w$]*$/.test(typeName) &&
+                !BUILTIN_TYPES.has(typeName) &&
+                !sharedInterfaceNames.has(typeName)
+            ) {
+                this.addNamedImport({ name: typeName, url: `./${apiFnName}`, isTypeOnly: true });
+            }
+        });
     }
     private genImports(url?: string) {
         // import 导入
