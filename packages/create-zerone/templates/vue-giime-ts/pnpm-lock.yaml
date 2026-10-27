@@ -30,8 +30,8 @@ importers:
         specifier: 2.14.2
         version: 2.14.2(vue@3.5.39(typescript@6.0.3))
       giime:
-        specifier: ~1.1.2
-        version: 1.1.2(@types/sortablejs@1.15.9)(echarts@5.6.0)(element-plus@2.14.2(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
+        specifier: ~1.1.6
+        version: 1.1.6(@types/sortablejs@1.15.9)(echarts@5.6.0)(element-plus@2.14.2(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       js-cookie:
         specifier: ^3.0.8
         version: 3.0.8
@@ -82,8 +82,8 @@ importers:
         specifier: ^0.9.1
         version: 0.9.1(typescript@6.0.3)(vue@3.5.39(typescript@6.0.3))
       '@zeronejs/cli':
-        specifier: ^3.11.0
-        version: 3.11.0(@types/node@26.1.1)
+        specifier: ^3.11.1
+        version: 3.11.1(@types/node@26.1.1)
       '@zeronejs/eslint-config-vue3':
         specifier: ^0.2.3
         version: 0.2.3(@typescript-eslint/eslint-plugin@8.64.0(@typescript-eslint/parser@8.64.0(eslint@10.7.0(jiti@1.21.7))(typescript@6.0.3))(eslint@10.7.0(jiti@1.21.7))(typescript@6.0.3))(@typescript-eslint/parser@8.64.0(eslint@10.7.0(jiti@1.21.7))(typescript@6.0.3))(@typescript-eslint/utils@8.64.0(eslint@10.7.0(jiti@1.21.7))(typescript@6.0.3))(eslint-import-resolver-node@0.3.9)(eslint@10.7.0(jiti@1.21.7))(prettier@3.9.5)(typescript@6.0.3)(vitest@4.1.10)
@@ -1472,8 +1472,8 @@ packages:
     resolution: {integrity: sha512-jB6FI1/7xUxe9YEegxS9xaWro8lh2wbeyIeXlT188MzgE/FWzQmfEta5C+s2T7jDORpb22IhzYrHsBm0kygFbw==}
     engines: {node: '>=12.0.0'}
 
-  '@zeronejs/cli@3.11.0':
-    resolution: {integrity: sha512-GyK5OEOGJKAnEFXjETn4gkrACcizkkEaQxH6LfjnMYkIWVt+sQ8I8J8ok1GasSsvjzscZMgY+33zc6VDqg1njA==}
+  '@zeronejs/cli@3.11.1':
+    resolution: {integrity: sha512-eqZY7Q5NTWSEBLjmrUE+RFmAIcKYF8EBvFY+Y560GGigXwLkFOJUu2oUt8leSgUFGF6SeUpDIjGCFgwqJPzJ/w==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -2574,8 +2574,8 @@ packages:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
     engines: {node: '>=0.10.0'}
 
-  giime@1.1.2:
-    resolution: {integrity: sha512-YoyBz6wChW5xjevaSAcEcCXAmBcFHRmkBdnMqa/mlCHKZQRhSMKdN3bm6o6V0mWbzE3u+aYPZDOjhpN7txLjBg==}
+  giime@1.1.6:
+    resolution: {integrity: sha512-Bg43wgxEKYmRcnLfpqi202nm8KpM5RcfYFDlDwPcDgiFO8iAtw7UacDpowBYhE96vpP/cabPVvJsidxAL/9pzA==}
     peerDependencies:
       echarts: ^5.5.1
       element-plus: ^2.11.0
@@ -6255,7 +6255,7 @@ snapshots:
     dependencies:
       typescript: 4.5.5
 
-  '@zeronejs/cli@3.11.0(@types/node@26.1.1)':
+  '@zeronejs/cli@3.11.1(@types/node@26.1.1)':
     dependencies:
       '@zeronejs/ast-ts': 1.0.0-beta.8
       '@zeronejs/utils': 2.2.1
@@ -7557,7 +7557,7 @@ snapshots:
 
   get-value@2.0.6: {}
 
-  giime@1.1.2(@types/sortablejs@1.15.9)(echarts@5.6.0)(element-plus@2.14.2(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)):
+  giime@1.1.6(@types/sortablejs@1.15.9)(echarts@5.6.0)(element-plus@2.14.2(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)):
     dependencies:
       '@types/file-saver': 2.0.7
       '@types/lodash': 4.17.24
